@@ -127,6 +127,9 @@ export class InputHandler {
      * @returns {Element|null} The square element or null if not found
      */
     getSquareElement(squareIndex) {
+        if (!this.boardElement) {
+            return null;
+        }
         return this.boardElement.querySelector(`[data-index="${squareIndex}"]`);
     }
 
@@ -134,6 +137,10 @@ export class InputHandler {
      * Clear all visual highlights from the board
      */
     clearHighlights() {
+        if (!this.boardElement) {
+            return; // Gracefully handle null board element
+        }
+        
         const squares = this.boardElement.querySelectorAll('.square');
         squares.forEach(square => {
             square.classList.remove('selected', 'valid-move', 'last-move');
@@ -170,6 +177,10 @@ export class InputHandler {
      * @param {number} toIndex - Target square of the last move
      */
     highlightLastMove(fromIndex, toIndex) {
+        if (!this.boardElement) {
+            return; // Gracefully handle null board element
+        }
+        
         // Clear previous last-move highlights
         const lastMoveSquares = this.boardElement.querySelectorAll('.last-move');
         lastMoveSquares.forEach(square => {
