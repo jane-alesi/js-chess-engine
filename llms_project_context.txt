@@ -1,0 +1,148 @@
+# JS Chess Engine - Development Context
+
+**Pure JavaScript chess engine inspired by Atari Video Chess, designed to enable LLMs to outplay the original Atari 2600 version through superior chess logic and AI.**
+
+## 🎯 **PROJECT OBJECTIVES**
+
+### **Core Goals**
+- **Pure JavaScript Implementation** - Complete chess logic without external libraries
+- **Advanced AI Engine** - Minimax with Alpha-Beta Pruning for intelligent gameplay
+- **LLM Integration Ready** - Engine designed for AI agents to understand strategies and generate moves
+- **Production Quality** - Modular, maintainable, performant codebase
+
+### **Development Philosophy**
+- **Issue-Driven Development** - All work tracked through GitHub Issues
+- **Modular Architecture** - Core, UI, AI, Utils components with incremental development
+- **AI-First Design** - Optimized for LLM collaboration and code generation
+
+**Repository:** https://github.com/jane-alesi/js-chess-engine
+
+---
+
+## ⚡ **CRITICAL WORKFLOWS**
+
+### **🔧 File Update Protocol (MANDATORY)**
+```javascript
+// ALWAYS follow this exact sequence
+const fileData = await get_file_contents(owner, repo, path);
+const currentSHA = fileData.sha;
+await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
+```
+
+### **📝 Base64 Content Processing**
+```javascript
+// Reliable decode pattern with error handling
+const processContent = (base64String) => {
+    try {
+        const decoded = atob(base64String);
+        return decoded?.length > 0 ? decoded : null;
+    } catch (error) {
+        console.log("Decode failed:", error.message);
+        return null;
+    }
+};
+
+// Usage with verification
+const content = processContent(fileData.content);
+if (content) {
+    // Process successfully decoded content
+    const lines = content.split('\n');
+} else {
+    console.log("Content processing failed");
+}
+```
+
+---
+
+## 🛠️ **TECHNICAL STANDARDS (2025)**
+
+### **JavaScript/ES2022**
+```javascript
+// ✅ Modern class fields syntax
+class ChessEngine {
+    static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
+    #privateField = 'value';
+}
+
+// ✅ Proper error handling
+throw new Error(`Invalid move: ${details}`);  // Not console.warn()
+
+// ✅ Unused parameters
+function processMove(_unused, toSquare) { /* ... */ }
+```
+
+### **Testing & Quality**
+- **Jest Configuration** - ES modules with experimental VM support
+- **ESLint** - Flat config format (not `.eslintrc.json`)
+- **Error Handling** - Descriptive exceptions, no console pollution
+- **Test Coverage** - All error paths and edge cases validated
+
+### **File Structure**
+```
+src/
+├── core/          # Chess logic (Board, Piece, Game)
+├── ui/            # User interface (InputHandler, BoardRenderer)
+├── ai/            # AI engine (Minimax, evaluation)
+└── utils/         # Utilities (Constants, helpers)
+
+tests/
+├── core/          # Core logic tests
+├── ui/            # UI component tests
+└── ai/            # AI engine tests
+```
+
+---
+
+## 🔍 **DEVELOPMENT BEST PRACTICES**
+
+### **Issue Management**
+- **Atomic Issues** - One specific problem per issue
+- **Clear Definitions** - Detailed problem description and acceptance criteria
+- **Priority Levels** - Critical → High → Medium → Low
+- **Progress Tracking** - Regular status updates and completion verification
+
+### **Code Quality Gates**
+1. **ESLint passes** without errors or warnings
+2. **All tests pass** with 100% success rate
+3. **Error handling** uses exceptions, not console output
+4. **Documentation** updated for significant changes
+5. **Performance** considerations for LLM integration
+
+### **Collaboration Protocol**
+- **SHA-based updates** - Always get current SHA before file modifications
+- **Verification steps** - Confirm operations completed successfully
+- **Error recovery** - Implement retry strategies for tool failures
+- **Research validation** - Verify best practices through online research
+
+---
+
+## 🎮 **CHESS ENGINE SPECIFICS**
+
+### **Core Features**
+- **64-square board representation** with piece positioning
+- **Move validation** with chess rule enforcement
+- **Game state tracking** including check/checkmate detection
+- **Move notation** for game recording and analysis
+
+### **AI Integration**
+- **Position evaluation** for strategic decision making
+- **Move generation** with legal move filtering
+- **Search algorithms** optimized for performance
+- **LLM-friendly APIs** for external AI agent integration
+
+### **Performance Targets**
+- **Sub-second move generation** for responsive gameplay
+- **Memory efficient** board representation
+- **Scalable architecture** for advanced AI features
+- **Web Worker support** for non-blocking computation
+
+---
+
+## 📚 **REFERENCE RESOURCES**
+
+- **Technical Guide** - `llms.txt` (comprehensive development guidelines)
+- **Issue Tracker** - GitHub Issues for all development tasks
+- **CI/CD Pipeline** - GitHub Actions with automated testing
+- **Code Standards** - ESLint flat config with ES2022 support
+
+**This context provides the essential framework for efficient development while maintaining the chess engine's core objectives and technical excellence.**
