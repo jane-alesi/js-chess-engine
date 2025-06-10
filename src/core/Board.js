@@ -46,15 +46,17 @@ export class Board {
 
     // Method to move a piece (simplified for now)
     movePiece(fromIndex, toIndex) {
+        // Validate indices
         if (fromIndex < 0 || fromIndex >= 64 || toIndex < 0 || toIndex >= 64) {
-            console.error('Invalid board index.');
-            return false;
+            throw new Error(`Invalid move: square indices out of bounds (from: ${fromIndex}, to: ${toIndex})`);
         }
+        
+        // Check if piece exists at starting square
         if (!this.squares[fromIndex]) {
-            console.warn('No piece at starting square.');
-            return false;
+            throw new Error(`Invalid move: no piece found at square ${fromIndex}`);
         }
 
+        // Move the piece
         this.squares[toIndex] = this.squares[fromIndex];
         this.squares[fromIndex] = null;
         return true;
