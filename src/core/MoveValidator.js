@@ -39,22 +39,22 @@ export class MoveValidator {
         return position >= 0 && position < 64;
     }
 
-    isInCheck(color) {
+    isInCheck(_color) {
         // TODO: Implement check detection
         return false;
     }
 
-    isCheckmate(color) {
+    isCheckmate(_color) {
         // TODO: Implement checkmate detection
         return false;
     }
 
-    isStalemate(color) {
+    isStalemate(_color) {
         // TODO: Implement stalemate detection
         return false;
     }
 
-    canCastle(color, side) {
+    canCastle(_color, _side) {
         // TODO: Implement castling validation
         return false;
     }
