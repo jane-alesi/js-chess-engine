@@ -1,7 +1,6 @@
 /** @type {import('jest').Config} */
 const config = {
-    // Enable ES Module support
-    preset: 'default',
+    // Enable ES Module support - NO preset needed for ES modules
     testEnvironment: 'node',
     transform: {},
     extensionsToTreatAsEsm: ['.js'],
@@ -12,7 +11,7 @@ const config = {
     
     // Module name mapping to handle relative imports correctly
     moduleNameMapper: {
-        '^(\\.{1,2}/.*)\\.js$': '$1'
+        '^(\\.\{1,2\}/.*)\\\.js$': '$1'
     },
     
     // Globals configuration for ES modules
