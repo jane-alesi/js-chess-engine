@@ -1,0 +1,354 @@
+# JS Chess Engine - AI Agent Development Guide
+
+## Project Overview
+
+This is a pure JavaScript chess engine inspired by the legendary Atari Video Chess program. The project implements a complete chess game with AI opponent using modern JavaScript practices while honoring the efficient design principles of the original 6502 assembly implementation.
+
+**Repository**: https://github.com/jane-alesi/js-chess-engine
+**License**: MIT
+**Target**: Browser-based chess game with AI opponent
+**Architecture**: Modular, divide-and-conquer approach
+
+## Project Goals
+
+1. **Pure JavaScript Implementation**: No external chess libraries, complete from-scratch implementation
+2. **AI Opponent**: Minimax algorithm with alpha-beta pruning, inspired by Video Chess AI techniques
+3. **Modern Web Standards**: ES6+ modules, responsive design, accessibility
+4. **Educational Value**: Clear, well-documented code for learning chess programming
+5. **Performance**: Efficient algorithms suitable for real-time gameplay
+
+## Architecture Overview
+
+### Core Modules
+
+```
+src/
+├── core/
+│   ├── Board.js           # Board representation and state management
+│   ├── Piece.js           # Piece definitions and movement rules
+│   ├── GameState.js       # Game state, turns, check/checkmate detection
+│   ├── MoveGenerator.js   # Legal move generation for all pieces
+│   ├── MoveValidator.js   # Move validation and self-check prevention
+│   └── Rules.js           # Chess rules implementation (castling, en passant, etc.)
+├── ui/
+│   ├── BoardRenderer.js   # Visual board rendering
+│   ├── InputHandler.js    # User input processing
+│   ├── UIController.js    # UI state management
+│   └── Themes.js          # Visual themes and styling
+├── ai/
+│   ├── AIPlayer.js        # Main AI controller
+│   ├── Evaluation.js      # Position evaluation function
+│   ├── Search.js          # Minimax with alpha-beta pruning
+│   └── OpeningBook.js     # Basic opening moves database
+└── utils/
+    ├── Notation.js        # Algebraic notation conversion
+    ├── FEN.js             # FEN string parsing/generation
+    ├── PGN.js             # PGN game notation support
+    └── Constants.js       # Game constants and piece values
+```
+
+### Key Design Principles
+
+1. **Separation of Concerns**: Clear boundaries between game logic, UI, and AI
+2. **Immutable State**: Game state changes through pure functions where possible
+3. **Event-Driven**: UI updates through event system
+4. **Testable**: Each module designed for unit testing
+5. **Extensible**: Plugin architecture for AI improvements and UI themes
+
+## Development Guidelines
+
+### Code Style
+
+- **ES6+ Modules**: Use import/export syntax
+- **Consistent Naming**: camelCase for variables/functions, PascalCase for classes
+- **JSDoc Comments**: Document all public methods and complex logic
+- **Error Handling**: Comprehensive error checking and user-friendly messages
+- **Performance**: Optimize hot paths (move generation, evaluation)
+
+### Testing Requirements
+
+- **Unit Tests**: Jest framework for all core modules
+- **Integration Tests**: Full game scenarios and AI behavior
+- **Performance Tests**: Move generation and search algorithm benchmarks
+- **Browser Tests**: Cross-browser compatibility verification
+
+### Git Workflow
+
+1. **Feature Branches**: Create branches for each issue/feature
+2. **Descriptive Commits**: Clear commit messages explaining changes
+3. **Pull Requests**: All changes through PR review process
+4. **Issue Linking**: Link commits/PRs to relevant GitHub issues
+
+## Key Files and Their Purposes
+
+### Core Game Logic
+
+- `src/core/Board.js`: 64-square array representation, piece placement, board state
+- `src/core/Piece.js`: Piece types, movement patterns, capture rules
+- `src/core/MoveGenerator.js`: Generate all legal moves for current position
+- `src/core/MoveValidator.js`: Validate moves, prevent self-check situations
+- `src/core/GameState.js`: Track game state, detect check/checkmate/stalemate
+
+### User Interface
+
+- `src/ui/BoardRenderer.js`: Canvas or DOM-based board visualization
+- `src/ui/InputHandler.js`: Mouse/touch input for piece selection and movement
+- `src/ui/UIController.js`: Coordinate between game logic and visual representation
+
+### AI Implementation
+
+- `src/ai/Search.js`: Minimax algorithm with alpha-beta pruning and quiescence search
+- `src/ai/Evaluation.js`: Position evaluation considering material, mobility, safety
+- `src/ai/AIPlayer.js`: AI move selection and difficulty levels
+
+### Utilities
+
+- `src/utils/Notation.js`: Convert between internal representation and algebraic notation
+- `src/utils/FEN.js`: Import/export game positions using FEN notation
+- `src/utils/Constants.js`: Piece values, board dimensions, game constants
+
+## Issue-Driven Development Process
+
+### Issue Categories
+
+1. **Core Infrastructure** (Priority: Critical)
+   - Board representation and basic piece movement
+   - Game state management and rule enforcement
+   - Move generation and validation systems
+
+2. **User Interface** (Priority: High)
+   - Board rendering and piece visualization
+   - Input handling and move selection
+   - Game controls and status display
+
+3. **AI Implementation** (Priority: High)
+   - Basic AI with random moves
+   - Minimax search algorithm
+   - Position evaluation function
+   - Advanced AI features (opening book, endgame tables)
+
+4. **Advanced Features** (Priority: Medium)
+   - Game notation support (PGN, FEN)
+   - Multiple difficulty levels
+   - Game analysis and move history
+   - Performance optimizations
+
+5. **Polish and Testing** (Priority: Medium)
+   - Comprehensive test suite
+   - Cross-browser compatibility
+   - Accessibility improvements
+   - Documentation and examples
+
+### Working with Issues
+
+1. **Read Issue Carefully**: Understand requirements and acceptance criteria
+2. **Check Dependencies**: Ensure prerequisite issues are completed
+3. **Create Feature Branch**: Branch from main using issue number
+4. **Implement Solution**: Follow coding standards and test requirements
+5. **Update Tests**: Add/modify tests for new functionality
+6. **Submit Pull Request**: Link to issue and provide clear description
+
+## Technical Specifications
+
+### Board Representation
+
+- **1D Array**: 64-element array representing squares 0-63
+- **Square Mapping**: a1=0, b1=1, ..., h8=63
+- **Piece Encoding**: Objects with type, color, hasMoved properties
+- **Empty Squares**: null values
+
+### Move Representation
+
+```javascript
+{
+  from: 12,           // Source square index
+  to: 28,             // Destination square index
+  piece: 'pawn',      // Moving piece type
+  captured: 'knight', // Captured piece (if any)
+  promotion: 'queen', // Promotion piece (if any)
+  castling: 'kingside', // Castling type (if any)
+  enPassant: true     // En passant capture flag
+}
+```
+
+### Game State Structure
+
+```javascript
+{
+  board: Array(64),           // Current board position
+  currentPlayer: 'white',     // Active player
+  castlingRights: {           // Castling availability
+    white: { kingside: true, queenside: true },
+    black: { kingside: true, queenside: true }
+  },
+  enPassantTarget: null,      // En passant target square
+  halfmoveClock: 0,          // 50-move rule counter
+  fullmoveNumber: 1,         // Game move counter
+  gameStatus: 'active'       // active, check, checkmate, stalemate, draw
+}
+```
+
+## AI Implementation Details
+
+### Evaluation Function Components
+
+1. **Material Balance**: Piece values (pawn=1, knight/bishop=3, rook=5, queen=9)
+2. **Piece Mobility**: Number of legal moves available
+3. **King Safety**: Proximity to enemy pieces, pawn shield
+4. **Pawn Structure**: Doubled, isolated, passed pawns
+5. **Center Control**: Piece placement in central squares
+
+### Search Algorithm
+
+- **Minimax**: Recursive game tree search
+- **Alpha-Beta Pruning**: Eliminate unnecessary branches
+- **Quiescence Search**: Extend search for tactical sequences
+- **Iterative Deepening**: Gradually increase search depth
+- **Move Ordering**: Search promising moves first
+
+## Dependencies and Requirements
+
+### Runtime Dependencies
+
+- **None**: Pure JavaScript implementation
+- **Browser Support**: Modern browsers with ES6+ support
+- **Optional**: Web Workers for AI computation
+
+### Development Dependencies
+
+- **Jest**: Testing framework
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+- **Webpack**: Module bundling (optional)
+- **Live Server**: Development server
+
+### Build Process
+
+```bash
+npm install          # Install dependencies
+npm test            # Run test suite
+npm run lint        # Check code style
+npm run build       # Build production version
+npm start           # Start development server
+```
+
+## Testing Strategy
+
+### Unit Tests
+
+- **Core Logic**: Board, pieces, move generation, validation
+- **AI Components**: Evaluation function, search algorithm
+- **Utilities**: Notation conversion, FEN parsing
+
+### Integration Tests
+
+- **Complete Games**: Play through full games programmatically
+- **AI Behavior**: Verify AI makes reasonable moves
+- **Edge Cases**: Unusual positions and rule interactions
+
+### Performance Tests
+
+- **Move Generation**: Benchmark legal move calculation
+- **Search Speed**: Measure AI thinking time at various depths
+- **Memory Usage**: Monitor object creation and garbage collection
+
+## Contributing Guidelines for AI Agents
+
+### Before Starting Work
+
+1. **Read the Issue**: Understand requirements completely
+2. **Check Dependencies**: Verify prerequisite work is complete
+3. **Review Related Code**: Understand existing implementation patterns
+4. **Plan Implementation**: Consider architecture and testing needs
+
+### Implementation Process
+
+1. **Create Feature Branch**: Use descriptive branch name with issue number
+2. **Write Tests First**: TDD approach where appropriate
+3. **Implement Feature**: Follow existing code patterns and style
+4. **Update Documentation**: Modify README and comments as needed
+5. **Test Thoroughly**: Ensure all tests pass and no regressions
+
+### Code Quality Standards
+
+- **Readability**: Clear variable names and logical structure
+- **Documentation**: JSDoc comments for public APIs
+- **Error Handling**: Graceful handling of invalid inputs
+- **Performance**: Efficient algorithms for time-critical code
+- **Compatibility**: Works across target browsers
+
+### Pull Request Process
+
+1. **Link to Issue**: Reference issue number in PR description
+2. **Describe Changes**: Explain what was implemented and why
+3. **Test Results**: Confirm all tests pass
+4. **Breaking Changes**: Highlight any API changes
+5. **Screenshots**: Include UI changes if applicable
+
+## Deployment and Distribution
+
+### Development Environment
+
+- **Local Server**: Use live-server or similar for development
+- **Hot Reload**: Automatic browser refresh on file changes
+- **Debug Tools**: Browser developer tools for debugging
+
+### Production Build
+
+- **Minification**: Compress JavaScript for faster loading
+- **Bundle**: Combine modules into single file if needed
+- **Assets**: Optimize images and other resources
+- **CDN**: Consider CDN deployment for better performance
+
+### GitHub Pages Deployment
+
+- **Automatic**: Deploy main branch to GitHub Pages
+- **Demo**: Live demo available at github.io URL
+- **Documentation**: Host project documentation alongside demo
+
+## Troubleshooting Common Issues
+
+### Move Generation Problems
+
+- **Check Bounds**: Ensure moves stay within board boundaries
+- **Piece Blocking**: Verify path-checking for sliding pieces
+- **Self-Check**: Confirm moves don't leave own king in check
+
+### AI Performance Issues
+
+- **Search Depth**: Reduce depth if AI is too slow
+- **Move Ordering**: Improve ordering for better pruning
+- **Evaluation**: Optimize evaluation function for speed
+
+### UI Responsiveness
+
+- **Event Handling**: Ensure proper event listener management
+- **Rendering**: Optimize drawing operations for smooth animation
+- **Mobile**: Test touch input on mobile devices
+
+## Resources and References
+
+### Chess Programming
+
+- **Chess Programming Wiki**: https://www.chessprogramming.org/
+- **Video Chess Analysis**: https://nanochess.org/video_chess.html
+- **Minimax Algorithm**: Standard game theory search algorithm
+- **Alpha-Beta Pruning**: Search optimization technique
+
+### JavaScript Best Practices
+
+- **MDN Web Docs**: Comprehensive JavaScript reference
+- **ES6+ Features**: Modern JavaScript language features
+- **Testing with Jest**: Unit testing framework documentation
+- **Performance Optimization**: Browser performance guidelines
+
+### Game Development
+
+- **Canvas API**: For advanced graphics rendering
+- **Web Workers**: For background AI computation
+- **Local Storage**: For saving game state and preferences
+- **Responsive Design**: Mobile-friendly user interfaces
+
+---
+
+This document serves as the complete guide for AI agents working on the JS Chess Engine project. Follow these guidelines to ensure consistent, high-quality contributions that advance the project goals while maintaining code quality and architectural integrity.
