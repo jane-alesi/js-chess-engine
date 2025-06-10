@@ -1,6 +1,6 @@
-// tests/Board.test.js
+// tests/core/Board.test.js
 
-import { Board } from '../src/core/Board.js';
+import { Board } from '../../src/core/Board.js';
 
 describe('Board', () => {
     let board;
