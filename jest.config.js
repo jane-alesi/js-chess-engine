@@ -1,19 +1,45 @@
 /** @type {import('jest').Config} */
 const config = {
-  transform: {},
-  // This is important for ES Modules support in Jest
-  // It tells Jest to treat .js files as ES Modules
-  // and to not transform them with Babel or similar.
-  // This is necessary because our project uses 'type': 'module' in package.json
-  // and imports/exports in our JavaScript files.
-  moduleFileExtensions: ['js', 'json', 'node'],
-  testMatch: ['**/tests/**/*.test.js'],
-  // If you have issues with imports, you might need to configure moduleNameMapper
-  // For example, if you are importing from 'src/core/Board.js' directly
-  // and Jest can't resolve it, you might need something like:
-  // moduleNameMapper: {
-  //   '^\.\./src/(.*)\.js$': '<rootDir>/src/$1.js',
-  // },
+    // Enable ES Module support
+    preset: 'default',
+    testEnvironment: 'node',
+    transform: {},
+    extensionsToTreatAsEsm: ['.js'],
+    
+    // Module configuration for ES modules
+    moduleFileExtensions: ['js', 'json', 'node'],
+    testMatch: ['**/tests/**/*.test.js'],
+    
+    // Module name mapping to handle relative imports correctly
+    moduleNameMapper: {
+        '^(\\.{1,2}/.*)\\.js$': '$1'
+    },
+    
+    // Globals configuration for ES modules
+    globals: {
+        'ts-jest': {
+            useESM: true
+        }
+    },
+    
+    // Verbose output for better debugging
+    verbose: true,
+    
+    // Coverage configuration
+    collectCoverageFrom: [
+        'src/**/*.js',
+        '!src/**/*.test.js',
+        '!src/**/index.js'
+    ],
+    
+    // Setup files if needed
+    setupFilesAfterEnv: [],
+    
+    // Clear mocks between tests
+    clearMocks: true,
+    
+    // Restore mocks after each test
+    restoreMocks: true
 };
 
 export default config;
