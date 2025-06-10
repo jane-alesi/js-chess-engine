@@ -170,10 +170,10 @@ export class ChessGame extends EventEmitter {
     
     /**
      * Load game state from FEN string
-     * @param {string} fen - FEN notation string
+     * @param {string} _fen - FEN notation string
      * @returns {boolean} True if FEN was loaded successfully
      */
-    fromFEN(fen) {
+    fromFEN(_fen) {
         // TODO: Implement FEN import
         console.warn('FEN import not yet implemented');
         return false;
