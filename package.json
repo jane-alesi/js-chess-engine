@@ -39,9 +39,9 @@
     "open": "^10.1.0",
     "opn": "npm:open@^10.1.0",
     "braces": "^3.0.3",
-    "chokidar": "^4.0.3",
-    "micromatch": "^5.1.0",
-    "anymatch": "^3.1.2",
-    "readdirp": "^3.6.0"
+    "chokidar": "^4.0.1",
+    "micromatch": "^4.0.8",
+    "anymatch": "^3.1.3",
+    "readdirp": "^4.0.2"
   }
 }
