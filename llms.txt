@@ -55,6 +55,201 @@ src/
 4. **Testable**: Each module designed for unit testing
 5. **Extensible**: Plugin architecture for AI improvements and UI themes
 
+## Automated Code Quality & Linting for LLMs
+
+### 🎯 **Critical Importance for AI-Generated Code**
+
+LLM-generated code must pass automated quality checks to prevent CI/CD pipeline failures. This section provides comprehensive guidelines for ensuring code quality before committing.
+
+### 🔧 **Pre-Generation Code Quality Checklist**
+
+Before generating any code, LLMs must consider:
+
+1. **ESLint Compliance**: All code must pass ESLint rules without errors
+2. **ES Module Compatibility**: Proper import/export syntax for ES6+ modules
+3. **Jest Configuration**: Tests must be compatible with ES module setup
+4. **Unused Variables**: Use underscore prefix for intentionally unused parameters
+5. **Regex Escaping**: Avoid unnecessary escape characters in regular expressions
+
+### 🚀 **Automated Linting Workflow**
+
+#### **Phase 1: Pre-Commit Validation**
+
+```bash
+# Recommended pre-commit workflow
+npm run lint          # Check for ESLint errors
+npm run lint:fix       # Auto-fix ESLint issues
+npm test              # Verify all tests pass
+npm run format        # Apply Prettier formatting
+```
+
+#### **Phase 2: LLM Code Generation Best Practices**
+
+1. **Parameter Naming Convention**:
+   ```javascript
+   // ✅ CORRECT: Unused parameters with underscore prefix
+   function generateMoves(_piece, _position) {
+       // TODO: Implement move generation
+       return [];
+   }
+   
+   // ❌ INCORRECT: Unused parameters without prefix
+   function generateMoves(piece, position) {
+       // TODO: Implement move generation
+       return [];
+   }
+   ```
+
+2. **ES Module Import/Export**:
+   ```javascript
+   // ✅ CORRECT: Proper ES module syntax
+   import { Board } from '../../src/core/Board.js';
+   export class MoveGenerator { }
+   
+   // ❌ INCORRECT: Wrong relative paths
+   import { Board } from '../src/core/Board.js';
+   ```
+
+3. **Jest Configuration for ES Modules**:
+   ```javascript
+   // ✅ CORRECT: Jest config for ES modules
+   const config = {
+       testEnvironment: 'node',
+       // NO extensionsToTreatAsEsm needed with "type": "module"
+       moduleNameMapper: {
+           '^(\\.{1,2}/.*)\\.js$': '$1'
+       }
+   };
+   ```
+
+4. **Regex Pattern Escaping**:
+   ```javascript
+   // ✅ CORRECT: Minimal necessary escaping
+   moduleNameMapper: {
+       '^(\\.{1,2}/.*)\\.js$': '$1'
+   }
+   
+   // ❌ INCORRECT: Unnecessary escape characters
+   moduleNameMapper: {
+       '^(\\\\.{1,2}/.*)\\\\.js$': '$1'
+   }
+   ```
+
+### 🛠️ **Common ESLint Error Patterns & Solutions**
+
+#### **1. Unused Variables (no-unused-vars)**
+```javascript
+// ❌ Problem: ESLint error for unused parameters
+function validateMove(fromPos, toPos, piece, gameState) {
+    // Only using fromPos and toPos
+    return fromPos >= 0 && toPos < 64;
+}
+
+// ✅ Solution: Prefix unused parameters with underscore
+function validateMove(fromPos, toPos, _piece, _gameState) {
+    return fromPos >= 0 && toPos < 64;
+}
+```
+
+#### **2. Indentation Errors (indent)**
+```javascript
+// ❌ Problem: Inconsistent indentation in switch statements
+switch (piece.type) {
+        case 'pawn':
+            return generatePawnMoves();
+        case 'rook':
+            return generateRookMoves();
+}
+
+// ✅ Solution: Consistent 4-space indentation
+switch (piece.type) {
+    case 'pawn':
+        return generatePawnMoves();
+    case 'rook':
+        return generateRookMoves();
+}
+```
+
+#### **3. Unnecessary Escape Characters (no-useless-escape)**
+```javascript
+// ❌ Problem: Unnecessary backslash escaping
+const regex = /^(\\.{1,2}\/.*)\\.js$/;
+
+// ✅ Solution: Remove unnecessary escapes
+const regex = /^(\.{1,2}\/.*)\.js$/;
+```
+
+### 🔄 **Automated Fixing Strategies**
+
+#### **Strategy 1: ESLint Auto-Fix**
+```bash
+# Auto-fix common issues
+npx eslint . --fix
+
+# Target specific files
+npx eslint src/core/MoveGenerator.js --fix
+```
+
+#### **Strategy 2: Pre-Commit Hooks (Future Implementation)**
+```json
+// package.json - lint-staged configuration
+{
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
+```
+
+#### **Strategy 3: LLM-Assisted Code Review**
+1. **Generate Code**: Create initial implementation
+2. **Self-Lint**: Run ESLint validation on generated code
+3. **Auto-Fix**: Apply ESLint --fix for common issues
+4. **Manual Review**: Address complex linting issues
+5. **Test Validation**: Ensure all tests pass after fixes
+
+### 📋 **LLM Code Generation Checklist**
+
+Before submitting any code, verify:
+
+- [ ] **ESLint Clean**: `npm run lint` passes without errors
+- [ ] **Tests Pass**: `npm test` completes successfully  
+- [ ] **Import Paths**: Correct relative paths for ES modules
+- [ ] **Unused Parameters**: Prefixed with underscore if intentional
+- [ ] **Jest Compatibility**: No ES module configuration conflicts
+- [ ] **Regex Patterns**: No unnecessary escape characters
+- [ ] **Indentation**: Consistent 4-space indentation
+- [ ] **TODO Comments**: Clear implementation placeholders
+
+### 🚨 **Critical CI/CD Failure Prevention**
+
+Common failures and prevention:
+
+1. **Jest Validation Errors**:
+   - Remove `extensionsToTreatAsEsm: ['.js']` when using `"type": "module"`
+   - Avoid invalid preset configurations
+
+2. **Import Path Errors**:
+   - Use correct relative paths: `../../src/core/Board.js`
+   - Include `.js` extension for ES modules
+
+3. **ESLint Rule Violations**:
+   - Prefix unused parameters with underscore
+   - Use consistent indentation (4 spaces)
+   - Avoid unnecessary regex escaping
+
+### 🔮 **Future Automated Linting Enhancements**
+
+Planned improvements for LLM code generation:
+
+1. **Pre-Commit Hooks**: Automatic ESLint fixing before commits
+2. **LLM-Powered Linting**: AI-assisted code quality analysis
+3. **Semantic Code Review**: Beyond syntax checking
+4. **Auto-Commit Fixes**: Automatic commit of linting corrections
+5. **Quality Gates**: Prevent commits with linting errors
+
 ## Development Guidelines
 
 ### Code Style
@@ -142,7 +337,7 @@ src/
 ### Working with Issues
 
 1. **Read Issue Carefully**: Understand requirements and acceptance criteria
-2. **Check Dependencies**: Ensure prerequisite issues are completed
+2. **Check Dependencies**: Ensure prerequisite issues are complete
 3. **Create Feature Branch**: Branch from main using issue number
 4. **Implement Solution**: Follow coding standards and test requirements
 5. **Update Tests**: Add/modify tests for new functionality
@@ -175,16 +370,16 @@ src/
 
 ```javascript
 {
-  board: Array(64),           // Current board position
-  currentPlayer: 'white',     // Active player
-  castlingRights: {           // Castling availability
+  board: Array(64),         // Current board position
+  currentPlayer: 'white',   // Active player
+  castlingRights: {         // Castling availability
     white: { kingside: true, queenside: true },
     black: { kingside: true, queenside: true }
   },
-  enPassantTarget: null,      // En passant target square
-  halfmoveClock: 0,          // 50-move rule counter
-  fullmoveNumber: 1,         // Game move counter
-  gameStatus: 'active'       // active, check, checkmate, stalemate, draw
+  enPassantTarget: null,    // En passant target square
+  halfmoveClock: 0,         // 50-move rule counter
+  fullmoveNumber: 1,        // Game move counter
+  gameStatus: 'active'      // active, check, checkmate, stalemate, draw
 }
 ```
 
@@ -226,10 +421,10 @@ src/
 
 ```bash
 npm install          # Install dependencies
-npm test            # Run test suite
-npm run lint        # Check code style
-npm run build       # Build production version
-npm start           # Start development server
+npm test             # Run test suite
+npm run lint         # Check code style
+npm run build        # Build production version
+npm start            # Start development server
 ```
 
 ## Testing Strategy
