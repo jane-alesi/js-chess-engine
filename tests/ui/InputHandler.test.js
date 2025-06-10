@@ -20,10 +20,7 @@ describe('InputHandler', () => {
 
         mockSquareElement = {
             dataset: { index: '0' },
-            classList: {
-                add: jest.fn(),
-                remove: jest.fn()
-            },
+            classList: { add: jest.fn(), remove: jest.fn() },
             closest: jest.fn()
         };
 
@@ -198,7 +195,7 @@ describe('InputHandler', () => {
 
         test('should highlight valid moves', () => {
             const validMoves = [8, 16, 24];
-            const mockSquares = validMoves.map(index => ({
+            const mockSquares = validMoves.map(_index => ({
                 classList: { add: jest.fn(), remove: jest.fn() }
             }));
 
@@ -239,7 +236,6 @@ describe('InputHandler', () => {
             mockBoardElement.querySelectorAll.mockReturnValue(mockSquares);
 
             inputHandler.clearHighlights();
-
             mockSquares.forEach(square => {
                 expect(square.classList.remove).toHaveBeenCalledWith('selected', 'valid-move', 'last-move');
             });
