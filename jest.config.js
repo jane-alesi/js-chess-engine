@@ -10,7 +10,7 @@ const config = {
     
     // Module name mapping to handle relative imports correctly
     moduleNameMapper: {
-        '^(\\..{1,2}/.*)\.js$': '$1'
+        '^(\\..{1,2}/.*)\\.js$': '$1'
     },
     
     // Verbose output for better debugging
