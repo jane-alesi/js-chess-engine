@@ -1,5 +1,6 @@
 // tests/ui/InputHandler.test.js
 
+import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
 import { InputHandler } from '../../src/ui/InputHandler.js';
 
 // Mock DOM environment for testing
