@@ -23,9 +23,9 @@ describe('Board', () => {
         expect(board.squares[63]).not.toBeNull(); // Rook at h8
         expect(board.squares[55]).not.toBeNull(); // Pawn at h7
 
-        // Check piece types and colors (example for white pawn at a2)
-        expect(board.squares[8].type).toBe('pawn');
-        expect(board.squares[8].color).toBe('white');
+        // Check piece types and colors using getter methods (example for white pawn at a2)
+        expect(board.squares[8].getType()).toBe('pawn');
+        expect(board.squares[8].getColor()).toBe('white');
 
         // Check empty square in the middle
         expect(board.squares[20]).toBeNull();
