@@ -76,25 +76,103 @@ export class Board {
 }
 ```
 
-**Piece.js** - Piece definitions and movement patterns
+**Piece.js** - Modern ES2022 implementation with private fields
 ```javascript
 export class Piece {
-    constructor(type, color, value, symbol) {
-        this.type = type;      // 'pawn', 'rook', 'knight', 'bishop', 'queen', 'king'
-        this.color = color;    // 'white', 'black'
-        this.value = value;    // Material value for evaluation
-        this.symbol = symbol;  // Unicode chess symbol
-        this.hasMoved = false; // For castling and pawn double-move
+    // Static validation constants
+    static VALID_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
+    static VALID_COLORS = ['white', 'black'];
+
+    // Private fields for encapsulation
+    #type;
+    #color;
+    #points;
+    #symbol;
+    #hasMoved = false;
+
+    constructor(type, color, points, symbol) {
+        // Comprehensive validation with descriptive errors
+        if (!type || typeof type !== 'string') {
+            throw new Error('Piece type must be a non-empty string');
+        }
+        if (!Piece.VALID_TYPES.includes(type.toLowerCase())) {
+            throw new Error(`Invalid piece type: ${type}. Must be one of: ${Piece.VALID_TYPES.join(', ')}`);
+        }
+        if (!color || typeof color !== 'string') {
+            throw new Error('Piece color must be a non-empty string');
+        }
+        if (!Piece.VALID_COLORS.includes(color.toLowerCase())) {
+            throw new Error(`Invalid piece color: ${color}. Must be one of: ${Piece.VALID_COLORS.join(', ')}`);
+        }
+        if (typeof points !== 'number' || points < 0) {
+            throw new Error('Piece points must be a non-negative number');
+        }
+        if (!symbol || typeof symbol !== 'string') {
+            throw new Error('Piece symbol must be a non-empty string');
+        }
+        
+        this.#type = type.toLowerCase();
+        this.#color = color.toLowerCase();
+        this.#points = points;
+        this.#symbol = symbol;
     }
-    
-    getMovementPattern() {
-        // Return movement vectors for piece type
-        // Implementation: Piece-specific movement rules
+
+    // Public API methods
+    getType() { return this.#type; }
+    getColor() { return this.#color; }
+    getPoints() { return this.#points; }
+    getSymbol() { return this.#symbol; }
+    getHasMoved() { return this.#hasMoved; }
+
+    markAsMoved() {
+        if (this.#hasMoved) {
+            throw new Error(`${this.#color} ${this.#type} has already been marked as moved`);
+        }
+        this.#hasMoved = true;
     }
-    
-    canMoveTo(fromSquare, toSquare, board) {
-        // Validate if piece can legally move to target square
-        // Include piece-specific rules (pawn diagonal capture, etc.)
+
+    resetMovedStatus() {
+        if (!this.#hasMoved) {
+            throw new Error(`${this.#color} ${this.#type} hasn't moved yet`);
+        }
+        this.#hasMoved = false;
+    }
+
+    // Utility methods for piece comparison
+    isOpponent(otherPiece) {
+        if (!(otherPiece instanceof Piece)) {
+            throw new Error('Parameter must be a Piece instance');
+        }
+        return this.#color !== otherPiece.getColor();
+    }
+
+    isAlly(otherPiece) {
+        if (!(otherPiece instanceof Piece)) {
+            throw new Error('Parameter must be a Piece instance');
+        }
+        return this.#color === otherPiece.getColor();
+    }
+
+    clone() {
+        const clonedPiece = new Piece(this.#type, this.#color, this.#points, this.#symbol);
+        if (this.#hasMoved) {
+            clonedPiece.markAsMoved();
+        }
+        return clonedPiece;
+    }
+
+    toString() {
+        return `${this.#color} ${this.#type} (${this.#symbol}) - ${this.#points} points${this.#hasMoved ? ' [moved]' : ''}`;
+    }
+
+    toJSON() {
+        return {
+            type: this.#type,
+            color: this.#color,
+            points: this.#points,
+            symbol: this.#symbol,
+            hasMoved: this.#hasMoved
+        };
     }
 }
 ```
@@ -109,7 +187,7 @@ export class MoveGenerator {
         
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
-            if (piece && piece.color === color) {
+            if (piece && piece.getColor() === color) {
                 moves.push(...this.generatePieceMoves(board, i, piece));
             }
         }
@@ -372,8 +450,8 @@ export class Evaluation {
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
             if (piece) {
-                const value = this.PIECE_VALUES[piece.type];
-                material += piece.color === 'white' ? value : -value;
+                const value = this.PIECE_VALUES[piece.getType()];
+                material += piece.getColor() === 'white' ? value : -value;
             }
         }
         
@@ -387,9 +465,9 @@ export class Evaluation {
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
             if (piece) {
-                const table = this.PIECE_SQUARE_TABLES[piece.type];
-                const squareValue = piece.color === 'white' ? table[i] : table[63 - i];
-                positional += piece.color === 'white' ? squareValue : -squareValue;
+                const table = this.PIECE_SQUARE_TABLES[piece.getType()];
+                const squareValue = piece.getColor() === 'white' ? table[i] : table[63 - i];
+                positional += piece.getColor() === 'white' ? squareValue : -squareValue;
             }
         }
         
@@ -400,7 +478,7 @@ export class Evaluation {
 
 #### 4. Utility Functions
 
-**Constants.js** - Game constants
+**Constants.js** - Enhanced with helper functions
 ```javascript
 export const PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
 export const COLORS = ['white', 'black'];
@@ -418,8 +496,77 @@ export const PIECE_SYMBOLS = {
 
 export const PIECE_VALUES = {
     pawn: 1, knight: 3, bishop: 3,
-    rook: 5, queen: 9, king: 0
+    rook: 5, queen: 9, king: 1000
 };
+
+export const PIECE_TYPES_CONSTANTS = {
+    PAWN: 'pawn',
+    ROOK: 'rook',
+    KNIGHT: 'knight',
+    BISHOP: 'bishop',
+    QUEEN: 'queen',
+    KING: 'king'
+};
+
+export const PIECE_COLORS_CONSTANTS = {
+    WHITE: 'white',
+    BLACK: 'black'
+};
+
+export const STARTING_POSITIONS = {
+    // White pieces (bottom of board, indices 48-63)
+    white: {
+        rooks: [56, 63],
+        knights: [57, 62],
+        bishops: [58, 61],
+        queen: [59],
+        king: [60],
+        pawns: [48, 49, 50, 51, 52, 53, 54, 55]
+    },
+    // Black pieces (top of board, indices 0-15)
+    black: {
+        rooks: [0, 7],
+        knights: [1, 6],
+        bishops: [2, 5],
+        queen: [3],
+        king: [4],
+        pawns: [8, 9, 10, 11, 12, 13, 14, 15]
+    }
+};
+
+// Helper functions for validation and retrieval
+export function getPieceSymbol(type, color, useAlt = false) {
+    if (!PIECE_SYMBOLS[color]) {
+        throw new Error(`Invalid piece color: ${color}`);
+    }
+    if (!PIECE_SYMBOLS[color][type]) {
+        throw new Error(`Invalid piece type: ${type}`);
+    }
+    return PIECE_SYMBOLS[color][type];
+}
+
+export function getPieceValue(type) {
+    if (!PIECE_VALUES[type]) {
+        throw new Error(`Invalid piece type: ${type}`);
+    }
+    return PIECE_VALUES[type];
+}
+
+export function isValidPieceType(type) {
+    return PIECE_TYPES.includes(type);
+}
+
+export function isValidPieceColor(color) {
+    return COLORS.includes(color);
+}
+
+export function getAllPieceTypes() {
+    return [...PIECE_TYPES];
+}
+
+export function getAllPieceColors() {
+    return [...COLORS];
+}
 
 export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 ```
@@ -496,13 +643,42 @@ describe('Board', () => {
     test('should setup initial board correctly', () => {
         board.setupInitialBoard();
         
-        // Test piece placement
-        expect(board.squares[0].type).toBe('rook');
-        expect(board.squares[0].color).toBe('white');
-        expect(board.squares[8].type).toBe('pawn');
-        expect(board.squares[63].type).toBe('rook');
-        expect(board.squares[63].color).toBe('black');
+        // Test piece placement using getter methods
+        expect(board.squares[0].getType()).toBe('rook');
+        expect(board.squares[0].getColor()).toBe('white');
+        expect(board.squares[8].getType()).toBe('pawn');
+        expect(board.squares[63].getType()).toBe('rook');
+        expect(board.squares[63].getColor()).toBe('black');
     });
+});
+```
+
+#### Test Compatibility Patterns
+
+**When Implementing Private Fields:**
+```javascript
+// ❌ INCORRECT: Direct property access (will fail with private fields)
+test('should have correct piece type', () => {
+    const piece = new Piece('pawn', 'white', 1, '♙');
+    expect(piece.type).toBe('pawn'); // Fails with private fields
+});
+
+// ✅ CORRECT: Use getter methods
+test('should have correct piece type', () => {
+    const piece = new Piece('pawn', 'white', 1, '♙');
+    expect(piece.getType()).toBe('pawn'); // Works with private fields
+});
+```
+
+**Integration Test Updates:**
+```javascript
+// When core components change, update dependent tests
+test('board should setup pieces correctly', () => {
+    board.setupInitialBoard();
+    
+    // Use getter methods for piece properties
+    expect(board.squares[8].getType()).toBe('pawn');
+    expect(board.squares[8].getColor()).toBe('white');
 });
 ```
 
@@ -679,7 +855,7 @@ function validateMove(fromIndex, toIndex) {
 
 #### Modern ES2022 Syntax
 ```javascript
-// ✅ CORRECT: Modern class fields
+// ✅ CORRECT: Modern class fields with private fields
 export class Rules {
     static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
     static COLORS = ['white', 'black'];
@@ -772,7 +948,7 @@ const MOVEMENT_PATTERNS = {
         white: [[-8], [-16], [-7], [-9]], // forward, double, captures
         black: [[8], [16], [7], [9]]
     },
-    rook: [[-8, -16, -24, -32, -40, -48, -56], [8, 16, 24, 32, 40, 48, 56], 
+    rook: [[-8, -16, -24, -32, -40, -48, -56], [8, 16, 24, 32, 40, 48, 56],
            [-1, -2, -3, -4, -5, -6, -7], [1, 2, 3, 4, 5, 6, 7]],
     knight: [[-17, -15, -10, -6, 6, 10, 15, 17]],
     bishop: [[-9, -18, -27, -36, -45, -54, -63], [-7, -14, -21, -28, -35, -42, -49],
