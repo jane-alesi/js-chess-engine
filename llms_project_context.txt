@@ -29,6 +29,26 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 ```
 
+### **🧪 Test Compatibility Protocol (MANDATORY)**
+```javascript
+// When modifying core components with private fields or new APIs:
+const testUpdateWorkflow = {
+    1: "Identify all dependent test files before making changes",
+    2: "Update tests to use getter methods instead of direct property access", 
+    3: "Run full test suite to verify compatibility",
+    4: "Document breaking changes in commit message",
+    5: "Update any integration tests that depend on the modified component"
+};
+
+// Example: After implementing private fields in Piece.js
+// ❌ OLD: expect(piece.type).toBe('pawn');
+// ✅ NEW: expect(piece.getType()).toBe('pawn');
+
+// Integration test updates
+// ❌ OLD: expect(board.squares[8].color).toBe('white');
+// ✅ NEW: expect(board.squares[8].getColor()).toBe('white');
+```
+
 ### **📝 Base64 Content Processing**
 ```javascript
 // Reliable decode pattern with error handling
@@ -58,10 +78,32 @@ if (content) {
 
 ### **JavaScript/ES2022**
 ```javascript
-// ✅ Modern class fields syntax
+// ✅ Modern class fields syntax with private fields
 class ChessEngine {
     static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
+    
+    // Private fields for encapsulation
     #privateField = 'value';
+    #gameState;
+    #currentPlayer = 'white';
+
+    constructor() {
+        this.#gameState = new GameState();
+    }
+
+    // Public getter methods for private fields
+    getCurrentPlayer() { return this.#currentPlayer; }
+    getGameState() { return this.#gameState; }
+}
+
+// ✅ Comprehensive input validation with descriptive errors
+function validateMove(fromIndex, toIndex) {
+    if (typeof fromIndex !== 'number' || fromIndex < 0 || fromIndex >= 64) {
+        throw new Error(`Invalid move: fromIndex ${fromIndex} must be 0-63`);
+    }
+    if (typeof toIndex !== 'number' || toIndex < 0 || toIndex >= 64) {
+        throw new Error(`Invalid move: toIndex ${toIndex} must be 0-63`);
+    }
 }
 
 // ✅ Proper error handling
@@ -76,6 +118,7 @@ function processMove(_unused, toSquare) { /* ... */ }
 - **ESLint** - Flat config format (not `.eslintrc.json`)
 - **Error Handling** - Descriptive exceptions, no console pollution
 - **Test Coverage** - All error paths and edge cases validated
+- **Test Compatibility** - Update tests when implementing private fields or new APIs
 
 ### **File Structure**
 ```
@@ -107,6 +150,13 @@ tests/
 3. **Error handling** uses exceptions, not console output
 4. **Documentation** updated for significant changes
 5. **Performance** considerations for LLM integration
+6. **Test compatibility** verified when modifying core components
+
+### **Integration Testing Protocol**
+- **Dependency Mapping** - Before modifying core components, identify all dependent files
+- **API Compatibility** - When changing public interfaces, update all consumers
+- **Test Cascade** - Run tests for modified component AND all dependent components
+- **Breaking Change Documentation** - Clearly document any API changes in commit messages
 
 ### **Collaboration Protocol**
 - **SHA-based updates** - Always get current SHA before file modifications
