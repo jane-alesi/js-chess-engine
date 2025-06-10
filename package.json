@@ -12,7 +12,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "build": "echo 'Build script goes here'"
+    "build": "echo 'Build script goes here'",
+    "security-check": "npm audit",
+    "security-fix": "npm audit fix"
   },
   "keywords": [
     "chess",
@@ -24,9 +26,9 @@
   "author": "Jane Alesi",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0",
+    "eslint": "^9.28.0",
+    "jest": "^29.7.0",
     "live-server": "^1.2.2",
-    "prettier": "^3.0.0"
+    "prettier": "^3.3.3"
   }
 }
