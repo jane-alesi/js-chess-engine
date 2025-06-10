@@ -14,49 +14,49 @@ export class MoveGenerator {
         const moves = [];
         
         switch (piece.type) {
-            case 'pawn':
-                return this.generatePawnMoves(piece, position);
-            case 'rook':
-                return this.generateRookMoves(piece, position);
-            case 'knight':
-                return this.generateKnightMoves(piece, position);
-            case 'bishop':
-                return this.generateBishopMoves(piece, position);
-            case 'queen':
-                return this.generateQueenMoves(piece, position);
-            case 'king':
-                return this.generateKingMoves(piece, position);
-            default:
-                return moves;
+        case 'pawn':
+            return this.generatePawnMoves(piece, position);
+        case 'rook':
+            return this.generateRookMoves(piece, position);
+        case 'knight':
+            return this.generateKnightMoves(piece, position);
+        case 'bishop':
+            return this.generateBishopMoves(piece, position);
+        case 'queen':
+            return this.generateQueenMoves(piece, position);
+        case 'king':
+            return this.generateKingMoves(piece, position);
+        default:
+            return moves;
         }
     }
 
-    generatePawnMoves(piece, position) {
+    generatePawnMoves(_piece, _position) {
         // TODO: Implement pawn move generation
         return [];
     }
 
-    generateRookMoves(piece, position) {
+    generateRookMoves(_piece, _position) {
         // TODO: Implement rook move generation
         return [];
     }
 
-    generateKnightMoves(piece, position) {
+    generateKnightMoves(_piece, _position) {
         // TODO: Implement knight move generation
         return [];
     }
 
-    generateBishopMoves(piece, position) {
+    generateBishopMoves(_piece, _position) {
         // TODO: Implement bishop move generation
         return [];
     }
 
-    generateQueenMoves(piece, position) {
+    generateQueenMoves(_piece, _position) {
         // TODO: Implement queen move generation
         return [];
     }
 
-    generateKingMoves(piece, position) {
+    generateKingMoves(_piece, _position) {
         // TODO: Implement king move generation
         return [];
     }
