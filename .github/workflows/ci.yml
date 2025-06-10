@@ -20,6 +20,11 @@ jobs:
         node-version: '20'
     - name: Install dependencies
       run: npm install
+    - name: Security Audit
+      run: |
+        echo "🔒 Running npm security audit..."
+        npm audit --audit-level=moderate
+        echo "📊 Security audit completed"
     - name: Run tests
       run: npm test
     - name: Run lint
