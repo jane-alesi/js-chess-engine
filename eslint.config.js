@@ -12,11 +12,20 @@ export default [
                 document: 'readonly',
                 console: 'readonly',
                 
+                // Timer functions (Browser & Node.js)
+                setTimeout: 'readonly',
+                clearTimeout: 'readonly',
+                setInterval: 'readonly',
+                clearInterval: 'readonly',
+                setImmediate: 'readonly',
+                clearImmediate: 'readonly',
+                
                 // Node.js globals
                 process: 'readonly',
                 Buffer: 'readonly',
                 __dirname: 'readonly',
                 __filename: 'readonly',
+                global: 'readonly',
                 
                 // Jest globals
                 describe: 'readonly',
