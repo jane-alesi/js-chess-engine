@@ -61,7 +61,7 @@ src/
 
 LLM-generated code must pass automated quality checks to prevent CI/CD pipeline failures. This section provides comprehensive guidelines for ensuring code quality before committing.
 
-### 🔧 **Pre-Generation Code Quality Checklist**
+### 📋 **Pre-Generation Code Quality Checklist**
 
 Before generating any code, LLMs must consider:
 
@@ -77,10 +77,10 @@ Before generating any code, LLMs must consider:
 
 ```bash
 # Recommended pre-commit workflow
-npm run lint          # Check for ESLint errors
-npm run lint:fix       # Auto-fix ESLint issues
-npm test              # Verify all tests pass
-npm run format        # Apply Prettier formatting
+npm run lint              # Check for ESLint errors
+npm run lint:fix          # Auto-fix ESLint issues
+npm test                  # Verify all tests pass
+npm run format            # Apply Prettier formatting
 ```
 
 #### **Phase 2: LLM Code Generation Best Practices**
@@ -110,29 +110,39 @@ npm run format        # Apply Prettier formatting
    import { Board } from '../src/core/Board.js';
    ```
 
-3. **Jest Configuration for ES Modules**:
+3. **Jest Configuration for ES Modules (2025 Update)**:
    ```javascript
-   // ✅ CORRECT: Jest config for ES modules
-   const config = {
+   // ✅ CORRECT: Modern Jest config for ES modules
+   export default {
        testEnvironment: 'node',
-       // NO extensionsToTreatAsEsm needed with "type": "module"
+       transform: {},
+       extensionsToTreatAsEsm: ['.js'],
        moduleNameMapper: {
            '^(\\.{1,2}/.*)\\.js$': '$1'
        }
    };
    ```
 
-4. **Regex Pattern Escaping**:
+4. **ESLint Configuration (2025 Flat Config)**:
    ```javascript
-   // ✅ CORRECT: Minimal necessary escaping
-   moduleNameMapper: {
-       '^(\\.{1,2}/.*)\\.js$': '$1'
-   }
+   // ✅ CORRECT: Modern ESLint flat config
+   import js from '@eslint/js';
    
-   // ❌ INCORRECT: Unnecessary escape characters
-   moduleNameMapper: {
-       '^(\\\\.{1,2}/.*)\\\\.js$': '$1'
-   }
+   export default [
+       js.configs.recommended,
+       {
+           languageOptions: {
+               ecmaVersion: 2022,
+               sourceType: 'module'
+           },
+           rules: {
+               'no-unused-vars': ['error', {
+                   argsIgnorePattern: '^_',
+                   varsIgnorePattern: '^_'
+               }]
+           }
+       }
+   ];
    ```
 
 ### 🛠️ **Common ESLint Error Patterns & Solutions**
@@ -151,66 +161,42 @@ function validateMove(fromPos, toPos, _piece, _gameState) {
 }
 ```
 
-#### **2. Indentation Errors (indent)**
+#### **2. ES2022 Class Fields Parsing**
 ```javascript
-// ❌ Problem: Inconsistent indentation in switch statements
-switch (piece.type) {
-        case 'pawn':
-            return generatePawnMoves();
-        case 'rook':
-            return generateRookMoves();
-}
-
-// ✅ Solution: Consistent 4-space indentation
-switch (piece.type) {
-    case 'pawn':
-        return generatePawnMoves();
-    case 'rook':
-        return generateRookMoves();
+// ✅ CORRECT: Modern class field syntax (requires ES2022)
+export class Rules {
+    static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
+    static COLORS = ['white', 'black'];
 }
 ```
 
 #### **3. Unnecessary Escape Characters (no-useless-escape)**
 ```javascript
 // ❌ Problem: Unnecessary backslash escaping
-const regex = /^(\\.{1,2}\/.*)\\.js$/;
+const regex = /^(\\..{1,2}\/.*)\\..js$/;
 
 // ✅ Solution: Remove unnecessary escapes
-const regex = /^(\.{1,2}\/.*)\.js$/;
+const regex = /^(\..{1,2}\/.*)\.js$/;
 ```
 
-### 🔄 **Automated Fixing Strategies**
+### 🚨 **Critical CI/CD Failure Prevention**
 
-#### **Strategy 1: ESLint Auto-Fix**
-```bash
-# Auto-fix common issues
-npx eslint . --fix
+Common failures and prevention:
 
-# Target specific files
-npx eslint src/core/MoveGenerator.js --fix
-```
+1. **Jest Validation Errors**:
+   - Use `extensionsToTreatAsEsm: ['.js']` with `"type": "module"`
+   - Avoid invalid preset configurations
 
-#### **Strategy 2: Pre-Commit Hooks (Future Implementation)**
-```json
-// package.json - lint-staged configuration
-{
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  }
-}
-```
+2. **Import Path Errors**:
+   - Use correct relative paths: `../../src/core/Board.js`
+   - Include `.js` extension for ES modules
 
-#### **Strategy 3: LLM-Assisted Code Review**
-1. **Generate Code**: Create initial implementation
-2. **Self-Lint**: Run ESLint validation on generated code
-3. **Auto-Fix**: Apply ESLint --fix for common issues
-4. **Manual Review**: Address complex linting issues
-5. **Test Validation**: Ensure all tests pass after fixes
+3. **ESLint Rule Violations**:
+   - Prefix unused parameters with underscore
+   - Use consistent indentation (4 spaces)
+   - Avoid unnecessary regex escaping
 
-### 📋 **LLM Code Generation Checklist**
+### 📊 **LLM Code Generation Checklist**
 
 Before submitting any code, verify:
 
@@ -222,23 +208,6 @@ Before submitting any code, verify:
 - [ ] **Regex Patterns**: No unnecessary escape characters
 - [ ] **Indentation**: Consistent 4-space indentation
 - [ ] **TODO Comments**: Clear implementation placeholders
-
-### 🚨 **Critical CI/CD Failure Prevention**
-
-Common failures and prevention:
-
-1. **Jest Validation Errors**:
-   - Remove `extensionsToTreatAsEsm: ['.js']` when using `"type": "module"`
-   - Avoid invalid preset configurations
-
-2. **Import Path Errors**:
-   - Use correct relative paths: `../../src/core/Board.js`
-   - Include `.js` extension for ES modules
-
-3. **ESLint Rule Violations**:
-   - Prefix unused parameters with underscore
-   - Use consistent indentation (4 spaces)
-   - Avoid unnecessary regex escaping
 
 ### 🔮 **Future Automated Linting Enhancements**
 
@@ -296,12 +265,6 @@ Planned improvements for LLM code generation:
 - `src/ai/Evaluation.js`: Position evaluation considering material, mobility, safety
 - `src/ai/AIPlayer.js`: AI move selection and difficulty levels
 
-### Utilities
-
-- `src/utils/Notation.js`: Convert between internal representation and algebraic notation
-- `src/utils/FEN.js`: Import/export game positions using FEN notation
-- `src/utils/Constants.js`: Piece values, board dimensions, game constants
-
 ## Issue-Driven Development Process
 
 ### Issue Categories
@@ -356,13 +319,13 @@ Planned improvements for LLM code generation:
 
 ```javascript
 {
-  from: 12,           // Source square index
-  to: 28,             // Destination square index
-  piece: 'pawn',      // Moving piece type
-  captured: 'knight', // Captured piece (if any)
-  promotion: 'queen', // Promotion piece (if any)
-  castling: 'kingside', // Castling type (if any)
-  enPassant: true     // En passant capture flag
+  from: 12,              // Source square index
+  to: 28,                // Destination square index
+  piece: 'pawn',         // Moving piece type
+  captured: 'knight',    // Captured piece (if any)
+  promotion: 'queen',    // Promotion piece (if any)
+  castling: 'kingside',  // Castling type (if any)
+  enPassant: true        // En passant capture flag
 }
 ```
 
@@ -370,16 +333,16 @@ Planned improvements for LLM code generation:
 
 ```javascript
 {
-  board: Array(64),         // Current board position
-  currentPlayer: 'white',   // Active player
-  castlingRights: {         // Castling availability
+  board: Array(64),           // Current board position
+  currentPlayer: 'white',     // Active player
+  castlingRights: {           // Castling availability
     white: { kingside: true, queenside: true },
     black: { kingside: true, queenside: true }
   },
-  enPassantTarget: null,    // En passant target square
-  halfmoveClock: 0,         // 50-move rule counter
-  fullmoveNumber: 1,        // Game move counter
-  gameStatus: 'active'      // active, check, checkmate, stalemate, draw
+  enPassantTarget: null,      // En passant target square
+  halfmoveClock: 0,           // 50-move rule counter
+  fullmoveNumber: 1,          // Game move counter
+  gameStatus: 'active'        // active, check, checkmate, stalemate, draw
 }
 ```
 
@@ -393,13 +356,36 @@ Planned improvements for LLM code generation:
 4. **Pawn Structure**: Doubled, isolated, passed pawns
 5. **Center Control**: Piece placement in central squares
 
-### Search Algorithm
+### Search Algorithm (2025 Optimizations)
 
-- **Minimax**: Recursive game tree search
-- **Alpha-Beta Pruning**: Eliminate unnecessary branches
-- **Quiescence Search**: Extend search for tactical sequences
-- **Iterative Deepening**: Gradually increase search depth
-- **Move Ordering**: Search promising moves first
+- **Minimax**: Recursive game tree search with alternating player perspectives
+- **Alpha-Beta Pruning**: Eliminate unnecessary branches (30-50% reduction)
+- **Quiescence Search**: Extend search depth for tactical sequences
+- **Iterative Deepening**: Gradually increase search depth for time management
+- **Move Ordering**: Search promising moves first (captures, checks, killer moves)
+- **Transposition Tables**: Cache evaluated positions using Map/WeakMap
+- **Web Workers**: Offload computation to background threads
+- **WASM Integration**: Critical path functions in WebAssembly for performance
+
+### Modern Performance Techniques
+
+```javascript
+// Web Worker implementation for AI computation
+const worker = new Worker('ai-worker.js');
+worker.postMessage({ FEN, depth: 4 });
+
+// Transposition table for position caching
+const transpositionTable = new Map();
+
+// Move ordering for better pruning
+const orderMoves = (moves) => {
+  return moves.sort((a, b) => {
+    if (a.captured && !b.captured) return -1;
+    if (b.captured && !a.captured) return 1;
+    return pieceSquareValue(b) - pieceSquareValue(a);
+  });
+};
+```
 
 ## Dependencies and Requirements
 
@@ -412,7 +398,7 @@ Planned improvements for LLM code generation:
 ### Development Dependencies
 
 - **Jest**: Testing framework
-- **ESLint**: Code linting
+- **ESLint**: Code linting (Flat Config format)
 - **Prettier**: Code formatting
 - **Webpack**: Module bundling (optional)
 - **Live Server**: Development server
@@ -420,11 +406,11 @@ Planned improvements for LLM code generation:
 ### Build Process
 
 ```bash
-npm install          # Install dependencies
-npm test             # Run test suite
-npm run lint         # Check code style
-npm run build        # Build production version
-npm start            # Start development server
+npm install              # Install dependencies
+npm test                 # Run test suite
+npm run lint             # Check code style
+npm run build            # Build production version
+npm start                # Start development server
 ```
 
 ## Testing Strategy
