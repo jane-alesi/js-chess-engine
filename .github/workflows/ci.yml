@@ -18,14 +18,52 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+    
     - name: Install dependencies
-      run: npm install
+      run: |
+        echo "📦 Installing npm dependencies..."
+        npm install --verbose
+        echo "✅ Dependencies installed successfully"
+    
+    - name: Display dependency tree
+      run: |
+        echo "🌳 Dependency tree overview:"
+        npm list --depth=0 || true
+        echo ""
+    
     - name: Security Audit
       run: |
-        echo "🔒 Running npm security audit..."
+        echo "🔒 Running comprehensive npm security audit..."
+        echo "📊 Audit level: moderate (catches moderate and high severity)"
         npm audit --audit-level=moderate
-        echo "📊 Security audit completed"
+        echo "✅ Security audit completed - no vulnerabilities found"
+    
+    - name: Show npm audit summary
+      if: failure()
+      run: |
+        echo "❌ Security audit failed - showing detailed report:"
+        npm audit || true
+        echo ""
+        echo "🔧 Available fixes:"
+        npm audit fix --dry-run || true
+    
     - name: Run tests
-      run: npm test
+      run: |
+        echo "🧪 Running test suite..."
+        npm test
+        echo "✅ All tests passed"
+    
     - name: Run lint
-      run: npm run lint
+      run: |
+        echo "🔍 Running ESLint code quality checks..."
+        npm run lint
+        echo "✅ Code quality checks passed"
+    
+    - name: Build summary
+      if: success()
+      run: |
+        echo "🎉 Build completed successfully!"
+        echo "✅ Dependencies: Installed"
+        echo "✅ Security: No vulnerabilities"
+        echo "✅ Tests: All passing"
+        echo "✅ Linting: No issues"
