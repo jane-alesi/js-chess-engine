@@ -3,32 +3,31 @@
 import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
 import { InputHandler } from '../../src/ui/InputHandler.js';
 
-// Mock DOM environment for testing
-const mockBoardElement = {
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    querySelector: jest.fn(),
-    querySelectorAll: jest.fn(() => [])
-};
-
-const mockSquareElement = {
-    dataset: { index: '0' },
-    classList: {
-        add: jest.fn(),
-        remove: jest.fn()
-    },
-    closest: jest.fn()
-};
-
 describe('InputHandler', () => {
     let inputHandler;
     let mockCallback;
+    let mockBoardElement;
+    let mockSquareElement;
 
     beforeEach(() => {
+        // Create fresh mocks for each test
+        mockBoardElement = {
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            querySelector: jest.fn(),
+            querySelectorAll: jest.fn(() => [])
+        };
+
+        mockSquareElement = {
+            dataset: { index: '0' },
+            classList: {
+                add: jest.fn(),
+                remove: jest.fn()
+            },
+            closest: jest.fn()
+        };
+
         mockCallback = jest.fn();
-        
-        // Reset all mocks before each test
-        jest.clearAllMocks();
         
         // Setup default mock returns
         mockBoardElement.querySelector.mockReturnValue(mockSquareElement);
@@ -38,6 +37,7 @@ describe('InputHandler', () => {
     afterEach(() => {
         if (inputHandler) {
             inputHandler.destroy();
+            inputHandler = null;
         }
     });
 
@@ -68,7 +68,6 @@ describe('InputHandler', () => {
     describe('Square Selection', () => {
         beforeEach(() => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            jest.clearAllMocks(); // Clear mocks after InputHandler creation
         });
 
         test('should select a square on first click', () => {
@@ -139,7 +138,6 @@ describe('InputHandler', () => {
     describe('Input Validation', () => {
         beforeEach(() => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            jest.clearAllMocks(); // Clear mocks after InputHandler creation
         });
 
         test('should ignore clicks on non-square elements', () => {
@@ -196,7 +194,6 @@ describe('InputHandler', () => {
     describe('Visual Feedback', () => {
         beforeEach(() => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            jest.clearAllMocks(); // Clear mocks after InputHandler creation
         });
 
         test('should highlight valid moves', () => {
@@ -252,7 +249,6 @@ describe('InputHandler', () => {
     describe('State Management', () => {
         beforeEach(() => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            jest.clearAllMocks(); // Clear mocks after InputHandler creation
         });
 
         test('should reset state correctly', () => {
@@ -276,7 +272,6 @@ describe('InputHandler', () => {
     describe('Cleanup', () => {
         test('should remove event listeners on destroy', () => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            jest.clearAllMocks(); // Clear mocks after InputHandler creation
             
             inputHandler.destroy();
 
