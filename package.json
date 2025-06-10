@@ -2,9 +2,10 @@
   "name": "js-chess-engine",
   "version": "0.1.0",
   "description": "A pure JavaScript chess engine inspired by Atari Video Chess.",
-  "main": "index.js",
+  "type": "module",
+  "main": "src/main.js",
   "scripts": {
-    "start": "live-server --port=8080",
+    "start": "live-server --port=8080 --entry-file=index.html",
     "test": "jest",
     "lint": "eslint .",
     "format": "prettier --write .",
