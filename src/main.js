@@ -1,15 +1,8 @@
 // src/main.js - Entry point for the game
 
-import { Board } from './core/Board.js';
-import { BoardRenderer } from './ui/BoardRenderer.js';
+import { Game } from './core/Game.js';
 
-const gameBoard = new Board();
-const boardRenderer = new BoardRenderer('board');
+const game = new Game();
+game.startGame();
 
-function initGame() {
-    gameBoard.setupInitialBoard();
-    boardRenderer.render(gameBoard.squares);
-    console.log('Game initialized!');
-}
-
-initGame();
+console.log('Game initialized and started!');
