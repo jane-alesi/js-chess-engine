@@ -34,7 +34,7 @@ export class InputHandler {
      * @param {Event} event - The click event
      */
     handleSquareClick(event) {
-        const square = event.target.closest('.square');
+        const square = event.target.closest('[data-index]');
         if (!square) return;
 
         const squareIndex = parseInt(square.dataset.index);
