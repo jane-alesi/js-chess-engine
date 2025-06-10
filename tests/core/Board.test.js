@@ -40,11 +40,43 @@ describe('Board', () => {
         expect(board.squares[0]).toBeNull();
     });
 
-    test('should not move a piece from an empty square', () => {
+    test('should throw error when moving from empty square', () => {
         board.setupInitialBoard();
-        const result = board.movePiece(20, 21); // Try to move from an empty square
-        expect(result).toBe(false);
+        expect(() => {
+            board.movePiece(20, 21); // Try to move from an empty square
+        }).toThrow('Invalid move: no piece found at square 20');
+        
+        // Board state should remain unchanged
         expect(board.squares[20]).toBeNull(); // Should remain null
         expect(board.squares[21]).toBeNull(); // Should remain null
+    });
+
+    test('should throw error for invalid fromIndex', () => {
+        board.setupInitialBoard();
+        expect(() => {
+            board.movePiece(-1, 20);
+        }).toThrow('Invalid move: square indices out of bounds (from: -1, to: 20)');
+        
+        expect(() => {
+            board.movePiece(64, 20);
+        }).toThrow('Invalid move: square indices out of bounds (from: 64, to: 20)');
+    });
+
+    test('should throw error for invalid toIndex', () => {
+        board.setupInitialBoard();
+        expect(() => {
+            board.movePiece(0, -1);
+        }).toThrow('Invalid move: square indices out of bounds (from: 0, to: -1)');
+        
+        expect(() => {
+            board.movePiece(0, 64);
+        }).toThrow('Invalid move: square indices out of bounds (from: 0, to: 64)');
+    });
+
+    test('should throw error for both invalid indices', () => {
+        board.setupInitialBoard();
+        expect(() => {
+            board.movePiece(-1, 64);
+        }).toThrow('Invalid move: square indices out of bounds (from: -1, to: 64)');
     });
 });
