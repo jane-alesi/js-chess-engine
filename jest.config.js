@@ -4,13 +4,16 @@ const config = {
     testEnvironment: 'node',
     transform: {},
     
+    // Enable Jest globals (jest.fn, describe, test, etc.)
+    injectGlobals: true,
+    
     // Module configuration for ES modules
     moduleFileExtensions: ['js', 'json', 'node'],
     testMatch: ['**/tests/**/*.test.js'],
     
     // Module name mapping to handle relative imports correctly
     moduleNameMapper: {
-        '^(\\..{1,2}/.*)\\.js$': '$1'
+        '^(\\.\\.?/.*)\\.(js)$': '$1'
     },
     
     // Verbose output for better debugging
