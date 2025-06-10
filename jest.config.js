@@ -1,9 +1,8 @@
 /** @type {import('jest').Config} */
 const config = {
-    // Enable ES Module support - NO preset needed for ES modules
+    // ES Module support is automatically inferred from package.json "type": "module"
     testEnvironment: 'node',
     transform: {},
-    extensionsToTreatAsEsm: ['.js'],
     
     // Module configuration for ES modules
     moduleFileExtensions: ['js', 'json', 'node'],
@@ -11,14 +10,7 @@ const config = {
     
     // Module name mapping to handle relative imports correctly
     moduleNameMapper: {
-        '^(\\.\{1,2\}/.*)\\\.js$': '$1'
-    },
-    
-    // Globals configuration for ES modules
-    globals: {
-        'ts-jest': {
-            useESM: true
-        }
+        '^(\\.{1,2}/.*)\\\.js$': '$1'
     },
     
     // Verbose output for better debugging
