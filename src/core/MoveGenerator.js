@@ -49,10 +49,10 @@ export class MoveGenerator {
         }
 
         // Determine direction and starting ranks based on color
-        // ✅ FIXED: Corrected direction based on test expectations
-        const direction = color === 'white' ? 8 : -8; // White moves down (+8), black moves up (-8)
-        // ✅ FIXED: Corrected starting ranks based on test analysis
-        const startingRank = color === 'white' ? 1 : 6; // White starts on rank 1 (position 12), black on rank 6 (position 52)
+        // ✅ FIXED: Corrected direction based on board layout from Constants.js
+        // Board layout: 0-7 (black back rank), 8-15 (black pawns), 48-55 (white pawns), 56-63 (white back rank)
+        const direction = color === 'white' ? -8 : 8; // White moves up (-8), black moves down (+8)
+        const startingRank = color === 'white' ? 6 : 1; // White starts on rank 6 (positions 48-55), black on rank 1 (positions 8-15)
         const currentRank = Math.floor(position / 8);
 
         // Single square forward move
@@ -86,7 +86,7 @@ export class MoveGenerator {
 
         // Diagonal capture moves
         // ✅ FIXED: Adjusted capture offsets for correct direction
-        const captureOffsets = color === 'white' ? [7, 9] : [-9, -7];
+        const captureOffsets = color === 'white' ? [-9, -7] : [7, 9];
 
         for (const offset of captureOffsets) {
             const captureSquare = position + offset;
