@@ -312,24 +312,6 @@ export class MoveGenerator {
         const rankDiff = Math.abs(toRank - fromRank);
 
         // Valid diagonal move: file and rank differences must be equal
-        // and movement must be consistent (no wrapping)
-        if (fileDiff !== rankDiff) {
-            return false; // Not a diagonal move
-        }
-
-        // Check for wrapping around board edges
-        const direction = toSquare - fromSquare;
-        const expectedDirection = Math.sign(direction);
-        
-        // Verify the move follows a consistent diagonal pattern
-        if (Math.abs(direction) % 7 === 0 && Math.abs(direction) % 9 !== 0) {
-            // Moving along -7/+7 diagonal (NE/SW)
-            return fileDiff === rankDiff;
-        } else if (Math.abs(direction) % 9 === 0 && Math.abs(direction) % 7 !== 0) {
-            // Moving along -9/+9 diagonal (NW/SE)
-            return fileDiff === rankDiff;
-        }
-
         return fileDiff === rankDiff;
     }
 
