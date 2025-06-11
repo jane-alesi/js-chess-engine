@@ -53,6 +53,45 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 ```
 
+### **🧠 Cortex Memory System Protocol**
+
+**CRITICAL**: The `read_graph` function requires specific parameter structure for correct initialization:
+
+```javascript
+// ✅ CORRECT: Use explicit parameter structure
+read_graph({"properties": {}})
+
+// ❌ INCORRECT: Will cause "Invalid JSON format" error
+read_graph()
+read_graph({})
+```
+
+**Initialization Sequence:**
+1. Always attempt cortex initialization at conversation start
+2. Use exact JSON parameter structure to prevent parsing errors
+3. Implement fallback strategies for initialization failures
+4. Verify successful memory integration before proceeding
+
+### **🔧 GitHub File Update Protocol (Enhanced)**
+
+**CRITICAL**: When updating EXISTING files, ALWAYS provide the SHA to prevent 422 errors:
+
+```javascript
+// ✅ CORRECT: SHA-based update sequence
+const fileData = await get_file_contents(owner, repo, path);
+const currentSHA = fileData.sha;
+await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
+
+// ❌ INCORRECT: Missing SHA causes error
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\n\\n\\"sha\\" wasn't supplied. []"}
+```
+
+**Update Workflow:**
+1. Get current file contents and SHA using `get_file_contents`
+2. Extract SHA from response: `const currentSHA = fileData.sha`
+3. Include SHA in `create_or_update_file` call as final parameter
+4. Verify successful update completion
+
 ### **🧪 Jest Test Execution (UPDATED 2025)**
 ```bash
 # ✅ CORRECT: Modern Jest configuration
