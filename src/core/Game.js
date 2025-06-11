@@ -7,6 +7,7 @@ import { GameState } from './GameState.js';
 /**
  * Main Game class that orchestrates the chess engine components
  * Manages the overall game flow, user interactions, and game state
+ * Enhanced to fully utilize the improved Board.js functionality from Issue #15
  */
 export class Game {
     constructor(boardContainerId) {
@@ -22,6 +23,9 @@ export class Game {
 
         // Input handling will be initialized in startGame()
         this.inputHandler = null;
+
+        // Move history for game analysis and undo functionality
+        this.moveHistory = [];
 
         // Bind methods to maintain context
         this.handleSquareClick = this.handleSquareClick.bind(this);
@@ -100,12 +104,12 @@ export class Game {
      */
     handlePieceSelection(squareIndex, piece) {
         // Only allow selection of current player's pieces
-        if (piece && piece.color === this.currentPlayer) {
+        if (piece && piece.getColor() === this.currentPlayer) {
             this.selectedSquare = squareIndex;
             this.highlightSelectedSquare(squareIndex);
-            console.log(`Selected ${piece.color} ${piece.type} at square ${squareIndex}`);
+            console.log(`Selected ${piece.getColor()} ${piece.getType()} at square ${squareIndex}`);
         } else if (piece) {
-            console.log(`Cannot select ${piece.color} piece. It's ${this.currentPlayer}'s turn.`);
+            console.log(`Cannot select ${piece.getColor()} piece. It's ${this.currentPlayer}'s turn.`);
         } else {
             console.log('No piece on selected square.');
         }
@@ -134,7 +138,7 @@ export class Game {
     }
 
     /**
-     * Attempt to make a move
+     * Attempt to make a move - Enhanced to utilize Board.js movePiece return object
      * @param {number} fromIndex - Source square index
      * @param {number} toIndex - Target square index
      * @returns {Object} Move result with success status and details
@@ -150,40 +154,48 @@ export class Game {
             return { success: false, reason: 'No piece at source square' };
         }
 
-        if (piece.color !== this.currentPlayer) {
+        if (piece.getColor() !== this.currentPlayer) {
             return { success: false, reason: 'Not your piece' };
         }
 
         // For now, allow any move (basic implementation)
         // TODO: Add proper move validation, check detection, etc.
 
-        const capturedPiece = this.board.squares[toIndex];
-
-        // Make the move
-        const moveSuccess = this.board.movePiece(fromIndex, toIndex);
-
-        if (moveSuccess) {
-            // Mark piece as moved (important for castling and pawn double moves)
-            piece.hasMoved = true;
-
+        try {
+            // Use enhanced Board.js movePiece method which returns comprehensive move details
+            const boardMoveResult = this.board.movePiece(fromIndex, toIndex);
+            
+            // The enhanced movePiece method already handles piece tracking and returns detailed info
             return {
-                success: true,
-                from: fromIndex,
-                to: toIndex,
-                piece: piece,
-                captured: capturedPiece,
-                notation: this.generateMoveNotation(fromIndex, toIndex, piece, capturedPiece),
+                success: boardMoveResult.success,
+                from: boardMoveResult.from,
+                to: boardMoveResult.to,
+                pieceMoved: boardMoveResult.pieceMoved,
+                pieceCaptured: boardMoveResult.pieceCaptured,
+                notation: this.generateMoveNotation(
+                    boardMoveResult.from, 
+                    boardMoveResult.to, 
+                    boardMoveResult.pieceMoved, 
+                    boardMoveResult.pieceCaptured
+                )
             };
-        } else {
-            return { success: false, reason: 'Move execution failed' };
+        } catch (error) {
+            return { success: false, reason: error.message };
         }
     }
 
     /**
-     * Process successful move
-     * @param {Object} moveResult - The successful move result
+     * Process successful move - Enhanced to work with Board.js move result
+     * @param {Object} moveResult - The successful move result from Board.js
      */
     processMoveSuccess(moveResult) {
+        // Add move to history
+        this.moveHistory.push({
+            ...moveResult,
+            timestamp: new Date().toISOString(),
+            gameState: { ...this.getGameState() }
+        });
+
         // Update display
         this.boardRenderer.render(this.board.squares);
 
@@ -216,7 +228,7 @@ export class Game {
         }
 
         // Reset halfmove clock on pawn move or capture
-        if (moveResult.piece.type === 'pawn' || moveResult.captured) {
+        if (moveResult.pieceMoved === 'pawn' || moveResult.pieceCaptured) {
             this.gameState.halfmoveClock = 0;
         } else {
             this.gameState.halfmoveClock++;
@@ -230,19 +242,19 @@ export class Game {
     }
 
     /**
-     * Generate basic move notation
+     * Generate basic move notation - Enhanced to work with piece type strings
      * @param {number} from - Source square
      * @param {number} to - Target square
-     * @param {Piece} piece - Moving piece
-     * @param {Piece|null} captured - Captured piece
+     * @param {string} pieceType - Moving piece type
+     * @param {string|null} capturedType - Captured piece type
      * @returns {string} Move notation
      */
-    generateMoveNotation(from, to, piece, captured) {
+    generateMoveNotation(from, to, pieceType, capturedType) {
         const fromSquare = this.indexToSquare(from);
         const toSquare = this.indexToSquare(to);
-        const captureSymbol = captured ? 'x' : '';
+        const captureSymbol = capturedType ? 'x' : '';
 
-        return `${piece.type}${fromSquare}${captureSymbol}${toSquare}`;
+        return `${pieceType}${fromSquare}${captureSymbol}${toSquare}`;
     }
 
     /**
@@ -317,7 +329,16 @@ export class Game {
             selectedSquare: this.selectedSquare,
             board: this.board.squares,
             moveNumber: this.gameState.fullmoveNumber,
+            moveHistory: this.moveHistory
         };
+    }
+
+    /**
+     * Get move history
+     * @returns {Array} Array of move objects
+     */
+    getMoveHistory() {
+        return [...this.moveHistory];
     }
 
     /**
@@ -333,6 +354,7 @@ export class Game {
         this.currentPlayer = 'white';
         this.gameStatus = 'active';
         this.selectedSquare = null;
+        this.moveHistory = [];
 
         // Re-render board
         this.boardRenderer.render(this.board.squares);
