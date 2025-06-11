@@ -19,6 +19,30 @@
 
 ---
 
+## 🏆 **CURRENT PROJECT STATUS (June 2025)**
+
+### **✅ Completed Components**
+- **Core Infrastructure**: Board.js, Piece.js (ES2022 private fields), Game.js, GameState.js
+- **UI Foundation**: BoardRenderer.js, InputHandler.js, styles.css
+- **Utilities**: Constants.js with comprehensive piece definitions and helper functions
+- **Move Generation**: **Pawn moves fully implemented** (Issue #4 ✅)
+- **Testing Framework**: Jest configuration with ES module support
+- **Security**: Comprehensive dependency security fixes and npm overrides
+
+### **🧪 Test Suite Status**
+- **All 21 tests passing** ✅
+- **Comprehensive pawn move generation tests** with edge cases
+- **Jest configuration modernized** for Node.js compatibility
+- **Test compatibility verified** with ES2022 private fields
+
+### **🔧 Recent Critical Fixes**
+- **Jest Configuration**: Removed deprecated `--harmony-private-fields` flag
+- **Test Cases**: Fixed board wrapping validation logic
+- **Security**: Updated all vulnerable dependencies with npm overrides
+- **ESLint**: Modern flat config format with ES2022 support
+
+---
+
 ## ⚡ **CRITICAL WORKFLOWS**
 
 ### **🔧 File Update Protocol (MANDATORY)**
@@ -29,12 +53,25 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 ```
 
+### **🧪 Jest Test Execution (UPDATED 2025)**
+```bash
+# ✅ CORRECT: Modern Jest configuration
+npm test
+
+# Test scripts (package.json):
+"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+"test:watch": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch"
+"test:coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage"
+
+# ❌ DEPRECATED: Do not use --harmony-private-fields (causes errors)
+```
+
 ### **🧪 Test Compatibility Protocol (MANDATORY)**
 ```javascript
 // When modifying core components with private fields or new APIs:
 const testUpdateWorkflow = {
     1: "Identify all dependent test files before making changes",
-    2: "Update tests to use getter methods instead of direct property access", 
+    2: "Update tests to use getter methods instead of direct property access",
     3: "Run full test suite to verify compatibility",
     4: "Document breaking changes in commit message",
     5: "Update any integration tests that depend on the modified component"
@@ -49,27 +86,17 @@ const testUpdateWorkflow = {
 // ✅ NEW: expect(board.squares[8].getColor()).toBe('white');
 ```
 
-### **📝 Base64 Content Processing**
+### **📝 Move Object Structure (STANDARDIZED)**
 ```javascript
-// Reliable decode pattern with error handling
-const processContent = (base64String) => {
-    try {
-        const decoded = atob(base64String);
-        return decoded?.length > 0 ? decoded : null;
-    } catch (error) {
-        console.log("Decode failed:", error.message);
-        return null;
-    }
+// Standardized move object format (implemented in Issue #4)
+const moveObject = {
+    from: 12,              // Source square index (0-63)
+    to: 28,                // Destination square index
+    type: 'normal',        // 'normal', 'double', 'capture', 'castling', 'enPassant'
+    piece: 'pawn',         // Moving piece type
+    color: 'white',        // Moving piece color
+    captured: 'knight'     // Captured piece type (if any)
 };
-
-// Usage with verification
-const content = processContent(fileData.content);
-if (content) {
-    // Process successfully decoded content
-    const lines = content.split('\n');
-} else {
-    console.log("Content processing failed");
-}
 ```
 
 ---
@@ -81,7 +108,7 @@ if (content) {
 // ✅ Modern class fields syntax with private fields
 class ChessEngine {
     static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-    
+
     // Private fields for encapsulation
     #privateField = 'value';
     #gameState;
@@ -114,7 +141,7 @@ function processMove(_unused, toSquare) { /* ... */ }
 ```
 
 ### **Testing & Quality**
-- **Jest Configuration** - ES modules with experimental VM support
+- **Jest Configuration** - ES modules with experimental VM support (NO deprecated flags)
 - **ESLint** - Flat config format (not `.eslintrc.json`)
 - **Error Handling** - Descriptive exceptions, no console pollution
 - **Test Coverage** - All error paths and edge cases validated
@@ -124,12 +151,27 @@ function processMove(_unused, toSquare) { /* ... */ }
 ```
 src/
 ├── core/          # Chess logic (Board, Piece, Game)
+│   ├── Board.js              # ✅ Implemented
+│   ├── Piece.js              # ✅ Implemented (ES2022 private fields)
+│   ├── Game.js               # ✅ Implemented
+│   ├── GameState.js          # ✅ Implemented
+│   ├── MoveGenerator.js      # 🔄 Pawn moves implemented, others TODO
+│   ├── MoveValidator.js      # ✅ Basic implementation
+│   └── Rules.js              # ✅ Basic implementation
 ├── ui/            # User interface (InputHandler, BoardRenderer)
+│   ├── BoardRenderer.js      # ✅ Implemented
+│   ├── InputHandler.js       # ✅ Implemented
+│   └── styles.css            # ✅ Implemented
 ├── ai/            # AI engine (Minimax, evaluation)
+│   └── [TODO]                # Future implementation
 └── utils/         # Utilities (Constants, helpers)
+    └── Constants.js          # ✅ Implemented
 
 tests/
 ├── core/          # Core logic tests
+│   ├── Board.test.js         # ✅ Implemented
+│   ├── Piece.test.js         # ✅ Implemented
+│   └── MoveGenerator.test.js # ✅ Implemented (21 tests passing)
 ├── ui/            # UI component tests
 └── ai/            # AI engine tests
 ```
@@ -169,16 +211,30 @@ tests/
 ## 🎮 **CHESS ENGINE SPECIFICS**
 
 ### **Core Features**
-- **64-square board representation** with piece positioning
-- **Move validation** with chess rule enforcement
-- **Game state tracking** including check/checkmate detection
-- **Move notation** for game recording and analysis
+- **64-square board representation** with piece positioning ✅
+- **Move validation** with chess rule enforcement (partial)
+- **Game state tracking** including check/checkmate detection (basic)
+- **Move notation** for game recording and analysis (TODO)
+
+### **Move Generation Status**
+- **✅ Pawn Moves**: Fully implemented with comprehensive testing
+  - Single forward moves
+  - Double moves from starting rank
+  - Diagonal captures
+  - Board boundary validation
+  - Edge case handling
+- **🔄 Other Pieces**: TODO (Issues #1, #2, #6, #7, #9)
+  - Rook moves (Issue #2) - Recommended next
+  - Bishop moves (Issue #1)
+  - Knight moves (Issue #9)
+  - King moves (Issue #7)
+  - Queen moves (Issue #6) - Combines Rook + Bishop
 
 ### **AI Integration**
-- **Position evaluation** for strategic decision making
-- **Move generation** with legal move filtering
-- **Search algorithms** optimized for performance
-- **LLM-friendly APIs** for external AI agent integration
+- **Position evaluation** for strategic decision making (TODO)
+- **Move generation** with legal move filtering (partial)
+- **Search algorithms** optimized for performance (TODO)
+- **LLM-friendly APIs** for external AI agent integration (partial)
 
 ### **Performance Targets**
 - **Sub-second move generation** for responsive gameplay
@@ -188,11 +244,56 @@ tests/
 
 ---
 
+## 🚀 **NEXT DEVELOPMENT PRIORITIES**
+
+### **Immediate (High Priority)**
+1. **Issue #2**: Implement Rook Pseudo-Legal Move Generation
+2. **Issue #1**: Implement Bishop Pseudo-Legal Move Generation
+3. **Issue #9**: Implement Knight Pseudo-Legal Move Generation
+4. **Issue #7**: Implement King Pseudo-Legal Move Generation
+5. **Issue #6**: Implement Queen Pseudo-Legal Move Generation
+
+### **Short-term (Medium Priority)**
+1. **Issue #15**: Enhance Board.js movePiece for Game Logic
+2. **Issue #14**: Orchestrate Game Flow with Game Class (if needed)
+3. **Move Validation**: Implement self-check prevention
+4. **Check Detection**: Implement check/checkmate logic
+
+### **Long-term (Lower Priority)**
+1. **AI Implementation**: Minimax with Alpha-Beta Pruning
+2. **Advanced Rules**: Castling, en passant, promotion
+3. **UI Enhancements**: Move highlighting, animations
+4. **Performance**: Web Workers, transposition tables
+
+---
+
 ## 📚 **REFERENCE RESOURCES**
 
 - **Technical Guide** - `llms.txt` (comprehensive development guidelines)
 - **Issue Tracker** - GitHub Issues for all development tasks
 - **CI/CD Pipeline** - GitHub Actions with automated testing
 - **Code Standards** - ESLint flat config with ES2022 support
+
+## 🔧 **TROUBLESHOOTING QUICK REFERENCE**
+
+### **Common Jest Issues**
+```bash
+# ❌ Error: node: bad option: --harmony-private-fields
+# ✅ Solution: Use modern Jest config (already fixed)
+npm test
+
+# ❌ Error: Cannot use import statement outside a module
+# ✅ Solution: Ensure "type": "module" in package.json (already set)
+```
+
+### **Common Test Failures**
+```javascript
+// ❌ Error: Cannot read private member #field
+// ✅ Solution: Use getter methods in tests
+expect(piece.getType()).toBe('pawn');  // Not piece.type
+
+// ❌ Error: Board wrapping validation
+// ✅ Solution: Use correct wrapping examples (already fixed)
+```
 
 **This context provides the essential framework for efficient development while maintaining the chess engine's core objectives and technical excellence.**
