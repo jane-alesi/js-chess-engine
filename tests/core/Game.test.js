@@ -1,5 +1,6 @@
 // tests/core/Game.test.js
 
+import { jest } from '@jest/globals';
 import { Game } from '../../src/core/Game.js';
 import { Board } from '../../src/core/Board.js';
 import { BoardRenderer } from '../../src/ui/BoardRenderer.js';
