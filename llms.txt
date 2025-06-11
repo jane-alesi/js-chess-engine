@@ -70,8 +70,8 @@ src/
 ### 2. Move Generation System
 
 **Current Status:**
-- ✅ Pawn, Rook, Bishop, and Knight moves fully implemented (see `src/core/MoveGenerator.js`)
-- 🔄 Other pieces: King, Queen (see active issues)
+- ✅ Pawn, Rook, Bishop, Knight, and King moves fully implemented (see `src/core/MoveGenerator.js`)
+- 🔄 Other pieces: Queen (see active issues)
 
 **Move Object Structure:**
 ```javascript
@@ -243,10 +243,9 @@ expect(piece.getType()).toBe('pawn');
 **📊 Documentation Achievement**: Complete professional documentation foundation (README.md: 16.9KB, CONTRIBUTING.md: 10.7KB)
 
 ### 🔄 Phase 2: Core Move Generation (CURRENT PRIORITY)
-1. **Issue #7**: Implement King Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
-2. **Issue #6**: Implement Queen Pseudo-Legal Move Generation
+1. **Issue #6**: Implement Queen Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
 
-**Current Status**: ✅ Pawn, Rook, Bishop, and Knight moves complete (80% progress), 1 piece remaining
+**Current Status**: ✅ Pawn, Rook, Bishop, Knight, and King moves complete (90% progress), 1 piece remaining
 
 ### 📅 Phase 3: Core Game Logic (Medium Priority)
 1. Implement move validation and legal move filtering
@@ -310,4 +309,4 @@ This document serves as the comprehensive development guide for any LLM working 
 
 **Remember**: This guide focuses on HOW to develop, while `llms_project_context.txt` focuses on WHAT to develop next.
 
-**Current Status**: Core Move Generation Phase (80% complete) → Entering final piece implementation (Issue #7: King Move Generation)
+**Current Status**: Core Move Generation Phase (90% complete) → Entering final piece implementation (Issue #6: Queen Move Generation)
