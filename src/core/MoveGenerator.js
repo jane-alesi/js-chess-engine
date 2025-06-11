@@ -187,6 +187,78 @@ export class MoveGenerator {
     }
 
     /**
+     * Generate pseudo-legal moves for bishops.
+     * Handles diagonal sliding movement with obstruction detection.
+     *
+     * @param {Piece} piece - The bishop piece
+     * @param {number} position - Current position index (0-63)
+     * @returns {Array} Array of move objects
+     */
+    generateBishopMoves(piece, position) {
+        const moves = [];
+        const color = piece.getColor();
+
+        // Validate position
+        if (position < 0 || position >= 64) {
+            throw new Error(`Invalid position: ${position} must be between 0 and 63`);
+        }
+
+        // Bishop movement directions: NE, NW, SE, SW
+        const directions = [
+            -9, // Up-Left (NW)
+            -7, // Up-Right (NE)
+            7,  // Down-Left (SW)
+            9   // Down-Right (SE)
+        ];
+
+        // Generate moves in each diagonal direction
+        for (const direction of directions) {
+            let currentSquare = position + direction;
+
+            // Continue sliding in this direction until obstruction or board edge
+            while (this.isValidSquare(currentSquare)) {
+                // Check for diagonal wrapping
+                if (!this.isValidDiagonalMove(position, currentSquare)) {
+                    break; // Stop if move would wrap around board
+                }
+
+                const targetPiece = this.board.squares[currentSquare];
+
+                if (!targetPiece) {
+                    // Empty square - add normal move
+                    moves.push({
+                        from: position,
+                        to: currentSquare,
+                        type: 'normal',
+                        piece: piece.getType(),
+                        color: color,
+                    });
+                } else {
+                    // Square occupied by a piece
+                    if (targetPiece.getColor() !== color) {
+                        // Enemy piece - can capture
+                        moves.push({
+                            from: position,
+                            to: currentSquare,
+                            type: 'capture',
+                            piece: piece.getType(),
+                            color: color,
+                            captured: targetPiece.getType(),
+                        });
+                    }
+                    // Stop sliding in this direction (whether friendly or enemy piece)
+                    break;
+                }
+
+                // Move to next square in this direction
+                currentSquare += direction;
+            }
+        }
+
+        return moves;
+    }
+
+    /**
      * Check if a square index is valid (0-63)
      * @param {number} square - Square index to validate
      * @returns {boolean} True if valid, false otherwise
@@ -223,13 +295,46 @@ export class MoveGenerator {
         return fromRank === toRank;
     }
 
-    generateKnightMoves(_piece, _position) {
-        // TODO: Implement knight move generation
-        return [];
+    /**
+     * Check if a diagonal move is valid (doesn't wrap around board edges)
+     * @param {number} fromSquare - Starting square
+     * @param {number} toSquare - Target square
+     * @returns {boolean} True if valid diagonal move, false otherwise
+     */
+    isValidDiagonalMove(fromSquare, toSquare) {
+        const fromFile = fromSquare % 8;
+        const fromRank = Math.floor(fromSquare / 8);
+        const toFile = toSquare % 8;
+        const toRank = Math.floor(toSquare / 8);
+
+        // Calculate file and rank differences
+        const fileDiff = Math.abs(toFile - fromFile);
+        const rankDiff = Math.abs(toRank - fromRank);
+
+        // Valid diagonal move: file and rank differences must be equal
+        // and movement must be consistent (no wrapping)
+        if (fileDiff !== rankDiff) {
+            return false; // Not a diagonal move
+        }
+
+        // Check for wrapping around board edges
+        const direction = toSquare - fromSquare;
+        const expectedDirection = Math.sign(direction);
+        
+        // Verify the move follows a consistent diagonal pattern
+        if (Math.abs(direction) % 7 === 0 && Math.abs(direction) % 9 !== 0) {
+            // Moving along -7/+7 diagonal (NE/SW)
+            return fileDiff === rankDiff;
+        } else if (Math.abs(direction) % 9 === 0 && Math.abs(direction) % 7 !== 0) {
+            // Moving along -9/+9 diagonal (NW/SE)
+            return fileDiff === rankDiff;
+        }
+
+        return fileDiff === rankDiff;
     }
 
-    generateBishopMoves(_piece, _position) {
-        // TODO: Implement bishop move generation
+    generateKnightMoves(_piece, _position) {
+        // TODO: Implement knight move generation
         return [];
     }
 
