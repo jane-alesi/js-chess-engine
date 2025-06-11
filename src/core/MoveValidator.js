@@ -54,9 +54,8 @@ export class MoveValidator {
             }
 
             return true;
-        } catch (_error) {
+        } catch {
             // 🔧 FIX: Graceful error handling for validation failures
-            console.warn('Move validation error:', _error.message);
             return false;
         }
     }
@@ -79,8 +78,7 @@ export class MoveValidator {
             // 🔧 FIX 2: Enhanced MoveGenerator integration with error handling
             const possibleMoves = this.moveGenerator.generateMoves(piece, fromPosition);
             return possibleMoves.some((move) => move.to === toPosition);
-        } catch (_error) {
-            console.warn('Pseudo-legal move check error:', _error.message);
+        } catch {
             return false;
         }
     }
@@ -109,15 +107,14 @@ export class MoveValidator {
                     if (possibleMoves.some((move) => move.to === kingPosition)) {
                         return true;
                     }
-                } catch (_error) {
+                } catch {
                     // Skip pieces that cause errors in move generation
                     continue;
                 }
             }
 
             return false;
-        } catch (_error) {
-            console.warn('Check detection error:', _error.message);
+        } catch {
             return false;
         }
     }
@@ -144,8 +141,7 @@ export class MoveValidator {
             // 🔧 FIX 3: Enhanced checkmate detection with comprehensive legal move checking
             const legalMoves = this.getAllLegalMoves(color);
             return legalMoves.length === 0;
-        } catch (_error) {
-            console.warn('Checkmate detection error:', _error.message);
+        } catch {
             return false;
         }
     }
@@ -176,8 +172,7 @@ export class MoveValidator {
             // Check if any legal moves are available
             const legalMoves = this.getAllLegalMoves(color);
             return legalMoves.length === 0;
-        } catch (_error) {
-            console.warn('Stalemate detection error:', _error.message);
+        } catch {
             return false;
         }
     }
@@ -272,12 +267,12 @@ export class MoveValidator {
                         if (!this.wouldMoveResultInCheck(move.from, move.to, color)) {
                             legalMoves.push(move);
                         }
-                    } catch (_error) {
+                    } catch {
                         // Skip moves that cause errors in self-check detection
                         continue;
                     }
                 }
-            } catch (_error) {
+            } catch {
                 // Skip pieces that cause errors in move generation
                 continue;
             }
@@ -314,9 +309,8 @@ export class MoveValidator {
 
             // Check if king would be in check after the move
             return tempValidator.isInCheck(color);
-        } catch (_error) {
+        } catch {
             // If there's an error in simulation, assume the move is invalid
-            console.warn('Move simulation error:', _error.message);
             return true;
         }
     }
@@ -348,7 +342,7 @@ export class MoveValidator {
                     }
 
                     boardCopy.squares[i] = pieceCopy;
-                } catch (_error) {
+                } catch {
                     // Skip pieces that cause errors during copying
                     continue;
                 }
