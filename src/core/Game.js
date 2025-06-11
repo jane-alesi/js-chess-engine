@@ -109,7 +109,9 @@ export class Game {
             this.highlightSelectedSquare(squareIndex);
             console.log(`Selected ${piece.getColor()} ${piece.getType()} at square ${squareIndex}`);
         } else if (piece) {
-            console.log(`Cannot select ${piece.getColor()} piece. It's ${this.currentPlayer}'s turn.`);
+            console.log(
+                `Cannot select ${piece.getColor()} piece. It's ${this.currentPlayer}'s turn.`
+            );
         } else {
             console.log('No piece on selected square.');
         }
@@ -164,7 +166,7 @@ export class Game {
         try {
             // Use enhanced Board.js movePiece method which returns comprehensive move details
             const boardMoveResult = this.board.movePiece(fromIndex, toIndex);
-            
+
             // The enhanced movePiece method already handles piece tracking and returns detailed info
             return {
                 success: boardMoveResult.success,
@@ -173,11 +175,11 @@ export class Game {
                 pieceMoved: boardMoveResult.pieceMoved,
                 pieceCaptured: boardMoveResult.pieceCaptured,
                 notation: this.generateMoveNotation(
-                    boardMoveResult.from, 
-                    boardMoveResult.to, 
-                    boardMoveResult.pieceMoved, 
+                    boardMoveResult.from,
+                    boardMoveResult.to,
+                    boardMoveResult.pieceMoved,
                     boardMoveResult.pieceCaptured
-                )
+                ),
             };
         } catch (error) {
             return { success: false, reason: error.message };
@@ -193,7 +195,7 @@ export class Game {
         this.moveHistory.push({
             ...moveResult,
             timestamp: new Date().toISOString(),
-            gameState: { ...this.getGameState() }
+            gameState: { ...this.getGameState() },
         });
 
         // Update display
@@ -329,7 +331,7 @@ export class Game {
             selectedSquare: this.selectedSquare,
             board: this.board.squares,
             moveNumber: this.gameState.fullmoveNumber,
-            moveHistory: this.moveHistory
+            moveHistory: this.moveHistory,
         };
     }
 
