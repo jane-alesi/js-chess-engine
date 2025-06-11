@@ -125,27 +125,31 @@ export const PIECE_COLORS = {
 /**
  * Starting positions for chess pieces on the board.
  * Uses 0-63 indexing where 0 is a8 and 63 is h1.
+ * 
+ * 🔧 CRITICAL FIX: Corrected to match Board.js implementation
+ * - White pieces on bottom of board (indices 8-15 for pawns, 56-63 for back rank)
+ * - Black pieces on top of board (indices 48-55 for pawns, 0-7 for back rank)
  *
  * @constant {Object} STARTING_POSITIONS
  */
 export const STARTING_POSITIONS = {
-    // White pieces (bottom of board, indices 48-63)
+    // White pieces (bottom of board, indices 8-15 for pawns, 56-63 for back rank)
     white: {
         rooks: [56, 63],
         knights: [57, 62],
         bishops: [58, 61],
         queen: [59],
         king: [60],
-        pawns: [48, 49, 50, 51, 52, 53, 54, 55],
+        pawns: [8, 9, 10, 11, 12, 13, 14, 15], // ✅ FIXED: Corrected to match Board.js
     },
-    // Black pieces (top of board, indices 0-15)
+    // Black pieces (top of board, indices 48-55 for pawns, 0-7 for back rank)
     black: {
         rooks: [0, 7],
         knights: [1, 6],
         bishops: [2, 5],
         queen: [3],
         king: [4],
-        pawns: [8, 9, 10, 11, 12, 13, 14, 15],
+        pawns: [48, 49, 50, 51, 52, 53, 54, 55], // ✅ FIXED: Corrected to match Board.js
     },
 };
 
