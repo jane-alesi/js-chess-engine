@@ -27,7 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # Remove cache since there's no package-lock.json
           
       - name: Install dependencies
         run: |
@@ -61,15 +60,16 @@ jobs:
           npm run format
           echo "✅ Prettier formatting completed"
           
-      - name: Check for changes
+      - name: Check for changes (excluding workflow files)
         id: changes
         run: |
-          if git diff --quiet; then
-            echo "No changes to commit"
+          # Check for changes excluding .github/workflows directory for security
+          if git diff --quiet -- . ':!.github/workflows'; then
+            echo "No changes to commit (excluding workflow files)"
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            echo "Changes detected:"
-            git diff --name-only
+            echo "Changes detected (excluding workflow files):"
+            git diff --name-only -- . ':!.github/workflows'
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
           
@@ -78,7 +78,8 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '🔧 Auto-fix: ESLint and Prettier code quality [auto-fix]'
-          file_pattern: '*.js *.json *.md *.yml'
+          # Exclude workflow files for security - they should be manually reviewed
+          file_pattern: 'src/ tests/ *.js *.json *.md README.md SECURITY.md index.html'
           commit_user_name: 'github-actions[bot]'
           commit_user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
@@ -89,6 +90,7 @@ jobs:
             echo "🎉 Auto-fix completed successfully!"
             echo "✅ Code quality issues automatically resolved"
             echo "✅ Changes committed to branch"
+            echo "ℹ️ Note: Workflow files excluded for security (manual review required)"
           else
             echo "✅ No auto-fixes needed - code quality is good!"
           fi
