@@ -32,7 +32,7 @@ export class MoveGenerator {
             throw new Error(`Invalid position: ${position} must be between 0 and 63`);
         }
 
-        const direction = color === 'white' ? -8 : 8;
+        const direction = color === 'white' ? 8 : -8;
         const startingRank = color === 'white' ? 6 : 1;
         const currentRank = Math.floor(position / 8);
 
@@ -63,7 +63,7 @@ export class MoveGenerator {
             }
         }
 
-        const captureOffsets = color === 'white' ? [-9, -7] : [7, 9];
+        const captureOffsets = color === 'white' ? [7, 9] : [-9, -7];
 
         for (const offset of captureOffsets) {
             const captureSquare = position + offset;
