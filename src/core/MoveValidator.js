@@ -75,13 +75,13 @@ export class MoveValidator {
      * Checks if a king of the specified color is currently in check
      *
      * @param {string} color - Color of the king to check ('white' or 'black')
-     * @returns {boolean} True if king is in check, false otherwise
-     * @throws {Error} If no king of the specified color is found
+     * @returns {boolean} True if king is in check, false otherwise (including when no king found)
      */
     isInCheck(color) {
         const kingPosition = this.findKing(color);
         if (kingPosition === -1) {
-            throw new Error(`No ${color} king found on the board`);
+            // If there's no king, it can't be in check
+            return false;
         }
 
         const opponentColor = color === 'white' ? 'black' : 'white';
@@ -112,12 +112,7 @@ export class MoveValidator {
         }
 
         // Must be in check to be checkmate
-        try {
-            if (!this.isInCheck(color)) {
-                return false;
-            }
-        } catch (error) {
-            // If king not found, can't be checkmate
+        if (!this.isInCheck(color)) {
             return false;
         }
 
@@ -140,12 +135,7 @@ export class MoveValidator {
         }
 
         // Must NOT be in check to be stalemate
-        try {
-            if (this.isInCheck(color)) {
-                return false;
-            }
-        } catch (error) {
-            // If king not found, can't be stalemate
+        if (this.isInCheck(color)) {
             return false;
         }
 
@@ -269,12 +259,7 @@ export class MoveValidator {
         const tempValidator = new MoveValidator(boardCopy, this.gameState);
 
         // Check if king would be in check after the move
-        try {
-            return tempValidator.isInCheck(color);
-        } catch (error) {
-            // If king not found after move, something went wrong
-            return true; // Treat as invalid move
-        }
+        return tempValidator.isInCheck(color);
     }
 
     /**
