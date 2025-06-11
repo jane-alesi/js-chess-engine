@@ -14,20 +14,20 @@ export class MoveGenerator {
         const moves = [];
 
         switch (piece.getType()) {
-            case 'pawn':
-                return this.generatePawnMoves(piece, position);
-            case 'rook':
-                return this.generateRookMoves(piece, position);
-            case 'knight':
-                return this.generateKnightMoves(piece, position);
-            case 'bishop':
-                return this.generateBishopMoves(piece, position);
-            case 'queen':
-                return this.generateQueenMoves(piece, position);
-            case 'king':
-                return this.generateKingMoves(piece, position);
-            default:
-                return moves;
+        case 'pawn':
+            return this.generatePawnMoves(piece, position);
+        case 'rook':
+            return this.generateRookMoves(piece, position);
+        case 'knight':
+            return this.generateKnightMoves(piece, position);
+        case 'bishop':
+            return this.generateBishopMoves(piece, position);
+        case 'queen':
+            return this.generateQueenMoves(piece, position);
+        case 'king':
+            return this.generateKingMoves(piece, position);
+        default:
+            return moves;
         }
     }
 
