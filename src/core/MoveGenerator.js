@@ -317,6 +317,62 @@ export class MoveGenerator {
     }
 
     /**
+     * Generate pseudo-legal moves for the king.
+     * Handles single-square movement in all 8 directions.
+     * (Does not yet handle castling or check prevention).
+     *
+     * @param {Piece} piece - The king piece
+     * @param {number} position - Current position index (0-63)
+     * @returns {Array} Array of move objects
+     */
+    generateKingMoves(piece, position) {
+        const moves = [];
+        const color = piece.getColor();
+
+        // Validate position
+        if (position < 0 || position >= 64) {
+            throw new Error(`Invalid position: ${position} must be between 0 and 63`);
+        }
+
+        // King movement directions (all 8 surrounding squares)
+        const directions = [-9, -8, -7, -1, 1, 7, 8, 9];
+
+        for (const direction of directions) {
+            const currentSquare = position + direction;
+
+            // Check if the target square is on the board and the move is valid
+            if (this.isValidSquare(currentSquare) && this.isValidKingMove(position, currentSquare)) {
+                const targetPiece = this.board.squares[currentSquare];
+
+                if (!targetPiece) {
+                    // Empty square - add normal move
+                    moves.push({
+                        from: position,
+                        to: currentSquare,
+                        type: 'normal',
+                        piece: piece.getType(),
+                        color: color,
+                    });
+                } else {
+                    // Square occupied - can capture if it's an enemy piece
+                    if (targetPiece.getColor() !== color) {
+                        moves.push({
+                            from: position,
+                            to: currentSquare,
+                            type: 'capture',
+                            piece: piece.getType(),
+                            color: color,
+                            captured: targetPiece.getType(),
+                        });
+                    }
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    /**
      * Check if a square index is valid (0-63)
      * @param {number} square - Square index to validate
      * @returns {boolean} True if valid, false otherwise
@@ -390,13 +446,24 @@ export class MoveGenerator {
         return fileDiff === 1 || fileDiff === 2;
     }
 
-    generateQueenMoves(_piece, _position) {
-        // TODO: Implement queen move generation
-        return [];
+    /**
+     * Check if a king move is valid (doesn't wrap around board edges).
+     * @param {number} fromSquare - Starting square index.
+     * @param {number} toSquare - Target square index.
+     * @returns {boolean} True if the move is valid, false otherwise.
+     */
+    isValidKingMove(fromSquare, toSquare) {
+        const fromFile = fromSquare % 8;
+        const toFile = toSquare % 8;
+        const fileDiff = Math.abs(fromFile - toFile);
+
+        // A king's move should not wrap around the board.
+        // The file difference for a valid king move will always be 0 or 1.
+        return fileDiff <= 1;
     }
 
-    generateKingMoves(_piece, _position) {
-        // TODO: Implement king move generation
+    generateQueenMoves(_piece, _position) {
+        // TODO: Implement queen move generation
         return [];
     }
 }
