@@ -21,7 +21,7 @@ describe('MoveValidator', () => {
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[12] = whitePawn;
             board.squares[4] = whiteKing;
             board.squares[60] = blackKing;
@@ -56,7 +56,7 @@ describe('MoveValidator', () => {
             const whiteRook = new Piece('rook', 'white', 5, '♖');
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[28] = whiteRook;
             board.squares[4] = whiteKing;
             board.squares[60] = blackKing;
@@ -254,7 +254,7 @@ describe('MoveValidator', () => {
         test('should not detect stalemate when legal moves exist', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[28] = whiteKing;
             board.squares[60] = blackKing;
 
@@ -390,7 +390,7 @@ describe('MoveValidator', () => {
         test('should handle piece at board boundaries correctly', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[0] = whiteKing;
             board.squares[63] = blackKing;
 
