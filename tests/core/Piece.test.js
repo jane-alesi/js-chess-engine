@@ -268,17 +268,17 @@ describe('Piece Class', () => {
 
     describe('Integration with Constants', () => {
         test('should work with PIECE_VALUES constants', () => {
-            Object.entries(PIECE_VALUES).forEach(([type, value]) => {
-                const piece = new Piece(type, 'white', value, PIECE_SYMBOLS[type]['white']);
-                expect(piece.getPoints()).toBe(value);
+            Object.keys(PIECE_VALUES).forEach(type => {
+                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS[type]['white']);
+                expect(piece.getPoints()).toBe(PIECE_VALUES[type]);
             });
         });
 
         test('should work with PIECE_SYMBOLS constants', () => {
-            Object.entries(PIECE_SYMBOLS).forEach(([type, symbols]) => {
-                Object.entries(symbols).forEach(([color, symbol]) => {
-                    const piece = new Piece(type, color, PIECE_VALUES[type], symbol);
-                    expect(piece.getSymbol()).toBe(symbol);
+            Object.keys(PIECE_SYMBOLS).forEach(type => {
+                Object.keys(PIECE_SYMBOLS[type]).forEach(color => {
+                    const piece = new Piece(type, color, PIECE_VALUES[type], PIECE_SYMBOLS[type][color]);
+                    expect(piece.getSymbol()).toBe(PIECE_SYMBOLS[type][color]);
                 });
             });
         });
