@@ -60,14 +60,16 @@ jobs:
             echo "Auto-fix status: ${{ needs.wait-for-auto-fix.outputs.auto-fix-status }}"
             echo "✅ Auto-fix workflow completed - proceeding with CI/CD"
           else
-            echo "📝 Direct trigger - auto-fix may run concurrently"
+            echo "🔗 Direct trigger - auto-fix may run concurrently"
           fi
           echo ""
 
       - uses: actions/checkout@v4
         with:
-          # For workflow_run, checkout the head commit that triggered auto-fix
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          # For workflow_run, checkout the latest commit on the branch (includes auto-fixes)
+          # For direct triggers, checkout the triggering commit
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref }}
+          fetch-depth: 0
           
       - name: Use Node.js
         uses: actions/setup-node@v4
