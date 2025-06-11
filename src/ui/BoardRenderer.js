@@ -40,4 +40,12 @@ export class BoardRenderer {
             }
         }
     }
+
+    /**
+     * Get the board container element for event handling
+     * @returns {HTMLElement|null} The board container element
+     */
+    getBoardContainer() {
+        return this.boardElement;
+    }
 }
