@@ -163,7 +163,8 @@ js-chess-engine/
 Our development follows a structured, phase-based approach with clear milestones and priorities:
 
 ### **📋 Phase 1: Documentation & Project Management** ✅ **COMPLETED**
-*Timeline: June 2025*
+
+_Timeline: June 2025_
 
 - ✅ **Professional README.md** ([#35](https://github.com/jane-alesi/js-chess-engine/issues/35)) - Impactful header and project description
 - ✅ **Installation & Usage Guide** ([#36](https://github.com/jane-alesi/js-chess-engine/issues/36)) - Comprehensive setup instructions
@@ -175,10 +176,11 @@ Our development follows a structured, phase-based approach with clear milestones
 ---
 
 ### **♛ Phase 2: Core Move Generation** 🔄 **IN PROGRESS**
-*Timeline: July-August 2025 | Priority: HIGH*
+
+_Timeline: July-August 2025 | Priority: HIGH_
 
 - 🔄 **Rook Move Generation** ([#2](https://github.com/jane-alesi/js-chess-engine/issues/2)) - Horizontal and vertical movement patterns
-- 🔄 **Bishop Move Generation** ([#1](https://github.com/jane-alesi/js-chess-engine/issues/1)) - Diagonal movement patterns  
+- 🔄 **Bishop Move Generation** ([#1](https://github.com/jane-alesi/js-chess-engine/issues/1)) - Diagonal movement patterns
 - 🔄 **Knight Move Generation** ([#9](https://github.com/jane-alesi/js-chess-engine/issues/9)) - L-shaped movement patterns
 - 🔄 **King Move Generation** ([#7](https://github.com/jane-alesi/js-chess-engine/issues/7)) - Single-square movement patterns
 - 🔄 **Queen Move Generation** ([#6](https://github.com/jane-alesi/js-chess-engine/issues/6)) - Combined rook and bishop patterns
@@ -189,15 +191,16 @@ Our development follows a structured, phase-based approach with clear milestones
 ---
 
 ### **🎮 Phase 3: Core Game Logic** 📅 **PLANNED**
-*Timeline: September-October 2025 | Priority: MEDIUM*
+
+_Timeline: September-October 2025 | Priority: MEDIUM_
 
 - 📅 **Enhanced Move Validation** - Self-check prevention and legal move filtering
 - 📅 **Check Detection** - King threat analysis and validation
 - 📅 **Checkmate & Stalemate** - Game ending condition detection
 - 📅 **Special Moves Implementation**:
-  - Castling (kingside and queenside)
-  - En passant capture
-  - Pawn promotion
+    - Castling (kingside and queenside)
+    - En passant capture
+    - Pawn promotion
 - 📅 **Game Flow Orchestration** ([#14](https://github.com/jane-alesi/js-chess-engine/issues/14)) - Complete game state management
 
 **Dependencies**: Requires completion of Phase 2 (all piece move generation)
@@ -205,82 +208,85 @@ Our development follows a structured, phase-based approach with clear milestones
 ---
 
 ### **🧠 Phase 4: AI Implementation** 📅 **PLANNED**
-*Timeline: November 2025-January 2026 | Priority: MEDIUM*
+
+_Timeline: November 2025-January 2026 | Priority: MEDIUM_
 
 - 📅 **Basic AI Foundation**:
-  - Random move selection
-  - Legal move filtering
-  - Basic position evaluation
+    - Random move selection
+    - Legal move filtering
+    - Basic position evaluation
 - 📅 **Minimax Algorithm**:
-  - Recursive game tree search
-  - Alpha-Beta pruning optimization
-  - Configurable search depth
+    - Recursive game tree search
+    - Alpha-Beta pruning optimization
+    - Configurable search depth
 - 📅 **Position Evaluation**:
-  - Material value calculation
-  - Positional factors (center control, piece development)
-  - King safety assessment
+    - Material value calculation
+    - Positional factors (center control, piece development)
+    - King safety assessment
 - 📅 **Difficulty Levels**:
-  - Beginner (depth 1-2)
-  - Intermediate (depth 3-4)  
-  - Advanced (depth 5-6)
-  - Expert (depth 7+ with optimizations)
+    - Beginner (depth 1-2)
+    - Intermediate (depth 3-4)
+    - Advanced (depth 5-6)
+    - Expert (depth 7+ with optimizations)
 
 **Target**: AI capable of defeating the original Atari Video Chess
 
 ---
 
 ### **🎨 Phase 5: User Interface & Experience** 📅 **FUTURE**
-*Timeline: February-March 2026 | Priority: LOW*
+
+_Timeline: February-March 2026 | Priority: LOW_
 
 - 📅 **Interactive Board Enhancements**:
-  - Drag-and-drop piece movement
-  - Move highlighting and validation
-  - Animated piece transitions
+    - Drag-and-drop piece movement
+    - Move highlighting and validation
+    - Animated piece transitions
 - 📅 **Game Features**:
-  - Move history and notation
-  - Position analysis tools
-  - Save/load game functionality
+    - Move history and notation
+    - Position analysis tools
+    - Save/load game functionality
 - 📅 **Visual Improvements**:
-  - Multiple board themes
-  - Piece set customization
-  - Responsive design for mobile
+    - Multiple board themes
+    - Piece set customization
+    - Responsive design for mobile
 - 📅 **Accessibility**:
-  - Keyboard navigation
-  - Screen reader support
-  - High contrast modes
+    - Keyboard navigation
+    - Screen reader support
+    - High contrast modes
 
 ---
 
 ### **⚡ Phase 6: Performance & Advanced Features** 📅 **FUTURE**
-*Timeline: April-June 2026 | Priority: LOW*
+
+_Timeline: April-June 2026 | Priority: LOW_
 
 - 📅 **Performance Optimizations**:
-  - Web Workers for AI computation
-  - Transposition tables for position caching
-  - Move ordering improvements
-  - Bitboard representation (optional)
+    - Web Workers for AI computation
+    - Transposition tables for position caching
+    - Move ordering improvements
+    - Bitboard representation (optional)
 - 📅 **Advanced AI Features**:
-  - Opening book integration
-  - Endgame tablebase support
-  - Neural network evaluation (experimental)
+    - Opening book integration
+    - Endgame tablebase support
+    - Neural network evaluation (experimental)
 - 📅 **Additional Features**:
-  - Multiplayer support
-  - Tournament modes
-  - Chess variant support (Chess960, King of the Hill)
-  - Engine vs. engine matches
+    - Multiplayer support
+    - Tournament modes
+    - Chess variant support (Chess960, King of the Hill)
+    - Engine vs. engine matches
 
 ---
 
 ### **📊 Progress Tracking**
 
-| Phase | Completion | Key Milestones | Target Date |
-|-------|------------|----------------|-------------|
-| **Phase 1** | ✅ 100% | Professional documentation complete | ✅ June 2025 |
-| **Phase 2** | 🔄 20% | Pawn moves implemented, 4 pieces remaining | August 2025 |
-| **Phase 3** | 📅 0% | Awaiting Phase 2 completion | October 2025 |
-| **Phase 4** | 📅 0% | Awaiting Phase 3 completion | January 2026 |
-| **Phase 5** | 📅 0% | UI/UX enhancements | March 2026 |
-| **Phase 6** | 📅 0% | Performance & advanced features | June 2026 |
+| Phase       | Completion | Key Milestones                             | Target Date  |
+| ----------- | ---------- | ------------------------------------------ | ------------ |
+| **Phase 1** | ✅ 100%    | Professional documentation complete        | ✅ June 2025 |
+| **Phase 2** | 🔄 20%     | Pawn moves implemented, 4 pieces remaining | August 2025  |
+| **Phase 3** | 📅 0%      | Awaiting Phase 2 completion                | October 2025 |
+| **Phase 4** | 📅 0%      | Awaiting Phase 3 completion                | January 2026 |
+| **Phase 5** | 📅 0%      | UI/UX enhancements                         | March 2026   |
+| **Phase 6** | 📅 0%      | Performance & advanced features            | June 2026    |
 
 ### **🎯 Success Metrics**
 
@@ -330,14 +336,14 @@ flowchart TB
         IH[InputHandler]
         CSS[Styles & Themes]
     end
-    
+
     subgraph "🧠 AI Engine Layer"
         AI[AI Module]
         EVAL[Evaluation]
         SEARCH[Search Algorithms]
         BOOK[Opening Book]
     end
-    
+
     subgraph "♛ Core Chess Logic"
         CORE[Core Module]
         BOARD[Board]
@@ -347,7 +353,7 @@ flowchart TB
         VALID[MoveValidator]
         RULES[Rules]
     end
-    
+
     subgraph "🔧 Utilities"
         UTILS[Utils Module]
         CONST[Constants]
@@ -355,12 +361,12 @@ flowchart TB
         PGN[PGN Support]
         NOTATION[Notation]
     end
-    
+
     UI --> CORE
     AI --> CORE
     CORE --> UTILS
     AI --> UTILS
-    
+
     style CORE fill:#e1f5fe
     style AI fill:#f3e5f5
     style UI fill:#e8f5e8
@@ -390,7 +396,7 @@ This project draws inspiration from one of the most impressive programming achie
 Our JavaScript implementation honors this legacy while embracing modern capabilities:
 
 - **Then**: 4KB ROM, 128 bytes RAM → **Now**: Unlimited memory and processing power
-- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features  
+- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features
 - **Then**: Simple evaluation function → **Now**: Sophisticated AI with deep search algorithms
 - **Then**: Fixed difficulty → **Now**: Adaptive AI with multiple skill levels
 
@@ -448,4 +454,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-*Built with ♛ by the chess programming community*
+_Built with ♛ by the chess programming community_
