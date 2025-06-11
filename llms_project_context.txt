@@ -2,7 +2,7 @@
 
 **Pure JavaScript chess engine inspired by Atari Video Chess, designed to enable LLMs to outplay the original Atari 2600 version through superior chess logic and AI.**
 
-## 🎯 **PROJECT OBJECTIVES**
+## 🚀 **PROJECT OBJECTIVES**
 
 ### **Core Goals**
 - **Pure JavaScript Implementation** - Complete chess logic without external libraries
@@ -21,21 +21,21 @@
 
 ---
 
-## 🏆 **CURRENT PROJECT STATUS (June 2025)**
+## 📊 **CURRENT PROJECT STATUS (June 2025)**
 
 ### **✅ Completed Components**
 - **Core Infrastructure**: Board.js, Piece.js (ES2022 private fields), Game.js, GameState.js
 - **UI Foundation**: BoardRenderer.js, InputHandler.js, styles.css
 - **Utilities**: Constants.js with comprehensive piece definitions and helper functions
-- **Move Generation**: **Pawn moves fully implemented** (Issue #4 ✅)
+- **Move Generation**: **Pawn, Rook, and Bishop moves fully implemented** (Issues #4, #2, #1 ✅)
 - **Testing Framework**: Jest configuration with ES module support
 - **Security**: Comprehensive dependency security fixes and npm overrides
 - **Automated Linting**: Fully synchronized auto-linting/formatting pipeline (ESLint + Prettier) (Issue #19 ✅)
 - **📋 DOCUMENTATION PHASE COMPLETE**: Professional README.md with comprehensive project documentation (Issues #35-#38 ✅)
 
 ### **🧪 Test Suite Status**
-- **All 21 tests passing** ✅
-- **Comprehensive pawn move generation tests** with edge cases
+- **All tests passing** ✅
+- **Comprehensive pawn, rook, and bishop move generation tests** with edge cases
 - **Jest configuration modernized** for Node.js compatibility
 - **Test compatibility verified** with ES2022 private fields
 
@@ -235,7 +235,7 @@ src/
 │   ├── Piece.js              # ✅ Implemented (ES2022 private fields)
 │   ├── Game.js               # ✅ Implemented
 │   ├── GameState.js          # ✅ Implemented
-│   ├── MoveGenerator.js      # 🔄 Pawn moves implemented, others TODO
+│   ├── MoveGenerator.js      # 🔄 Pawn, Rook, Bishop moves implemented, others TODO
 │   ├── MoveValidator.js      # ✅ Basic implementation
 │   └── Rules.js              # ✅ Basic implementation
 ├── ui/            # User interface (InputHandler, BoardRenderer)
@@ -251,7 +251,7 @@ tests/
 ├── core/          # Core logic tests
 │   ├── Board.test.js         # ✅ Implemented
 │   ├── Piece.test.js         # ✅ Implemented
-│   └── MoveGenerator.test.js # ✅ Implemented (21 tests passing)
+│   └── MoveGenerator.test.js # ✅ Implemented (All tests passing)
 ├── ui/            # UI component tests
 └── ai/            # AI engine tests
 
@@ -306,7 +306,7 @@ tests/
 
 ---
 
-## 🎮 **CHESS ENGINE SPECIFICS**
+## ♟️ **CHESS ENGINE SPECIFICS**
 
 ### **Core Features**
 - **64-square board representation** with piece positioning ✅
@@ -316,15 +316,10 @@ tests/
 
 ### **Move Generation Status**
 - **✅ Pawn Moves**: Fully implemented with comprehensive testing
-  - Single forward moves
-  - Double moves from starting rank
-  - Diagonal captures
-  - Board boundary validation
-  - Edge case handling
-- **🔄 Other Pieces**: TODO (Issues #1, #2, #6, #7, #9)
-  - Rook moves (Issue #2) - **NEXT PRIORITY**
-  - Bishop moves (Issue #1)
-  - Knight moves (Issue #9)
+- **✅ Rook Moves**: Fully implemented with comprehensive testing
+- **✅ Bishop Moves**: Fully implemented with comprehensive testing
+- **🔄 Other Pieces**: TODO (Issues #9, #7, #6)
+  - Knight moves (Issue #9) - **NEXT PRIORITY**
   - King moves (Issue #7)
   - Queen moves (Issue #6) - Combines Rook + Bishop
 
@@ -345,26 +340,17 @@ tests/
 ## 🚀 **NEXT DEVELOPMENT PRIORITIES**
 
 ### **🎯 IMMEDIATE PRIORITY: Phase 2 - Core Move Generation**
-**Status**: Documentation Phase Complete ✅ → Now entering Core Logic Phase
+**Status**: Documentation Phase Complete ✅ → Now in Core Logic Phase
 
-1. **Issue #2**: Implement Rook Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
-   - Horizontal and vertical movement patterns
-   - Foundation for Queen move generation
-   - Critical for complete piece movement system
-
-2. **Issue #1**: Implement Bishop Pseudo-Legal Move Generation
-   - Diagonal movement patterns
-   - Complements Rook for Queen implementation
-
-3. **Issue #9**: Implement Knight Pseudo-Legal Move Generation
+1. **Issue #9**: Implement Knight Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
    - L-shaped movement patterns
    - Unique piece movement logic
 
-4. **Issue #7**: Implement King Pseudo-Legal Move Generation
+2. **Issue #7**: Implement King Pseudo-Legal Move Generation
    - Single-square movement patterns
    - Foundation for castling rules
 
-5. **Issue #6**: Implement Queen Pseudo-Legal Move Generation
+3. **Issue #6**: Implement Queen Pseudo-Legal Move Generation
    - Combines Rook and Bishop patterns
    - Most powerful piece implementation
 
@@ -382,7 +368,7 @@ tests/
 
 ### **📊 Current Progress Summary**
 - **Phase 1 (Documentation)**: ✅ **100% COMPLETE** (Issues #35-#38)
-- **Phase 2 (Core Logic)**: 🔄 **20% COMPLETE** (Pawn moves done, 4 pieces remaining)
+- **Phase 2 (Core Logic)**: 🔄 **60% COMPLETE** (Pawn, Rook, Bishop moves done, 2 pieces remaining)
 - **Phase 3 (Game Rules)**: 📅 **0% COMPLETE** (Awaiting Phase 2)
 - **Phase 4 (AI & Advanced)**: 📅 **0% COMPLETE** (Future implementation)
 
