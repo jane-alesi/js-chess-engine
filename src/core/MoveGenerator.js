@@ -113,6 +113,80 @@ export class MoveGenerator {
     }
 
     /**
+     * Generate pseudo-legal moves for rooks.
+     * Handles horizontal and vertical sliding movement with obstruction detection.
+     *
+     * @param {Piece} piece - The rook piece
+     * @param {number} position - Current position index (0-63)
+     * @returns {Array} Array of move objects
+     */
+    generateRookMoves(piece, position) {
+        const moves = [];
+        const color = piece.getColor();
+
+        // Validate position
+        if (position < 0 || position >= 64) {
+            throw new Error(`Invalid position: ${position} must be between 0 and 63`);
+        }
+
+        // Rook movement directions: up, down, left, right
+        const directions = [
+            -8, // Up (rank decrease)
+            8,  // Down (rank increase)
+            -1, // Left (file decrease)
+            1   // Right (file increase)
+        ];
+
+        // Generate moves in each direction
+        for (const direction of directions) {
+            let currentSquare = position + direction;
+
+            // Continue sliding in this direction until obstruction or board edge
+            while (this.isValidSquare(currentSquare)) {
+                // Check for horizontal wrapping (left/right movement)
+                if (direction === -1 || direction === 1) {
+                    if (!this.isValidHorizontalMove(position, currentSquare)) {
+                        break; // Stop if move would wrap around board
+                    }
+                }
+
+                const targetPiece = this.board.squares[currentSquare];
+
+                if (!targetPiece) {
+                    // Empty square - add normal move
+                    moves.push({
+                        from: position,
+                        to: currentSquare,
+                        type: 'normal',
+                        piece: piece.getType(),
+                        color: color,
+                    });
+                } else {
+                    // Square occupied by a piece
+                    if (targetPiece.getColor() !== color) {
+                        // Enemy piece - can capture
+                        moves.push({
+                            from: position,
+                            to: currentSquare,
+                            type: 'capture',
+                            piece: piece.getType(),
+                            color: color,
+                            captured: targetPiece.getType(),
+                        });
+                    }
+                    // Stop sliding in this direction (whether friendly or enemy piece)
+                    break;
+                }
+
+                // Move to next square in this direction
+                currentSquare += direction;
+            }
+        }
+
+        return moves;
+    }
+
+    /**
      * Check if a square index is valid (0-63)
      * @param {number} square - Square index to validate
      * @returns {boolean} True if valid, false otherwise
@@ -135,9 +209,18 @@ export class MoveGenerator {
         return Math.abs(fromFile - toFile) === 1;
     }
 
-    generateRookMoves(_piece, _position) {
-        // TODO: Implement rook move generation
-        return [];
+    /**
+     * Check if a horizontal move is valid (doesn't wrap around board edges)
+     * @param {number} fromSquare - Starting square
+     * @param {number} toSquare - Target square
+     * @returns {boolean} True if valid horizontal move, false otherwise
+     */
+    isValidHorizontalMove(fromSquare, toSquare) {
+        const fromRank = Math.floor(fromSquare / 8);
+        const toRank = Math.floor(toSquare / 8);
+
+        // Horizontal moves must stay on the same rank
+        return fromRank === toRank;
     }
 
     generateKnightMoves(_piece, _position) {
