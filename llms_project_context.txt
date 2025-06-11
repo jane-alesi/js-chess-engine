@@ -27,7 +27,7 @@
 - **Core Infrastructure**: Board.js, Piece.js (ES2022 private fields), Game.js, GameState.js
 - **UI Foundation**: BoardRenderer.js, InputHandler.js, styles.css
 - **Utilities**: Constants.js with comprehensive piece definitions and helper functions
-- **Move Generation**: **Pawn, Rook, Bishop, Knight, and King moves fully implemented** (Issues #4, #2, #1, #9, #7 ✅)
+- **Move Generation**: **Pawn, Rook, Bishop, Knight, King and Queen moves fully implemented** (Issues #4, #2, #1, #9, #7, #6 ✅)
 - **Testing Framework**: Jest configuration with ES module support
 - **Security**: Comprehensive dependency security fixes and npm overrides
 - **Automated Linting**: Fully synchronized auto-linting/formatting pipeline (ESLint + Prettier) (Issue #19 ✅)
@@ -35,7 +35,7 @@
 
 ### **🧪 Test Suite Status**
 - **All tests passing** ✅
-- **Comprehensive pawn, rook, bishop, knight, and king move generation tests** with edge cases
+- **Comprehensive pawn, rook, bishop, knight, king and queen move generation tests** with edge cases
 - **Jest configuration modernized** for Node.js compatibility
 - **Test compatibility verified** with ES2022 private fields
 
@@ -96,7 +96,7 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 
 // ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\n\\\\n\\\\\\\"sha\\\\\\\" wasn't supplied. []"}
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\n\\\\n\\\\\\\\\"sha\\\\\\\\\" wasn't supplied. []"}
 ```
 
 **Update Workflow:**
@@ -235,7 +235,7 @@ src/
 │   ├── Piece.js              # ✅ Implemented (ES2022 private fields)
 │   ├── Game.js               # ✅ Implemented
 │   ├── GameState.js          # ✅ Implemented
-│   ├── MoveGenerator.js      # 🔄 Pawn, Rook, Bishop, Knight, King moves implemented, others TODO
+│   ├── MoveGenerator.js      # ✅ All pieces implemented
 │   ├── MoveValidator.js      # ✅ Basic implementation
 │   └── Rules.js              # ✅ Basic implementation
 ├── ui/            # User interface (InputHandler, BoardRenderer)
@@ -320,8 +320,7 @@ tests/
 - **✅ Bishop Moves**: Fully implemented with comprehensive testing
 - **✅ Knight Moves**: Fully implemented with comprehensive testing
 - **✅ King Moves**: Fully implemented with comprehensive testing
-- **🔄 Other Pieces**: TODO (Issue #6)
-  - Queen moves (Issue #6) - Combines Rook + Bishop
+- **✅ Queen Moves**: Fully implemented with comprehensive testing
 
 ### **AI Integration**
 - **Position evaluation** for strategic decision making (TODO)
@@ -339,15 +338,10 @@ tests/
 
 ## 🚀 **NEXT DEVELOPMENT PRIORITIES**
 
-### **🎯 IMMEDIATE PRIORITY: Phase 2 - Core Move Generation**
-**Status**: Documentation Phase Complete ✅ → Now in Core Logic Phase
+### **🎯 IMMEDIATE PRIORITY: Phase 3 - Core Game Logic**
+**Status**: Core Move Generation Complete ✅ → Now in Core Game Logic Phase
 
-1. **Issue #6**: Implement Queen Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
-   - Combines Rook and Bishop patterns
-   - Most powerful piece implementation
-
-### **📋 Phase 3: Core Game Logic (Medium Priority)**
-1. **Issue #15**: Enhance Board.js movePiece for Game Logic
+1. **Issue #15**: Enhance Board.js movePiece for Game Logic (**RECOMMENDED NEXT**)
 2. **Issue #14**: Orchestrate Game Flow with Game Class (if needed)
 3. **Move Validation**: Implement self-check prevention
 4. **Check Detection**: Implement check/checkmate logic
@@ -360,7 +354,7 @@ tests/
 
 ### **📊 Current Progress Summary**
 - **Phase 1 (Documentation)**: ✅ **100% COMPLETE** (Issues #35-#38)
-- **Phase 2 (Core Logic)**: 🔄 **90% COMPLETE** (Pawn, Rook, Bishop, Knight, King moves done, 1 piece remaining)
+- **Phase 2 (Core Logic)**: ✅ **100% COMPLETE** (All piece moves implemented)
 - **Phase 3 (Game Rules)**: 📅 **0% COMPLETE** (Awaiting Phase 2)
 - **Phase 4 (AI & Advanced)**: 📅 **0% COMPLETE** (Future implementation)
 
