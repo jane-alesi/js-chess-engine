@@ -191,14 +191,14 @@ flowchart TB
         IH[InputHandler]
         CSS[Styles & Themes]
     end
-    
+
     subgraph "🧠 AI Engine Layer"
         AI[AI Module]
         EVAL[Evaluation]
         SEARCH[Search Algorithms]
         BOOK[Opening Book]
     end
-    
+
     subgraph "♛ Core Chess Logic"
         CORE[Core Module]
         BOARD[Board]
@@ -208,7 +208,7 @@ flowchart TB
         VALID[MoveValidator]
         RULES[Rules]
     end
-    
+
     subgraph "🔧 Utilities"
         UTILS[Utils Module]
         CONST[Constants]
@@ -216,12 +216,12 @@ flowchart TB
         PGN[PGN Support]
         NOTATION[Notation]
     end
-    
+
     UI --> CORE
     AI --> CORE
     CORE --> UTILS
     AI --> UTILS
-    
+
     style CORE fill:#e1f5fe
     style AI fill:#f3e5f5
     style UI fill:#e8f5e8
@@ -251,7 +251,7 @@ This project draws inspiration from one of the most impressive programming achie
 Our JavaScript implementation honors this legacy while embracing modern capabilities:
 
 - **Then**: 4KB ROM, 128 bytes RAM → **Now**: Unlimited memory and processing power
-- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features  
+- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features
 - **Then**: Simple evaluation function → **Now**: Sophisticated AI with deep search algorithms
 - **Then**: Fixed difficulty → **Now**: Adaptive AI with multiple skill levels
 
@@ -309,4 +309,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-*Built with ♛ by the chess programming community*
+_Built with ♛ by the chess programming community_
