@@ -229,12 +229,12 @@ export class MoveValidator {
                         if (!this.wouldMoveResultInCheck(move.from, move.to, color)) {
                             legalMoves.push(move);
                         }
-                    } catch (error) {
+                    } catch (_error) {
                         // Skip moves that cause errors in self-check detection
                         continue;
                     }
                 }
-            } catch (error) {
+            } catch (_error) {
                 // Skip pieces that cause errors in move generation
                 continue;
             }
@@ -271,7 +271,7 @@ export class MoveValidator {
 
             // Check if king would be in check after the move
             return tempValidator.isInCheck(color);
-        } catch (error) {
+        } catch (_error) {
             // If there's an error in simulation, assume the move is invalid
             return true;
         }
@@ -304,7 +304,7 @@ export class MoveValidator {
                     }
 
                     boardCopy.squares[i] = pieceCopy;
-                } catch (error) {
+                } catch (_error) {
                     // Skip pieces that cause errors during copying
                     continue;
                 }
