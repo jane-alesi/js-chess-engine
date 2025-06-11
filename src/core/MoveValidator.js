@@ -19,7 +19,7 @@ export class MoveValidator {
     /**
      * Validates if a move is legal according to chess rules
      * Includes piece-specific validation, turn validation, and self-check prevention
-     *
+     * 
      * @param {number} fromPosition - Source square index (0-63)
      * @param {number} toPosition - Destination square index (0-63)
      * @returns {boolean} True if move is legal, false otherwise
@@ -56,7 +56,7 @@ export class MoveValidator {
     /**
      * Checks if a move is pseudo-legal (follows piece movement rules)
      * Does not consider check/checkmate, only basic piece movement
-     *
+     * 
      * @param {number} fromPosition - Source square index
      * @param {number} toPosition - Destination square index
      * @returns {boolean} True if move is pseudo-legal
@@ -73,7 +73,7 @@ export class MoveValidator {
 
     /**
      * Checks if a king of the specified color is currently in check
-     *
+     * 
      * @param {string} color - Color of the king to check ('white' or 'black')
      * @returns {boolean} True if king is in check, false otherwise
      */
@@ -101,7 +101,7 @@ export class MoveValidator {
     /**
      * Checks if the specified color is in checkmate
      * King must be in check and have no legal moves to escape
-     *
+     * 
      * @param {string} color - Color to check for checkmate
      * @returns {boolean} True if in checkmate, false otherwise
      */
@@ -124,7 +124,7 @@ export class MoveValidator {
     /**
      * Checks if the specified color is in stalemate
      * King must NOT be in check but have no legal moves
-     *
+     * 
      * @param {string} color - Color to check for stalemate
      * @returns {boolean} True if in stalemate, false otherwise
      */
@@ -133,7 +133,7 @@ export class MoveValidator {
         if (this.findKing(color) === -1) {
             return false;
         }
-
+        
         // Must NOT be in check to be stalemate
         if (this.isInCheck(color)) {
             return false;
@@ -147,7 +147,7 @@ export class MoveValidator {
     /**
      * Checks if castling is legal for the specified color and side
      * TODO: Implement castling validation in future enhancement
-     *
+     * 
      * @param {string} _color - Color attempting to castle
      * @param {string} _side - Side to castle ('kingside' or 'queenside')
      * @returns {boolean} Currently returns false (not implemented)
@@ -163,7 +163,7 @@ export class MoveValidator {
 
     /**
      * Helper method to validate square indices
-     *
+     * 
      * @param {number} position - Square index to validate
      * @returns {boolean} True if position is valid (0-63)
      */
@@ -173,7 +173,7 @@ export class MoveValidator {
 
     /**
      * Finds the position of the king for the specified color
-     *
+     * 
      * @param {string} color - Color of king to find
      * @returns {number} King position index, or -1 if not found
      */
@@ -189,7 +189,7 @@ export class MoveValidator {
 
     /**
      * Gets all pieces of the specified color with their positions
-     *
+     * 
      * @param {string} color - Color of pieces to find
      * @returns {Array} Array of {piece, position} objects
      */
@@ -207,7 +207,7 @@ export class MoveValidator {
     /**
      * Gets all legal moves for the specified color
      * Filters out moves that would result in self-check
-     *
+     * 
      * @param {string} color - Color to get legal moves for
      * @returns {Array} Array of legal move objects
      */
@@ -231,7 +231,7 @@ export class MoveValidator {
     /**
      * Simulates a move and checks if it would result in the king being in check
      * Creates a temporary board state to test the move
-     *
+     * 
      * @param {number} fromPosition - Source square index
      * @param {number} toPosition - Destination square index
      * @param {string} color - Color of the moving piece
@@ -260,7 +260,7 @@ export class MoveValidator {
     /**
      * Creates a deep copy of the current board state
      * Preserves all piece properties including hasMoved state
-     *
+     * 
      * @returns {Board} Deep copy of the current board
      */
     createBoardCopy() {
