@@ -866,11 +866,75 @@ describe('MoveGenerator', () => {
         });
     });
 
-    describe('Other Piece Move Generation (TODO)', () => {
-        test('should return empty array for queen moves (not implemented)', () => {
+    describe('Queen Move Generation', () => {
+        test('should generate all 27 moves for queen in center of empty board', () => {
             const queen = new Piece('queen', 'white', 9, '♕');
-            const moves = moveGenerator.generateQueenMoves(queen, 3);
-            expect(moves).toEqual([]);
+            board.squares[28] = queen; // e4
+    
+            const moves = moveGenerator.generateQueenMoves(queen, 28);
+            // Rook moves from e4 = 14; Bishop moves from e4 = 13. Total = 27.
+            expect(moves).toHaveLength(27);
+        });
+    
+        test('should generate 21 moves for queen in corner (a1)', () => {
+            const queen = new Piece('queen', 'white', 9, '♕');
+            board.squares[56] = queen; // a1
+    
+            const moves = moveGenerator.generateQueenMoves(queen, 56);
+            // Rook moves from a1 = 14; Bishop moves from a1 = 7. Total = 21.
+            expect(moves).toHaveLength(21);
+        });
+    
+        test('should be blocked by friendly pieces', () => {
+            const queen = new Piece('queen', 'white', 9, '♕');
+            board.squares[28] = queen; // e4
+    
+            // Friendly piece blocking vertically
+            board.squares[36] = new Piece('pawn', 'white', 1, '♙'); // e5
+            // Friendly piece blocking diagonally
+            board.squares[37] = new Piece('pawn', 'white', 1, '♙'); // f5
+    
+            const moves = moveGenerator.generateQueenMoves(queen, 28);
+            expect(moves.length).toBeLessThan(27);
+            
+            const movesToE5 = moves.find(m => m.to === 36);
+            expect(movesToE5).toBeUndefined(); // Cannot land on friendly piece
+    
+            const movesToF5 = moves.find(m => m.to === 37);
+            expect(movesToF5).toBeUndefined(); // Cannot land on friendly piece
+        });
+    
+        test('should capture enemy pieces', () => {
+            const queen = new Piece('queen', 'white', 9, '♕');
+            board.squares[28] = queen; // e4
+    
+            // Enemy piece blocking vertically
+            board.squares[36] = new Piece('pawn', 'black', 1, '♟'); // e5
+            // Enemy piece blocking diagonally
+            board.squares[37] = new Piece('pawn', 'black', 1, '♟'); // f5
+    
+            const moves = moveGenerator.generateQueenMoves(queen, 28);
+            
+            const captureAtE5 = moves.find(m => m.to === 36);
+            expect(captureAtE5).toBeDefined();
+            expect(captureAtE5.type).toBe('capture');
+            expect(captureAtE5.captured).toBe('pawn');
+    
+            const captureAtF5 = moves.find(m => m.to === 37);
+            expect(captureAtF5).toBeDefined();
+            expect(captureAtF5.type).toBe('capture');
+            expect(captureAtF5.captured).toBe('pawn');
+        });
+    
+        test('all generated moves should have correct piece type and color', () => {
+            const queen = new Piece('queen', 'white', 9, '♕');
+            board.squares[28] = queen; // e4
+    
+            const moves = moveGenerator.generateQueenMoves(queen, 28);
+            moves.forEach(move => {
+                expect(move.piece).toBe('queen');
+                expect(move.color).toBe('white');
+            });
         });
     });
 
@@ -923,6 +987,16 @@ describe('MoveGenerator', () => {
 
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('king');
+        });
+
+        test('should route to correct piece-specific method for queen', () => {
+            const whiteQueen = new Piece('queen', 'white', 9, '♕');
+            board.squares[28] = whiteQueen;
+        
+            const moves = moveGenerator.generateMoves(whiteQueen, 28);
+        
+            expect(moves.length).toBeGreaterThan(0);
+            expect(moves[0].piece).toBe('queen');
         });
 
         test('should return empty array for unknown piece type', () => {
