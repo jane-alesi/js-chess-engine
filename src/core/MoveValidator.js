@@ -41,7 +41,7 @@ export class MoveValidator {
         }
 
         // Check if move is pseudo-legal (piece-specific movement rules)
-        if (!this.isMovePseudoLegal(fromPosition, toPosition)) {
+        if (!this.isMovesPseudoLegal(fromPosition, toPosition)) {
             return false;
         }
 
@@ -61,7 +61,7 @@ export class MoveValidator {
      * @param {number} toPosition - Destination square index
      * @returns {boolean} True if move is pseudo-legal
      */
-    isMovePseudoLegal(fromPosition, toPosition) {
+    isMovesPseudoLegal(fromPosition, toPosition) {
         const piece = this.board.squares[fromPosition];
         if (!piece) {
             return false;
@@ -76,12 +76,12 @@ export class MoveValidator {
      *
      * @param {string} color - Color of the king to check ('white' or 'black')
      * @returns {boolean} True if king is in check, false otherwise
+     * @throws {Error} If no king of the specified color is found
      */
     isInCheck(color) {
         const kingPosition = this.findKing(color);
         if (kingPosition === -1) {
-            // If there's no king, it can't be in check
-            return false;
+            throw new Error(`No ${color} king found on the board`);
         }
 
         const opponentColor = color === 'white' ? 'black' : 'white';
@@ -112,7 +112,12 @@ export class MoveValidator {
         }
 
         // Must be in check to be checkmate
-        if (!this.isInCheck(color)) {
+        try {
+            if (!this.isInCheck(color)) {
+                return false;
+            }
+        } catch (error) {
+            // If king not found, can't be checkmate
             return false;
         }
 
@@ -135,7 +140,12 @@ export class MoveValidator {
         }
 
         // Must NOT be in check to be stalemate
-        if (this.isInCheck(color)) {
+        try {
+            if (this.isInCheck(color)) {
+                return false;
+            }
+        } catch (error) {
+            // If king not found, can't be stalemate
             return false;
         }
 
@@ -215,6 +225,11 @@ export class MoveValidator {
         const legalMoves = [];
         const pieces = this.getAllPiecesOfColor(color);
 
+        // If no king found, return empty array (graceful handling)
+        if (this.findKing(color) === -1) {
+            return [];
+        }
+
         for (const { piece, position } of pieces) {
             const pseudoLegalMoves = this.moveGenerator.generateMoves(piece, position);
 
@@ -254,7 +269,12 @@ export class MoveValidator {
         const tempValidator = new MoveValidator(boardCopy, this.gameState);
 
         // Check if king would be in check after the move
-        return tempValidator.isInCheck(color);
+        try {
+            return tempValidator.isInCheck(color);
+        } catch (error) {
+            // If king not found after move, something went wrong
+            return true; // Treat as invalid move
+        }
     }
 
     /**
