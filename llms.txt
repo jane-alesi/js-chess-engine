@@ -53,22 +53,22 @@ export class Board {
     constructor() {
         this.squares = new Array(64).fill(null);
     }
-    
+
     setupInitialBoard() {
         // Place pieces in starting positions
         // Implementation: Standard chess setup
     }
-    
+
     movePiece(fromIndex, toIndex) {
         // Validate and execute piece movement
         // Error handling: Throw descriptive errors for invalid moves
     }
-    
+
     isSquareAttacked(squareIndex, byColor) {
         // Check if square is under attack by specified color
         // Used for check detection and castling validation
     }
-    
+
     clone() {
         // Deep copy board state for AI search
         // Performance critical: Optimize for speed
@@ -110,7 +110,7 @@ export class Piece {
         if (!symbol || typeof symbol !== 'string') {
             throw new Error('Piece symbol must be a non-empty string');
         }
-        
+
         this.#type = type.toLowerCase();
         this.#color = color.toLowerCase();
         this.#points = points;
@@ -184,22 +184,22 @@ export class MoveGenerator {
         // Generate all legal moves for specified color
         // Performance critical: Used by AI search
         const moves = [];
-        
+
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
             if (piece && piece.getColor() === color) {
                 moves.push(...this.generatePieceMoves(board, i, piece));
             }
         }
-        
+
         return moves.filter(move => this.isLegalMove(board, move));
     }
-    
+
     static generatePieceMoves(board, fromIndex, piece) {
         // Generate pseudo-legal moves for specific piece
         // Implementation: Piece-type specific generation
     }
-    
+
     static isLegalMove(board, move) {
         // Verify move doesn't leave king in check
         // Implementation: Make move, check for self-check, unmake
@@ -223,20 +223,20 @@ export class GameState {
         this.gameStatus = 'active'; // active, check, checkmate, stalemate, draw
         this.moveHistory = [];
     }
-    
+
     makeMove(move) {
         // Execute move and update game state
         // Update castling rights, en passant, clocks
     }
-    
+
     isInCheck(color) {
         // Check if specified color's king is in check
     }
-    
+
     isCheckmate(color) {
         // Check if specified color is in checkmate
     }
-    
+
     isStalemate(color) {
         // Check if specified color is in stalemate
     }
@@ -254,22 +254,22 @@ export class BoardRenderer {
         this.squareSize = 64;
         this.theme = 'classic';
     }
-    
+
     render(board, highlightSquares = []) {
         // Render board with pieces and highlights
         // Implementation: Canvas-based or DOM-based rendering
     }
-    
+
     drawPiece(piece, x, y) {
         // Draw individual piece at coordinates
         // Use Unicode chess symbols or sprite images
     }
-    
+
     highlightSquare(squareIndex, color) {
         // Highlight square with specified color
         // Used for move selection and valid moves
     }
-    
+
     animateMove(fromSquare, toSquare, duration = 300) {
         // Animate piece movement between squares
         // Smooth visual feedback for moves
@@ -285,20 +285,20 @@ export class InputHandler {
         this.onMove = onMoveCallback;
         this.selectedSquare = null;
         this.validMoves = [];
-        
+
         this.attachEventListeners();
     }
-    
+
     attachEventListeners() {
         // Mouse and touch event handlers
         // Support for drag-and-drop and click-to-move
     }
-    
+
     handleSquareClick(squareIndex) {
         // Process square selection and move execution
         // Two-click interface: select piece, select destination
     }
-    
+
     highlightValidMoves(fromSquare) {
         // Show valid moves for selected piece
         // Visual feedback for legal moves
@@ -318,19 +318,19 @@ export class AIPlayer {
         this.search = new Search();
         this.openingBook = new OpeningBook();
     }
-    
+
     async selectMove(gameState) {
         // Select best move using search algorithm
         // Use Web Workers for non-blocking computation
-        
+
         // Check opening book first
         const bookMove = this.openingBook.getMove(gameState);
         if (bookMove) return bookMove;
-        
+
         // Use minimax search
         return this.search.findBestMove(gameState, this.maxDepth);
     }
-    
+
     getDifficultyDepth(difficulty) {
         // Map difficulty to search depth
         const depths = { easy: 2, medium: 4, hard: 6, expert: 8 };
@@ -347,40 +347,40 @@ export class Search {
         this.killerMoves = [];
         this.historyTable = new Map();
     }
-    
+
     findBestMove(gameState, maxDepth) {
         // Iterative deepening minimax search
         let bestMove = null;
-        
+
         for (let depth = 1; depth <= maxDepth; depth++) {
             const result = this.minimax(gameState, depth, -Infinity, Infinity, true);
             if (result.move) bestMove = result.move;
         }
-        
+
         return bestMove;
     }
-    
+
     minimax(gameState, depth, alpha, beta, maximizingPlayer) {
         // Minimax algorithm with alpha-beta pruning
         // Include quiescence search for tactical positions
-        
+
         if (depth === 0 || gameState.isGameOver()) {
             return { score: this.evaluation.evaluate(gameState) };
         }
-        
+
         const moves = this.orderMoves(
             MoveGenerator.generateAllMoves(gameState.board, gameState.currentPlayer)
         );
-        
+
         let bestMove = null;
         let bestScore = maximizingPlayer ? -Infinity : Infinity;
-        
+
         for (const move of moves) {
             const newState = gameState.clone();
             newState.makeMove(move);
-            
+
             const result = this.minimax(newState, depth - 1, alpha, beta, !maximizingPlayer);
-            
+
             if (maximizingPlayer) {
                 if (result.score > bestScore) {
                     bestScore = result.score;
@@ -394,13 +394,13 @@ export class Search {
                 }
                 beta = Math.min(beta, result.score);
             }
-            
+
             if (beta <= alpha) break; // Alpha-beta pruning
         }
-        
+
         return { score: bestScore, move: bestMove };
     }
-    
+
     orderMoves(moves) {
         // Order moves for better pruning
         // Captures, checks, killer moves, history heuristic
@@ -424,29 +424,29 @@ export class Evaluation {
         queen: 900,
         king: 20000
     };
-    
+
     static PIECE_SQUARE_TABLES = {
         // Positional value tables for each piece type
         // Encourage good piece placement
     };
-    
+
     evaluate(gameState) {
         // Comprehensive position evaluation
         let score = 0;
-        
+
         score += this.evaluateMaterial(gameState.board);
         score += this.evaluatePosition(gameState.board);
         score += this.evaluateKingSafety(gameState.board);
         score += this.evaluatePawnStructure(gameState.board);
         score += this.evaluateMobility(gameState);
-        
+
         return gameState.currentPlayer === 'white' ? score : -score;
     }
-    
+
     evaluateMaterial(board) {
         // Count material balance
         let material = 0;
-        
+
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
             if (piece) {
@@ -454,14 +454,14 @@ export class Evaluation {
                 material += piece.getColor() === 'white' ? value : -value;
             }
         }
-        
+
         return material;
     }
-    
+
     evaluatePosition(board) {
         // Evaluate piece placement using square tables
         let positional = 0;
-        
+
         for (let i = 0; i < 64; i++) {
             const piece = board.squares[i];
             if (piece) {
@@ -470,7 +470,7 @@ export class Evaluation {
                 positional += piece.getColor() === 'white' ? squareValue : -squareValue;
             }
         }
-        
+
         return positional;
     }
 }
@@ -578,12 +578,12 @@ export class FEN {
         // Parse FEN string into game state
         // Implementation: Standard FEN parsing
     }
-    
+
     static generate(gameState) {
         // Generate FEN string from game state
         // Implementation: Standard FEN generation
     }
-    
+
     static validateFEN(fenString) {
         // Validate FEN string format
         // Return true if valid, false otherwise
@@ -624,25 +624,25 @@ import { Board } from '../../src/core/Board.js';
 
 describe('Board', () => {
     let board;
-    
+
     beforeEach(() => {
         board = new Board();
     });
-    
+
     test('should initialize with 64 null squares', () => {
         expect(board.squares.length).toBe(64);
         expect(board.squares.every(square => square === null)).toBe(true);
     });
-    
+
     test('should throw error when moving from empty square', () => {
         expect(() => {
             board.movePiece(20, 21);
         }).toThrow('Invalid move: no piece found at square 20');
     });
-    
+
     test('should setup initial board correctly', () => {
         board.setupInitialBoard();
-        
+
         // Test piece placement using getter methods
         expect(board.squares[0].getType()).toBe('rook');
         expect(board.squares[0].getColor()).toBe('white');
@@ -675,7 +675,7 @@ test('should have correct piece type', () => {
 // When core components change, update dependent tests
 test('board should setup pieces correctly', () => {
     board.setupInitialBoard();
-    
+
     // Use getter methods for piece properties
     expect(board.squares[8].getType()).toBe('pawn');
     expect(board.squares[8].getColor()).toBe('white');
@@ -688,21 +688,29 @@ test('board should setup pieces correctly', () => {
 ```javascript
 // eslint.config.js
 import js from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
     js.configs.recommended,
+    prettierConfig,
     {
         languageOptions: {
             ecmaVersion: 2022,
-            sourceType: 'module'
+            sourceType: 'module',
+            globals: {
+                // Add globals here
+            },
         },
         rules: {
-            'no-unused-vars': ['error', {
-                argsIgnorePattern: '^_',
-                varsIgnorePattern: '^_',
-            }]
-        }
-    }
+            'no-unused-vars': [
+                'error',
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                },
+            ],
+        },
+    },
 ];
 ```
 
@@ -714,7 +722,7 @@ export default {
     transform: {},
     extensionsToTreatAsEsm: ['.js'],
     moduleNameMapper: {
-        '^(\.{1,2}/.*)\.js$': '$1',
+        '^(\\.{1,2}/.*)\\.js$': '$1.js',
     },
     injectGlobals: true,
 };
@@ -727,17 +735,29 @@ export default {
     "version": "0.1.0",
     "type": "module",
     "scripts": {
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "start": "live-server --port=8080 --entry-file=index.html",
+        "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
+        "test:watch": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch",
+        "test:coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "start": "live-server .",
-        "build": "webpack --mode production"
+        "lint:check": "eslint . --max-warnings 0",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "quality:check": "npm run format:check && npm run lint:check",
+        "quality:fix": "npm run format && npm run lint:fix",
+        "build": "echo 'Build script goes here'",
+        "prepare": "husky install",
+        "pre-commit": "lint-staged"
     },
     "devDependencies": {
-        "@eslint/js": "^9.0.0",
-        "eslint": "^9.0.0",
-        "jest": "^29.0.0",
-        "live-server": "^1.2.2"
+        "eslint": "^9.28.0",
+        "eslint-config-prettier": "^9.1.0",
+        "husky": "^9.1.7",
+        "jest": "^29.7.0",
+        "lint-staged": "^15.2.10",
+        "live-server": "^1.2.2",
+        "prettier": "^3.3.3"
     }
 }
 ```
@@ -753,7 +773,7 @@ const ai = new AIPlayer();
 
 self.onmessage = async function(e) {
     const { gameState, difficulty } = e.data;
-    
+
     try {
         const move = await ai.selectMove(gameState);
         self.postMessage({ success: true, move });
@@ -771,28 +791,28 @@ class TranspositionTable {
         this.table = new Map();
         this.maxSize = maxSize;
     }
-    
+
     store(positionHash, depth, score, moveType, bestMove) {
         if (this.table.size >= this.maxSize) {
             // Remove oldest entries
             const firstKey = this.table.keys().next().value;
             this.table.delete(firstKey);
         }
-        
+
         this.table.set(positionHash, {
             depth, score, moveType, bestMove,
             timestamp: Date.now()
         });
     }
-    
+
     lookup(positionHash, depth, alpha, beta) {
         const entry = this.table.get(positionHash);
         if (!entry || entry.depth < depth) return null;
-        
+
         if (entry.moveType === 'exact') return entry.score;
         if (entry.moveType === 'lowerbound' && entry.score >= beta) return entry.score;
         if (entry.moveType === 'upperbound' && entry.score <= alpha) return entry.score;
-        
+
         return null;
     }
 }
@@ -859,9 +879,9 @@ function validateMove(fromIndex, toIndex) {
 export class Rules {
     static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
     static COLORS = ['white', 'black'];
-    
+
     #privateField = 'value';
-    
+
     constructor() {
         this.publicField = 'value';
     }
@@ -948,10 +968,10 @@ const MOVEMENT_PATTERNS = {
         white: [[-8], [-16], [-7], [-9]], // forward, double, captures
         black: [[8], [16], [7], [9]]
     },
-    rook: [[-8, -16, -24, -32, -40, -48, -56], [8, 16, 24, 32, 40, 48, 56],
+    rook: [[-8, -16, -24, -32, -40, -48, -56], [8, 16, 24, 32, 40, 48, 56], \
            [-1, -2, -3, -4, -5, -6, -7], [1, 2, 3, 4, 5, 6, 7]],
     knight: [[-17, -15, -10, -6, 6, 10, 15, 17]],
-    bishop: [[-9, -18, -27, -36, -45, -54, -63], [-7, -14, -21, -28, -35, -42, -49],
+    bishop: [[-9, -18, -27, -36, -45, -54, -63], [-7, -14, -21, -28, -35, -42, -49], \
              [7, 14, 21, 28, 35, 42, 49], [9, 18, 27, 36, 45, 54, 63]],
     queen: [...MOVEMENT_PATTERNS.rook, ...MOVEMENT_PATTERNS.bishop],
     king: [[-9, -8, -7, -1, 1, 7, 8, 9]]
@@ -988,21 +1008,23 @@ This document serves as the complete guide for AI agents working on the JS Chess
 
 This section provides solutions to common issues encountered during development.
 
-### **1. ESLint Errors**
+### **1. ESLint / Prettier Conflicts**
 
-**Problem:** ESLint reports errors or warnings that prevent code from compiling or passing CI checks.
+**Problem**: The CI build fails with linting errors (e.g., quote style, indentation) even after the auto-fixer runs.
 
-**Solution:**
-- **Run `npm run lint:fix`**: This command automatically fixes most linting issues.
-- **Review ESLint rules**: Understand the specific rule causing the error. Refer to `eslint.config.js` for project-specific rules.
-- **Check for unused variables/parameters**: Ensure all variables and function parameters are used. If a parameter is intentionally unused, prefix it with an underscore (e.g., `_unusedParam`).
-- **Verify ES2022 syntax**: Ensure you are using correct modern JavaScript syntax, especially for private class fields (`#field`).
+**Cause**: This happens when ESLint and Prettier have conflicting style rules. The auto-fixer might apply one style, and the CI linter expects another.
+
+**Solution**: The project is now configured with `eslint-config-prettier` to prevent this. This package disables all ESLint style rules that Prettier already handles.
+
+- **Ensure Correct Setup**: Your `eslint.config.js` should include `prettierConfig` to disable conflicting rules.
+- **Run `npm run quality:fix`**: This command now runs `prettier --write` first, then `eslint --fix`. This ensures code is formatted correctly before ESLint checks for logical errors.
+- **Check `.prettierrc.json`**: This file is the single source of truth for all formatting rules.
 
 ### **2. Test Failures**
 
-**Problem:** Jest tests fail after implementing new features or refactoring existing code.
+**Problem**: Jest tests fail after implementing new features or refactoring existing code.
 
-**Solution:**
+**Solution**:
 - **Check console output**: Look for specific error messages in the test output.
 - **Verify getter methods**: If you are working with `Piece` objects or other classes using private fields, ensure you are using getter methods (e.g., `piece.getType()`) instead of direct property access (e.g., `piece.type`).
 - **Update dependent tests**: If you modified a core component, ensure all tests that depend on that component are updated to reflect the changes. Refer to the `Test Compatibility Protocol` in `llms_project_context.txt`.
@@ -1011,27 +1033,27 @@ This section provides solutions to common issues encountered during development.
 
 ### **3. Private Field Access Errors**
 
-**Problem:** You encounter errors like `TypeError: Cannot read private member #field from an object whose class did not declare it` or `SyntaxError: Private field '#field' must be declared in an enclosing class`.
+**Problem**: You encounter errors like `TypeError: Cannot read private member #field from an object whose class did not declare it` or `SyntaxError: Private field '#field' must be declared in an enclosing class`.
 
-**Solution:**
+**Solution**:
 - **Ensure correct class context**: Private fields can only be accessed from within the class that declares them. If you are trying to access a private field from outside the class (e.g., in a test or another module), you must use a public getter method.
 - **Verify ES2022 support**: Ensure your Node.js environment and Jest configuration support ES2022 private class fields. The project's `package.json` and `jest.config.js` are configured for this, but verify your local setup.
 - **Check for typos**: Double-check the spelling of private field names and ensure consistency.
 
 ### **4. Module Resolution Errors**
 
-**Problem:** `import` statements fail with errors like `SyntaxError: Cannot use import statement outside a module` or `ERR_MODULE_NOT_FOUND`.
+**Problem**: `import` statements fail with errors like `SyntaxError: Cannot use import statement outside a module` or `ERR_MODULE_NOT_FOUND`.
 
-**Solution:**
+**Solution**:
 - **Verify `type: "module"` in `package.json`**: Ensure your project's `package.json` includes `"type": "module"` to enable ES module syntax.
 - **Use correct file extensions**: Ensure all imported files have the `.js` extension in the `import` path (e.g., `import { Piece } from './Piece.js';`).
 - **Check `moduleNameMapper` in `jest.config.js`**: If you are using Jest, ensure `moduleNameMapper` is correctly configured to resolve module paths.
 
 ### **5. Performance Issues**
 
-**Problem:** The chess engine is slow, especially during AI computations.
+**Problem**: The chess engine is slow, especially during AI computations.
 
-**Solution:**
+**Solution**:
 - **Optimize search algorithms**: Ensure Minimax with Alpha-Beta pruning is correctly implemented.
 - **Implement Transposition Tables**: Cache previously evaluated positions to avoid redundant computations.
 - **Utilize Web Workers**: Offload AI computations to a separate thread to prevent blocking the main UI thread.
