@@ -70,8 +70,7 @@ src/
 ### 2. Move Generation System
 
 **Current Status:**
-- ✅ Pawn, Rook, Bishop, Knight, and King moves fully implemented (see `src/core/MoveGenerator.js`)
-- 🔄 Other pieces: Queen (see active issues)
+- ✅ Pawn, Rook, Bishop, Knight, King and Queen moves fully implemented (see `src/core/MoveGenerator.js`)
 
 **Move Object Structure:**
 ```javascript
@@ -242,16 +241,15 @@ expect(piece.getType()).toBe('pawn');
 
 **📊 Documentation Achievement**: Complete professional documentation foundation (README.md: 16.9KB, CONTRIBUTING.md: 10.7KB)
 
-### 🔄 Phase 2: Core Move Generation (CURRENT PRIORITY)
-1. **Issue #6**: Implement Queen Pseudo-Legal Move Generation (**RECOMMENDED NEXT**)
+### ✅ Phase 2: Core Move Generation (COMPLETED)
+- ✅ **Pawn, Rook, Bishop, Knight, King and Queen moves fully implemented**
+- **All pseudo-legal move generation for standard pieces is now implemented.**
 
-**Current Status**: ✅ Pawn, Rook, Bishop, Knight, and King moves complete (90% progress), 1 piece remaining
-
-### 📅 Phase 3: Core Game Logic (Medium Priority)
-1. Implement move validation and legal move filtering
-2. Add check/checkmate detection
-3. Complete game state management
-4. Enhanced Board.js movePiece for Game Logic
+### 📅 Phase 3: Core Game Logic (CURRENT PRIORITY)
+1. **Issue #15**: Enhance Board.js movePiece for Game Logic (**RECOMMENDED NEXT**)
+2. Implement move validation and legal move filtering
+3. Add check/checkmate detection
+4. Complete game state management
 
 ### 🧠 Phase 4: AI Implementation (Lower Priority)
 1. Basic AI with random moves
@@ -309,4 +307,4 @@ This document serves as the comprehensive development guide for any LLM working 
 
 **Remember**: This guide focuses on HOW to develop, while `llms_project_context.txt` focuses on WHAT to develop next.
 
-**Current Status**: Core Move Generation Phase (90% complete) → Entering final piece implementation (Issue #6: Queen Move Generation)
+**Current Status**: Core Game Logic Phase (Phase 3) → Entering core game logic implementation (Issue #15)
