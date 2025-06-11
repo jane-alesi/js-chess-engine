@@ -28,6 +28,7 @@
 - **UI Foundation**: BoardRenderer.js, InputHandler.js, styles.css
 - **Utilities**: Constants.js with comprehensive piece definitions and helper functions
 - **Move Generation**: **Pawn, Rook, Bishop, Knight, King and Queen moves fully implemented** (Issues #4, #2, #1, #9, #7, #6 ✅)
+- **Enhanced Board Logic**: **Issue #15 COMPLETED** - Enhanced movePiece method with game logic tracking ✅
 - **Testing Framework**: Jest configuration with ES module support
 - **Security**: Comprehensive dependency security fixes and npm overrides
 - **Automated Linting**: Fully synchronized auto-linting/formatting pipeline (ESLint + Prettier) (Issue #19 ✅)
@@ -36,6 +37,7 @@
 ### **🧪 Test Suite Status**
 - **All tests passing** ✅
 - **Comprehensive pawn, rook, bishop, knight, king and queen move generation tests** with edge cases
+- **Enhanced Board.js tests** with move result validation and piece tracking ✅
 - **Jest configuration modernized** for Node.js compatibility
 - **Test compatibility verified** with ES2022 private fields
 
@@ -53,6 +55,14 @@
 - **✅ Status Badges & Roadmap** (Issue #38) - 8 dynamic status badges and 6-phase development roadmap
 - **📊 README Growth**: From 2.5KB → 16.9KB with world-class professional documentation
 - **🎯 Project Credibility**: Complete documentation foundation suitable for portfolio and enterprise use
+
+### **🎯 PHASE 3 PROGRESS: Enhanced Board Logic**
+- **✅ Issue #15 COMPLETED**: Enhanced Board.js movePiece for Game Logic
+  - **Enhanced movePiece method** with comprehensive game logic tracking
+  - **Piece movement tracking** using `markAsMoved()` method (crucial for castling and pawn rules)
+  - **Detailed move result objects** with `from`, `to`, `pieceMoved`, `pieceCaptured`, and `success` status
+  - **Backward compatibility** maintained with existing tests
+  - **Comprehensive test coverage** for new functionality
 
 ---
 
@@ -96,7 +106,7 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 
 // ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\\\\\n\\\\\\\\n\\\\\\\\\\\\\\\"sha\\\\\\\\\\\\\\\" wasn't supplied. []"}
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"sha\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" wasn't supplied. []"}
 ```
 
 **Update Workflow:**
@@ -165,16 +175,15 @@ const testUpdateWorkflow = {
 // ✅ NEW: expect(board.squares[8].getColor()).toBe('white');
 ```
 
-### **📝 Move Object Structure (STANDARDIZED)**
+### **📝 Enhanced Move Object Structure (IMPLEMENTED)**
 ```javascript
-// Standardized move object format (implemented in Issue #4)
-const moveObject = {
+// Enhanced move object format (implemented in Issue #15)
+const moveResult = {
     from: 12,              // Source square index (0-63)
     to: 28,                // Destination square index
-    type: 'normal',        // 'normal', 'double', 'capture', 'castling', 'enPassant'
-    piece: 'pawn',         // Moving piece type
-    color: 'white',        // Moving piece color
-    captured: 'knight'     // Captured piece type (if any)
+    pieceMoved: 'pawn',    // Moving piece type
+    pieceCaptured: 'knight', // Captured piece type (if any, null otherwise)
+    success: true          // Move execution status
 };
 ```
 
@@ -231,7 +240,7 @@ function processMove(_unused, toSquare) { /* ... */ }
 ```
 src/
 ├── core/          # Chess logic (Board, Piece, Game)
-│   ├── Board.js              # ✅ Implemented
+│   ├── Board.js              # ✅ Enhanced (Issue #15)
 │   ├── Piece.js              # ✅ Implemented (ES2022 private fields)
 │   ├── Game.js               # ✅ Implemented
 │   ├── GameState.js          # ✅ Implemented
@@ -249,7 +258,7 @@ src/
 
 tests/
 ├── core/          # Core logic tests
-│   ├── Board.test.js         # ✅ Implemented
+│   ├── Board.test.js         # ✅ Enhanced (Issue #15)
 │   ├── Piece.test.js         # ✅ Implemented
 │   └── MoveGenerator.test.js # ✅ Implemented (All tests passing)
 ├── ui/            # UI component tests
@@ -310,6 +319,7 @@ tests/
 
 ### **Core Features**
 - **64-square board representation** with piece positioning ✅
+- **Enhanced move tracking** with piece property updates ✅ (Issue #15)
 - **Move validation** with chess rule enforcement (partial)
 - **Game state tracking** including check/checkmate detection (basic)
 - **Move notation** for game recording and analysis (TODO)
@@ -321,6 +331,12 @@ tests/
 - **✅ Knight Moves**: Fully implemented with comprehensive testing
 - **✅ King Moves**: Fully implemented with comprehensive testing
 - **✅ Queen Moves**: Fully implemented with comprehensive testing
+
+### **Enhanced Board Logic (NEW)**
+- **✅ Move Execution**: Enhanced movePiece method with detailed result tracking
+- **✅ Piece Tracking**: Automatic marking of moved pieces (crucial for castling/pawn rules)
+- **✅ Capture Detection**: Comprehensive capture identification and reporting
+- **✅ Game Integration Ready**: Method designed for Game class orchestration
 
 ### **AI Integration**
 - **Position evaluation** for strategic decision making (TODO)
@@ -338,24 +354,24 @@ tests/
 
 ## 🚀 **NEXT DEVELOPMENT PRIORITIES**
 
-### **🎯 IMMEDIATE PRIORITY: Phase 3 - Core Game Logic**
-**Status**: Core Move Generation Complete ✅ → Now in Core Game Logic Phase
+### **🎯 IMMEDIATE PRIORITY: Phase 3 - Core Game Logic (IN PROGRESS)**
+**Status**: Enhanced Board Logic Complete ✅ → Continuing Core Game Logic Phase
 
-1. **Issue #15**: Enhance Board.js movePiece for Game Logic (**RECOMMENDED NEXT**)
-2. **Issue #14**: Orchestrate Game Flow with Game Class (if needed)
-3. **Move Validation**: Implement self-check prevention
-4. **Check Detection**: Implement check/checkmate logic
+1. **Issue #14**: Orchestrate Game Flow with Game Class (**NEXT RECOMMENDED**)
+2. **Move Validation**: Implement self-check prevention and legal move filtering
+3. **Check Detection**: Implement check/checkmate logic
+4. **Special Moves**: Begin castling, en passant, promotion implementation
 
 ### **🧠 Phase 4: AI & Advanced Features (Lower Priority)**
 1. **AI Implementation**: Minimax with Alpha-Beta Pruning
-2. **Advanced Rules**: Castling, en passant, promotion
+2. **Advanced Rules**: Complete special moves implementation
 3. **UI Enhancements**: Move highlighting, animations
 4. **Performance**: Web Workers, transposition tables
 
 ### **📊 Current Progress Summary**
 - **Phase 1 (Documentation)**: ✅ **100% COMPLETE** (Issues #35-#38)
 - **Phase 2 (Core Logic)**: ✅ **100% COMPLETE** (All piece moves implemented)
-- **Phase 3 (Game Rules)**: 📅 **0% COMPLETE** (Awaiting Phase 2)
+- **Phase 3 (Game Rules)**: 🔄 **25% COMPLETE** (Issue #15 completed, continuing with Game orchestration)
 - **Phase 4 (AI & Advanced)**: 📅 **0% COMPLETE** (Future implementation)
 
 ---
