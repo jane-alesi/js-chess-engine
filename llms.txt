@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-This is a pure JavaScript chess engine inspired by the legendary Atari Video Chess program. The project implements a complete chess game with AI opponent using modern JavaScript practices while honoring the efficient design principles of the original 6502 assembly implementation.
+This is a pure JavaScript chess engine inspired by the legendary Atari Video Chess program. The project implements a complete chess game with an AI opponent using modern JavaScript practices while honoring the efficient design principles of the original 6502 assembly implementation.
 
 **Repository**: https://github.com/jane-alesi/js-chess-engine
 **License**: MIT
@@ -240,13 +240,18 @@ expect(piece.getType()).toBe('pawn');
 3. Add check/checkmate detection
 4. Complete game state management
 
-### Phase 2: AI Implementation (High Priority)
+### Phase 2: Documentation & Project Management (High Priority)
+1.  **Create Professional README.md** (#35, #36, #37, #38)
+2.  **Implement Issue Templates** (#39)
+3.  **Implement Labeling & Automation** (#40)
+
+### Phase 3: AI Implementation (Medium Priority)
 1. Basic AI with random moves
 2. Minimax search algorithm
 3. Position evaluation function
 4. Alpha-beta pruning optimization
 
-### Phase 3: Advanced Features (Medium Priority)
+### Phase 4: Advanced Features (Low Priority)
 1. Multiple difficulty levels
 2. Opening book integration
 3. Performance optimizations
