@@ -58,9 +58,13 @@ jobs:
           echo "Trigger: ${{ github.event_name }}"
           if [ "${{ github.event_name }}" == "workflow_run" ]; then
             echo "Auto-fix status: ${{ needs.wait-for-auto-fix.outputs.auto-fix-status }}"
+            echo "Workflow run ID: ${{ github.event.workflow_run.id }}"
+            echo "Head branch: ${{ github.event.workflow_run.head_branch }}"
+            echo "Head SHA: ${{ github.event.workflow_run.head_sha }}"
+            echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
             echo "✅ Auto-fix workflow completed - proceeding with CI/CD"
           else
-            echo "🔗 Direct trigger - auto-fix may run concurrently"
+            echo "📝 Direct trigger - auto-fix may run concurrently"
           fi
           echo ""
 
@@ -70,6 +74,67 @@ jobs:
           # For direct triggers, checkout the triggering commit
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Synchronize with auto-fix commits
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "🔄 Synchronizing repository with auto-fix commits..."
+          echo "Target branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Trigger SHA: ${{ github.event.workflow_run.head_sha }}"
+          
+          # Force fetch latest changes
+          git fetch origin ${{ github.event.workflow_run.head_branch }}
+          
+          # Check for new commits beyond trigger SHA
+          LATEST_SHA=$(git rev-parse origin/${{ github.event.workflow_run.head_branch }})
+          TRIGGER_SHA="${{ github.event.workflow_run.head_sha }}"
+          
+          echo "Latest SHA: $LATEST_SHA"
+          echo "Trigger SHA: $TRIGGER_SHA"
+          
+          if [ "$LATEST_SHA" != "$TRIGGER_SHA" ]; then
+            echo "✅ Auto-fix commits detected - synchronizing..."
+            git reset --hard origin/${{ github.event.workflow_run.head_branch }}
+            echo "Repository synchronized to: $(git rev-parse HEAD)"
+          else
+            echo "ℹ️ No auto-fix commits found - proceeding with trigger SHA"
+          fi
+          
+          # Verify we have the latest code
+          echo "Final commit: $(git log -1 --oneline)"
+
+      - name: Verify code quality synchronization
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "🔍 Verifying auto-fix synchronization..."
+          
+          # Quick lint check to verify fixes are present
+          if npm run lint --silent; then
+            echo "✅ Code quality verified - auto-fixes are present"
+          else
+            echo "⚠️ Lint issues still present - checking for propagation delay..."
+            
+            # Wait up to 30 seconds for commit propagation
+            for i in {1..6}; do
+              echo "Attempt $i/6: Fetching latest changes..."
+              git fetch origin ${{ github.event.workflow_run.head_branch }}
+              git reset --hard origin/${{ github.event.workflow_run.head_branch }}
+              
+              if npm run lint --silent; then
+                echo "✅ Auto-fixes synchronized successfully"
+                break
+              fi
+              
+              if [ $i -eq 6 ]; then
+                echo "❌ Auto-fix synchronization failed after 30 seconds"
+                echo "This may indicate an auto-fix workflow failure"
+                exit 1
+              fi
+              
+              sleep 5
+            done
+          fi
           
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -84,7 +149,7 @@ jobs:
     
       - name: Display dependency tree
         run: |
-          echo "🌳 Dependency tree overview:"
+          echo "📳 Dependency tree overview:"
           npm list --depth=0 || true
           echo ""
     
