@@ -810,16 +810,66 @@ describe('MoveGenerator', () => {
         });
     });
 
+    describe('King Move Generation', () => {
+        test('should generate all 8 moves for king in center of empty board', () => {
+            const king = new Piece('king', 'white', 1000, '♔');
+            board.squares[28] = king; // e4
+
+            const moves = moveGenerator.generateKingMoves(king, 28);
+            expect(moves).toHaveLength(8);
+        });
+
+        test('should generate 3 moves for king in corner (a1)', () => {
+            const king = new Piece('king', 'white', 1000, '♔');
+            board.squares[56] = king; // a1
+
+            const moves = moveGenerator.generateKingMoves(king, 56);
+            expect(moves).toHaveLength(3);
+            const destinations = moves.map(m => m.to);
+            expect(destinations).toEqual(expect.arrayContaining([48, 49, 57])); // a2, b2, b1
+        });
+
+        test('should generate 5 moves for king on edge (a4)', () => {
+            const king = new Piece('king', 'white', 1000, '♔');
+            board.squares[32] = king; // a4
+
+            const moves = moveGenerator.generateKingMoves(king, 32);
+            expect(moves).toHaveLength(5);
+        });
+
+        test('should capture enemy pieces but not land on friendly pieces', () => {
+            const king = new Piece('king', 'white', 1000, '♔');
+            board.squares[28] = king; // e4
+
+            // Friendly piece at one destination
+            board.squares[27] = new Piece('pawn', 'white', 1, '♙'); // d4, blocks one move
+            // Enemy piece at another
+            board.squares[29] = new Piece('pawn', 'black', 1, '♟'); // f4, can be captured
+
+            const moves = moveGenerator.generateKingMoves(king, 28);
+            expect(moves).toHaveLength(7); // 8 possible moves - 1 blocked by friendly
+
+            const captureMove = moves.find(m => m.to === 29);
+            expect(captureMove).toBeDefined();
+            expect(captureMove.type).toBe('capture');
+            expect(captureMove.captured).toBe('pawn');
+        });
+
+        test('isValidKingMove should prevent wrapping', () => {
+            // Valid moves
+            expect(moveGenerator.isValidKingMove(0, 9)).toBe(true);  // a8 to b7
+            expect(moveGenerator.isValidKingMove(28, 27)).toBe(true); // e4 to d4
+
+            // Invalid moves (wrapping from h-file to a-file)
+            expect(moveGenerator.isValidKingMove(7, 8)).toBe(false);   // h8 to a7
+            expect(moveGenerator.isValidKingMove(15, 16)).toBe(false); // h7 to a6
+        });
+    });
+    
     describe('Other Piece Move Generation (TODO)', () => {
         test('should return empty array for queen moves (not implemented)', () => {
             const queen = new Piece('queen', 'white', 9, '♕');
             const moves = moveGenerator.generateQueenMoves(queen, 3);
-            expect(moves).toEqual([]);
-        });
-
-        test('should return empty array for king moves (not implemented)', () => {
-            const king = new Piece('king', 'white', 1000, '♔');
-            const moves = moveGenerator.generateKingMoves(king, 4);
             expect(moves).toEqual([]);
         });
     });
@@ -863,6 +913,16 @@ describe('MoveGenerator', () => {
 
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('knight');
+        });
+        
+        test('should route to correct piece-specific method for king', () => {
+            const whiteKing = new Piece('king', 'white', 1000, '♔');
+            board.squares[28] = whiteKing;
+
+            const moves = moveGenerator.generateMoves(whiteKing, 28);
+
+            expect(moves.length).toBeGreaterThan(0);
+            expect(moves[0].piece).toBe('king');
         });
 
         test('should return empty array for unknown piece type', () => {
