@@ -28,7 +28,7 @@
 - **Move Generation**: **Pawn moves fully implemented** (Issue #4 ✅)
 - **Testing Framework**: Jest configuration with ES module support
 - **Security**: Comprehensive dependency security fixes and npm overrides
-- **Automated Linting**: Auto-fix workflow for LLM code optimization (Issue #19 ✅)
+- **Automated Linting**: Fully synchronized auto-linting/formatting pipeline (ESLint + Prettier) (Issue #19 ✅)
 
 ### **🧪 Test Suite Status**
 - **All 21 tests passing** ✅
@@ -40,8 +40,8 @@
 - **Jest Configuration**: Removed deprecated `--harmony-private-fields` flag
 - **Test Cases**: Fixed board wrapping validation logic
 - **Security**: Updated all vulnerable dependencies with npm overrides
-- **ESLint**: Modern flat config format with ES2022 support
-- **Automated Linting**: Auto-fix workflow prevents CI failures from LLM-generated code
+- **ESLint & Prettier**: Synchronized tooling with a `.prettierrc.json` and `eslint-config-prettier` to resolve all style conflicts.
+- **CI/CD Pipeline**: Implemented a robust, multi-stage CI workflow that correctly handles auto-fix commits, race conditions, and dependency installation order.
 
 ---
 
@@ -85,7 +85,7 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 
 // ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\n\\n\\\"sha\\\" wasn't supplied. []"}
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\n\\\\n\\\\\\\"sha\\\\\\\" wasn't supplied. []"}
 ```
 
 **Update Workflow:**
@@ -94,29 +94,29 @@ await create_or_update_file(owner, repo, path, content, message, branch, current
 3. Include SHA in `create_or_update_file` call as final parameter
 4. Verify successful update completion
 
-### **🤖 Automated LLM Code Quality Protocol (NEW)**
+### **🤖 Automated LLM Code Quality Protocol (NEW & IMPROVED)**
 
-**CRITICAL**: The project now includes automated code quality fixes for LLM-generated code:
+**CRITICAL**: The project now includes a fully synchronized, automated code quality workflow.
 
 ```yaml
 # Auto-fix workflow (.github/workflows/auto-fix.yml)
 # - Runs before main CI pipeline
-# - Automatically fixes ESLint and Prettier issues
+# - Automatically formats and fixes ESLint issues
 # - Commits fixes back to branch with [auto-fix] tag
 # - Prevents CI failures from LLM code generation
 ```
 
 **LLM Development Workflow:**
-1. **Generate Code**: LLMs can generate code without worrying about minor linting issues
-2. **Auto-Fix Triggers**: Push/PR automatically triggers auto-fix workflow
-3. **Automatic Fixes**: ESLint --fix and Prettier --write applied automatically
-4. **Auto-Commit**: Fixed code committed back to branch with [auto-fix] message
-5. **CI Validation**: Main CI pipeline runs on fixed code
+1. **Generate Code**: LLMs can generate code without worrying about minor linting or formatting issues.
+2. **Auto-Fix Triggers**: Push/PR automatically triggers the auto-fix workflow.
+3. **Automatic Fixes**: Prettier and ESLint are run in the correct order to automatically format and fix the code.
+4. **Auto-Commit**: Fixed code is committed back to the branch with an `[auto-fix]` message.
+5. **CI Validation**: The main CI pipeline runs on the *already fixed* code, ensuring a smooth and reliable build.
 
 **Enhanced Scripts Available:**
 ```bash
-npm run quality:check    # Check both linting and formatting
-npm run quality:fix      # Fix both linting and formatting
+npm run quality:check    # Check both formatting and linting
+npm run quality:fix      # Fix both formatting and linting (Prettier runs first)
 npm run lint:check       # Check linting with zero warnings
 npm run format:check     # Check formatting without fixing
 ```
@@ -209,12 +209,12 @@ function processMove(_unused, toSquare) { /* ... */ }
 ```
 
 ### **Testing & Quality**
-- **Jest Configuration** - ES modules with experimental VM support (NO deprecated flags)
-- **ESLint** - Flat config format (not `.eslintrc.json`)
-- **Error Handling** - Descriptive exceptions, no console pollution
-- **Test Coverage** - All error paths and edge cases validated
-- **Test Compatibility** - Update tests when implementing private fields or new APIs
-- **Automated Linting** - Auto-fix workflow prevents CI failures from LLM code
+- **Jest Configuration** - ES modules with experimental VM support (NO deprecated flags).
+- **ESLint & Prettier** - Synchronized flat config with `.prettierrc.json` and `eslint-config-prettier`.
+- **Error Handling** - Descriptive exceptions, no console pollution.
+- **Test Coverage** - All error paths and edge cases validated.
+- **Test Compatibility** - Update tests when implementing private fields or new APIs.
+- **Automated Linting** - Auto-fix workflow prevents CI failures from LLM code.
 
 ### **File Structure**
 ```
@@ -260,32 +260,32 @@ tests/
 - **Progress Tracking** - Regular status updates and completion verification
 
 ### **Code Quality Gates**
-1. **ESLint passes** without errors or warnings (auto-fixed if needed)
-2. **All tests pass** with 100% success rate
-3. **Error handling** uses exceptions, not console output
-4. **Documentation** updated for significant changes
-5. **Performance** considerations for LLM integration
-6. **Test compatibility** verified when modifying core components
-7. **Automated fixes** applied for LLM-generated code quality issues
+1. **ESLint passes** without errors or warnings (auto-fixed if needed).
+2. **All tests pass** with 100% success rate.
+3. **Error handling** uses exceptions, not console output.
+4. **Documentation** updated for significant changes.
+5. **Performance** considerations for LLM integration.
+6. **Test compatibility** verified when modifying core components.
+7. **Automated fixes** applied for LLM-generated code quality issues.
 
 ### **Integration Testing Protocol**
-- **Dependency Mapping** - Before modifying core components, identify all dependent files
-- **API Compatibility** - When changing public interfaces, update all consumers
-- **Test Cascade** - Run tests for modified component AND all dependent components
-- **Breaking Change Documentation** - Clearly document any API changes in commit messages
+- **Dependency Mapping** - Before modifying core components, identify all dependent files.
+- **API Compatibility** - When changing public interfaces, update all consumers.
+- **Test Cascade** - Run tests for modified component AND all dependent components.
+- **Breaking Change Documentation** - Clearly document any API changes in commit messages.
 
 ### **Collaboration Protocol**
-- **SHA-based updates** - Always get current SHA before file modifications
-- **Verification steps** - Confirm operations completed successfully
-- **Error recovery** - Implement retry strategies for tool failures
-- **Research validation** - Verify best practices through online research
-- **LLM-friendly workflow** - Auto-fix handles minor code quality issues automatically
+- **SHA-based updates** - Always get current SHA before file modifications.
+- **Verification steps** - Confirm operations completed successfully.
+- **Error recovery** - Implement retry strategies for tool failures.
+- **Research validation** - Verify best practices through online research.
+- **LLM-friendly workflow** - Auto-fix handles minor code quality issues automatically.
 
 ### **LLM Code Generation Best Practices**
-- **Focus on Logic** - LLMs can focus on implementing functionality without worrying about minor linting
-- **Trust Auto-Fix** - Let the automated workflow handle ESLint and Prettier issues
-- **Verify Results** - Check that auto-fixes don't change intended logic
-- **Quality Scripts** - Use `npm run quality:check` before major commits
+- **Focus on Logic** - LLMs can focus on implementing functionality without worrying about minor linting.
+- **Trust Auto-Fix** - Let the automated workflow handle ESLint and Prettier issues.
+- **Verify Results** - Check that auto-fixes don't change intended logic.
+- **Quality Scripts** - Use `npm run quality:check` before major commits.
 
 ---
 
