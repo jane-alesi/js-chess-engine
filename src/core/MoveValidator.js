@@ -137,11 +137,11 @@ export class MoveValidator {
      * Checks if castling is legal for the specified color and side
      * TODO: Implement castling validation in future enhancement
      * 
-     * @param {string} color - Color attempting to castle
-     * @param {string} side - Side to castle ('kingside' or 'queenside')
+     * @param {string} _color - Color attempting to castle
+     * @param {string} _side - Side to castle ('kingside' or 'queenside')
      * @returns {boolean} Currently returns false (not implemented)
      */
-    canCastle(color, side) {
+    canCastle(_color, _side) {
         // TODO: Implement castling validation
         // - King and rook haven't moved
         // - No pieces between king and rook
@@ -262,7 +262,7 @@ export class MoveValidator {
                 const pieceCopy = new Piece(
                     piece.getType(),
                     piece.getColor(),
-                    piece.getPoints(),
+                    piece.getPoints(),  // ✅ FIXED: Changed from getValue() to getPoints()
                     piece.getSymbol()
                 );
                 
