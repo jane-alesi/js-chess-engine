@@ -38,48 +38,48 @@ describe('Board', () => {
 
         expect(board.squares[16]).toBe(originalPiece);
         expect(board.squares[0]).toBeNull();
-        
+
         // Verify the move result object
         expect(moveResult).toEqual({
             from: 0,
             to: 16,
             pieceMoved: 'rook',
             pieceCaptured: null,
-            success: true
+            success: true,
         });
     });
 
     test('should return detailed move information for captures', () => {
         board.setupInitialBoard();
-        
+
         // Move white pawn to capture position
         board.movePiece(8, 16); // Move pawn from a2 to a3
         board.movePiece(16, 24); // Move pawn from a3 to a4
         board.movePiece(24, 32); // Move pawn from a4 to a5
         board.movePiece(32, 40); // Move pawn from a5 to a6
-        
+
         // Now capture black pawn
         const moveResult = board.movePiece(40, 48); // Capture black pawn at a7
-        
+
         expect(moveResult).toEqual({
             from: 40,
             to: 48,
             pieceMoved: 'pawn',
             pieceCaptured: 'pawn',
-            success: true
+            success: true,
         });
     });
 
     test('should mark pieces as moved after first move', () => {
         board.setupInitialBoard();
         const rook = board.squares[0]; // White rook at a1
-        
+
         // Initially, piece should not have moved
         expect(rook.getHasMoved()).toBe(false);
-        
+
         // Move the piece
         board.movePiece(0, 16);
-        
+
         // After moving, piece should be marked as moved
         expect(rook.getHasMoved()).toBe(true);
     });
@@ -87,11 +87,11 @@ describe('Board', () => {
     test('should not mark piece as moved again if already moved', () => {
         board.setupInitialBoard();
         const rook = board.squares[0]; // White rook at a1
-        
+
         // Move the piece first time
         board.movePiece(0, 16);
         expect(rook.getHasMoved()).toBe(true);
-        
+
         // Move the piece second time - should not throw error
         const moveResult = board.movePiece(16, 24);
         expect(moveResult.success).toBe(true);
@@ -141,13 +141,13 @@ describe('Board', () => {
     test('should handle king moves and mark as moved (important for castling)', () => {
         board.setupInitialBoard();
         const whiteKing = board.squares[4]; // White king at e1
-        
+
         expect(whiteKing.getType()).toBe('king');
         expect(whiteKing.getHasMoved()).toBe(false);
-        
+
         // Move king
         const moveResult = board.movePiece(4, 12); // Move king to e2
-        
+
         expect(moveResult.pieceMoved).toBe('king');
         expect(whiteKing.getHasMoved()).toBe(true);
     });
@@ -155,13 +155,13 @@ describe('Board', () => {
     test('should handle rook moves and mark as moved (important for castling)', () => {
         board.setupInitialBoard();
         const whiteRook = board.squares[0]; // White rook at a1
-        
+
         expect(whiteRook.getType()).toBe('rook');
         expect(whiteRook.getHasMoved()).toBe(false);
-        
+
         // Move rook
         const moveResult = board.movePiece(0, 8); // Move rook to a2
-        
+
         expect(moveResult.pieceMoved).toBe('rook');
         expect(whiteRook.getHasMoved()).toBe(true);
     });
@@ -169,13 +169,13 @@ describe('Board', () => {
     test('should handle pawn moves and mark as moved (important for double move rules)', () => {
         board.setupInitialBoard();
         const whitePawn = board.squares[8]; // White pawn at a2
-        
+
         expect(whitePawn.getType()).toBe('pawn');
         expect(whitePawn.getHasMoved()).toBe(false);
-        
+
         // Move pawn
         const moveResult = board.movePiece(8, 16); // Move pawn to a3
-        
+
         expect(moveResult.pieceMoved).toBe('pawn');
         expect(whitePawn.getHasMoved()).toBe(true);
     });
