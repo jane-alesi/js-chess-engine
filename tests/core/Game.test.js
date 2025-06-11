@@ -113,11 +113,11 @@ describe('Game Class - Issue #14 Validation', () => {
 
         test('should handle missing board container gracefully', () => {
             jest.spyOn(game.boardRenderer, 'getBoardContainer').mockReturnValue(null);
-            const consoleSpy = jest.spyOn(console, 'error');
+            const _consoleSpy = jest.spyOn(console, 'error');
             
             game.setupInputHandling();
             
-            expect(consoleSpy).toHaveBeenCalledWith('Board container not found. Cannot setup input handling.');
+            expect(_consoleSpy).toHaveBeenCalledWith('Board container not found. Cannot setup input handling.');
         });
     });
 
@@ -150,12 +150,12 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should only allow selection of current player pieces', () => {
-            const consoleSpy = jest.spyOn(console, 'log');
+            const _consoleSpy = jest.spyOn(console, 'log');
             
             // Try to select black piece when white to move
             game.handlePieceSelection(56, game.board.squares[56]); // Black rook
             expect(game.selectedSquare).toBe(null);
-            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("Cannot select black piece"));
+            expect(_consoleSpy).toHaveBeenCalledWith(expect.stringContaining("Cannot select black piece"));
             
             // Select white piece
             game.handlePieceSelection(8, game.board.squares[8]); // White pawn
@@ -192,7 +192,7 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should handle invalid moves gracefully', () => {
-            const consoleSpy = jest.spyOn(console, 'log');
+            const _consoleSpy = jest.spyOn(console, 'log');
             
             // Try to move from empty square
             const result = game.attemptMove(20, 28); // Empty square to empty square
@@ -258,8 +258,7 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should generate move notation', () => {
-            const piece = game.board.squares[8]; // White pawn
-            const notation = game.generateMoveNotation(8, 24, piece, null);
+            const notation = game.generateMoveNotation(8, 24, 'pawn', null);
             
             expect(notation).toBe('pawna2a3');
         });
@@ -297,6 +296,12 @@ describe('Game Class - Issue #14 Validation', () => {
             expect(game.currentPlayer).toBe('white');
             expect(game.selectedSquare).toBe(null);
             expect(game.gameStatus).toBe('active');
+        });
+
+        test('should provide move history functionality', () => {
+            const history = game.getMoveHistory();
+            expect(Array.isArray(history)).toBe(true);
+            expect(history.length).toBe(0); // Initially empty
         });
     });
 
