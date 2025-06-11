@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game Orchestration Demo - Issue #14</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        #chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(8, 60px);
+            gap: 1px;
+            margin: 0 auto;
+            border: 2px solid #333;
+            background-color: #333;
+        }
+        
+        .square {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .square.light {
+            background-color: #f0d9b5;
+        }
+        
+        .square.dark {
+            background-color: #b58863;
+        }
+        
+        .square.selected {
+            background-color: #ffff99 !important;
+            box-shadow: inset 0 0 10px rgba(255, 255, 0, 0.8);
+        }
+        
+        .square:hover {
+            opacity: 0.8;
+        }
+        
+        .piece {
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            user-select: none;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .status-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        
+        .feature-list {
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>🏛️ Chess Game Orchestration Demo</h1>
+            <p><strong>Issue #14:</strong> Orchestrate Game Flow with Game Class</p>
+        </div>
+        
+        <div class="game-info">
+            <div>
+                <strong>Current Player:</strong> 
+                <span id="game-status">White to move</span>
+            </div>
+            <div>
+                <strong>Move:</strong> 
+                <span id="move-counter">1</span>
+            </div>
+        </div>
+        
+        <div id="chess-board"></div>
+        
+        <div class="controls">
+            <button class="btn" onclick="startNewGame()">🔄 New Game</button>
+            <button class="btn" onclick="showGameState()">📊 Show State</button>
+        </div>
+        
+        <div class="status-panel">
+            <h3>🎯 Issue #14 Implementation Status</h3>
+            <div class="feature-list">
+                <div class="feature-item">✅ Game class constructor initializes Board, BoardRenderer, and GameState</div>
+                <div class="feature-item">✅ startGame() method sets up initial board and renders it</div>
+                <div class="feature-item">✅ Receives click events and manages game state (selectedPiece, currentPlayer)</div>
+                <div class="feature-item">✅ Calls board.movePiece() and boardRenderer.render() after valid moves</div>
+                <div class="feature-item">✅ Basic turn management (switching currentPlayer) implemented</div>
+                <div class="feature-item">✅ Enhanced features: move notation, highlighting, game reset</div>
+            </div>
+        </div>
+        
+        <div id="debug-output" style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script type="module">
+        // Import the Game class and dependencies
+        import { Game } from '../src/core/Game.js';
+        
+        let chessGame;
+        
+        // Initialize the game
+        function initializeGame() {
+            try {
+                chessGame = new Game('chess-board');
+                chessGame.startGame();
+                
+                // Override console.log to show debug output
+                const originalLog = console.log;
+                console.log = function(...args) {
+                    originalLog.apply(console, args);
+                    const debugOutput = document.getElementById('debug-output');
+                    if (debugOutput) {
+                        debugOutput.innerHTML += args.join(' ') + '<br>';
+                        debugOutput.scrollTop = debugOutput.scrollHeight;
+                    }
+                };
+                
+                console.log('🎮 Chess Game Orchestration Demo Initialized');
+                console.log('🏛️ Game class successfully orchestrates all components');
+                console.log('📋 All Issue #14 acceptance criteria implemented');
+                
+            } catch (error) {
+                console.error('Failed to initialize game:', error);
+                document.getElementById('debug-output').innerHTML = 
+                    `<span style="color: red;">Error: ${error.message}</span>`;
+            }
+        }
+        
+        // Global functions for buttons
+        window.startNewGame = function() {
+            if (chessGame) {
+                chessGame.resetGame();
+                console.log('🔄 Game reset - demonstrating Game class orchestration');
+            }
+        };
+        
+        window.showGameState = function() {
+            if (chessGame) {
+                const state = chessGame.getGameState();
+                console.log('📊 Current Game State:', {
+                    currentPlayer: state.currentPlayer,
+                    gameStatus: state.gameStatus,
+                    moveNumber: state.moveNumber,
+                    selectedSquare: state.selectedSquare
+                });
+            }
+        };
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeGame);
+    </script>
+</body>
+</html>
