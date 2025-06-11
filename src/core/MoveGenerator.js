@@ -132,9 +132,9 @@ export class MoveGenerator {
         // Rook movement directions: up, down, left, right
         const directions = [
             -8, // Up (rank decrease)
-            8,  // Down (rank increase)
+            8, // Down (rank increase)
             -1, // Left (file decrease)
-            1   // Right (file increase)
+            1, // Right (file increase)
         ];
 
         // Generate moves in each direction
