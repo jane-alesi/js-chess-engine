@@ -191,14 +191,10 @@ describe('MoveValidator', () => {
             board.squares[52] = whitePawn1; // e2
             board.squares[53] = whitePawn2; // f2
             board.squares[54] = whitePawn3; // g2
-
-            gameState.setCurrentPlayer('black');
-            moveValidator = new MoveValidator(board, gameState);
-            board.movePiece(61, 60); // Black moves rook to capture, but we just set it up
-
-            gameState.setCurrentPlayer('white');
-            moveValidator = new MoveValidator(board, gameState);
             
+            board.squares[61] = null;
+            board.squares[58] = blackRook;
+
             const isCheckmate = moveValidator.isCheckmate('white');
             expect(isCheckmate).toBe(true);
         });
