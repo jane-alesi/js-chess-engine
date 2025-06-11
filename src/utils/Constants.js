@@ -125,7 +125,7 @@ export const PIECE_COLORS = {
 /**
  * Starting positions for chess pieces on the board.
  * Uses 0-63 indexing where 0 is a8 and 63 is h1.
- * 
+ *
  * 🔧 CRITICAL FIX: Corrected to match Board.js implementation
  * - White pieces on bottom of board (indices 8-15 for pawns, 56-63 for back rank)
  * - Black pieces on top of board (indices 48-55 for pawns, 0-7 for back rank)
