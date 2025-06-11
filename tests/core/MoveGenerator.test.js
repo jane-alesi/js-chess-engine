@@ -635,7 +635,7 @@ describe('MoveGenerator', () => {
                 const whiteBishop = new Piece('bishop', 'white', 3, '♗');
                 board.squares[28] = whiteBishop;
 
-                // Place friendly piece on g6 (index 46) - blocks NE diagonal
+                // Place friendly piece on g6 (index 46) - blocks SE diagonal
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[46] = whitePawn;
 
@@ -645,8 +645,8 @@ describe('MoveGenerator', () => {
                 const captureAtG6 = moves.find(move => move.to === 46);
                 expect(captureAtG6).toBeUndefined();
 
-                // Should not include moves beyond g6 in NE direction
-                const beyondG6 = moves.filter(move => move.to > 46 && (move.to - 28) % 7 === 0);
+                // Should not include moves beyond g6 in SE direction
+                const beyondG6 = moves.filter(move => move.to > 46 && (move.to - 28) % 9 === 0);
                 expect(beyondG6).toHaveLength(0);
             });
 
