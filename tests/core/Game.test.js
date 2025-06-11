@@ -195,7 +195,7 @@ describe('Game Class - Issue #14 Validation', () => {
                 success: true,
             });
 
-            const moveResult = game.attemptMove(48, 40); // Pawn move (a2 to a6)
+            const moveResult = game.attemptMove(48, 40); // Pawn move (a2 to a3)
 
             expect(movePieceSpy).toHaveBeenCalledWith(48, 40);
 
@@ -238,7 +238,7 @@ describe('Game Class - Issue #14 Validation', () => {
                 to: 40,
                 pieceMoved: 'pawn',
                 pieceCaptured: null,
-                notation: 'a2a6',
+                notation: 'a2a3',
             };
 
             game.processMoveSuccess(mockMoveResult);
@@ -256,7 +256,7 @@ describe('Game Class - Issue #14 Validation', () => {
                 to: 40,
                 pieceMoved: 'pawn',
                 pieceCaptured: null,
-                notation: 'a2a6',
+                notation: 'a2a3',
             };
 
             game.processMoveSuccess(mockMoveResult);
@@ -274,7 +274,7 @@ describe('Game Class - Issue #14 Validation', () => {
         test('should generate move notation', () => {
             const notation = game.generateMoveNotation(48, 40, 'pawn', null);
 
-            expect(notation).toBe('pawna2a6');
+            expect(notation).toBe('pawna2a3');
         });
 
         test('should convert index to square notation', () => {
@@ -326,7 +326,7 @@ describe('Game Class - Issue #14 Validation', () => {
 
         test('should work with enhanced movePiece method', () => {
             // The enhanced movePiece returns detailed move information
-            const result = game.board.movePiece(48, 40); // White pawn a2 to a6
+            const result = game.board.movePiece(48, 40); // White pawn a2 to a3
 
             expect(result).toHaveProperty('from', 48);
             expect(result).toHaveProperty('to', 40);
