@@ -78,7 +78,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '🔧 Auto-fix: ESLint and Prettier code quality [auto-fix]'
-          file_pattern: '*.js *.json *.md *.yml *.yaml'
+          file_pattern: '*.js *.json *.md *.yml'
           commit_user_name: 'github-actions[bot]'
           commit_user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
