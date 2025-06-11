@@ -31,19 +31,19 @@ Thank you for your interest in contributing to the JS Chess Engine! This project
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/js-chess-engine.git
-   cd js-chess-engine
-   ```
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/js-chess-engine.git
+    cd js-chess-engine
+    ```
 3. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 4. **Verify setup**:
-   ```bash
-   npm run quality:check
-   npm test
-   ```
+    ```bash
+    npm run quality:check
+    npm test
+    ```
 
 ## 📋 Issue-Driven Workflow
 
@@ -51,12 +51,12 @@ Thank you for your interest in contributing to the JS Chess Engine! This project
 
 1. **Browse [Open Issues](https://github.com/jane-alesi/js-chess-engine/issues)** to find tasks
 2. **Look for labels**:
-   - `good first issue` - Perfect for new contributors
-   - `documentation` - Documentation improvements
-   - `enhancement` - New features
-   - `bug` - Bug fixes
-   - `core` - Chess logic implementation
-   - `ai` - AI engine development
+    - `good first issue` - Perfect for new contributors
+    - `documentation` - Documentation improvements
+    - `enhancement` - New features
+    - `bug` - Bug fixes
+    - `core` - Chess logic implementation
+    - `ai` - AI engine development
 
 ### Issue Assignment
 
@@ -67,28 +67,31 @@ Thank you for your interest in contributing to the JS Chess Engine! This project
 ### Development Process
 
 1. **Create a feature branch**:
-   ```bash
-   git checkout -b feature/issue-XX-description
-   ```
+
+    ```bash
+    git checkout -b feature/issue-XX-description
+    ```
 
 2. **Follow the acceptance criteria** outlined in the issue
 
 3. **Implement following coding standards** (see below)
 
 4. **Test your changes**:
-   ```bash
-   npm test
-   npm run quality:check
-   ```
+
+    ```bash
+    npm test
+    npm run quality:check
+    ```
 
 5. **Commit with descriptive messages**:
-   ```bash
-   git commit -m "✨ Implement feature X (Issue #XX)
-   
-   - Add specific functionality
-   - Include comprehensive tests
-   - Update documentation"
-   ```
+
+    ```bash
+    git commit -m "✨ Implement feature X (Issue #XX)
+
+    - Add specific functionality
+    - Include comprehensive tests
+    - Update documentation"
+    ```
 
 ## 🛠️ Technical Standards
 
@@ -106,14 +109,16 @@ class ChessEngine {
     // Private fields for encapsulation
     #gameState;
     #currentPlayer = 'white';
-    
+
     constructor() {
         this.#gameState = new GameState();
     }
-    
+
     // Public getter methods for private fields
-    getCurrentPlayer() { return this.#currentPlayer; }
-    
+    getCurrentPlayer() {
+        return this.#currentPlayer;
+    }
+
     // Comprehensive input validation
     makeMove(fromIndex, toIndex) {
         if (typeof fromIndex !== 'number' || fromIndex < 0 || fromIndex >= 64) {
@@ -195,40 +200,47 @@ src/
 2. **Follow acceptance criteria** - Address all requirements in the issue
 3. **Update tests** - Add/modify tests for your changes
 4. **Run quality checks**:
-   ```bash
-   npm test
-   npm run quality:check
-   npm run security-check
-   ```
+    ```bash
+    npm test
+    npm run quality:check
+    npm run security-check
+    ```
 
 ### PR Requirements
 
 #### Title Format
+
 ```
 ✨ Brief description (Issue #XX)
 ```
 
 #### Description Template
+
 ```markdown
 ## Issue Reference
+
 Fixes #XX
 
 ## Changes Made
+
 - Specific change 1
 - Specific change 2
 - Specific change 3
 
 ## Testing
+
 - [ ] All existing tests pass
 - [ ] New tests added for new functionality
 - [ ] Manual testing completed
 
 ## Quality Checks
+
 - [ ] `npm run quality:check` passes
 - [ ] `npm test` passes
 - [ ] `npm run security-check` passes
 
 ## Documentation
+
 - [ ] Code comments added where necessary
 - [ ] README updated if needed
 - [ ] Breaking changes documented
@@ -343,4 +355,4 @@ By contributing to this project, you agree that your contributions will be licen
 
 **Thank you for contributing to the JS Chess Engine!** Together, we're building a chess engine that honors the past while pushing the boundaries of modern web-based chess.
 
-*For AI agents: This project embraces AI collaboration - your contributions are valued and essential to achieving our ambitious goals.*
+_For AI agents: This project embraces AI collaboration - your contributions are valued and essential to achieving our ambitious goals._
