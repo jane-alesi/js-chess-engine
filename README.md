@@ -1,4 +1,4 @@
-# ♛ JS Chess Engine
+# ✨ JS Chess Engine
 
 > **A pure JavaScript chess engine inspired by the legendary Atari Video Chess, designed to outplay the original through superior AI and modern web technologies.**
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 🎯 Project Description
+## 🚀 Project Description
 
 ### The Vision
 
@@ -22,19 +22,16 @@ In 1979, Atari released Video Chess for the Atari 2600 - a groundbreaking achiev
 ### What Problem Does This Solve?
 
 **For Chess Enthusiasts:**
-
 - Provides a pure JavaScript chess implementation that runs entirely in the browser
 - Offers an AI opponent with adjustable difficulty levels
 - Enables chess learning through position analysis and move suggestions
 
 **For Developers:**
-
 - Demonstrates advanced JavaScript patterns including ES2022 private fields
 - Showcases modular architecture with clean separation of concerns
 - Provides a comprehensive testing framework for complex game logic
 
 **For AI Researchers:**
-
 - Implements classic game AI algorithms (Minimax with Alpha-Beta pruning)
 - Offers a platform for experimenting with chess evaluation functions
 - Enables comparison with historical chess engines
@@ -55,7 +52,7 @@ Can a modern JavaScript implementation, with access to decades of chess programm
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Getting Started
 
 ### Prerequisites
 
@@ -106,13 +103,12 @@ Before you begin, ensure you have the following installed:
     Navigate to `http://localhost:8080` to see the chess engine in action.
 
 #### Development Commands
-
 ```bash
 # Development server
-npm start                    # Start live development server on port 8080
+npm start                   # Start live development server on port 8080
 
 # Testing
-npm test                     # Run all tests
+npm test                    # Run all tests
 npm run test:watch          # Run tests in watch mode
 npm run test:coverage       # Run tests with coverage report
 
@@ -128,26 +124,25 @@ npm run security-fix        # Fix security vulnerabilities
 ```
 
 #### Project Structure
-
 ```
 js-chess-engine/
-├── src/
-│   ├── core/               # Chess logic foundation
-│   │   ├── Board.js        # Board representation and state
-│   │   ├── Piece.js        # Piece definitions and validation
-│   │   ├── GameState.js    # Game state management
-│   │   ├── MoveGenerator.js # Move generation algorithms
+├─── src/
+│   ├─── core/                  # Chess logic foundation
+│   │   ├── Board.js              # Board representation and state
+│   │   ├── Piece.js              # Piece definitions and validation
+│   │   ├── GameState.js          # Game state management
+│   │   ├── MoveGenerator.js      # Move generation algorithms
 │   │   └── ...
-│   ├── ui/                 # User interface components
-│   │   ├── BoardRenderer.js # Visual board rendering
-│   │   ├── InputHandler.js  # User input processing
-│   │   └── styles.css       # Styling and themes
-│   ├── ai/                 # AI engine (future implementation)
-│   └── utils/              # Shared utilities
-│       └── Constants.js     # Game constants and piece values
-├── tests/                  # Test files
-├── index.html              # Main HTML entry point
-└── package.json            # Project configuration
+│   ├─── ui/                   # User interface components
+│   │   ├── BoardRenderer.js      # Visual board rendering
+│   │   ├── InputHandler.js       # User input processing
+│   │   └── styles.css            # Styling and themes
+│   ├─── ai/                   # AI engine (future implementation)
+│   └─── utils/                  # Shared utilities
+│           └── Constants.js        # Game constants and piece values
+├─── tests/                      # Test files
+├─── index.html                  # Main HTML entry point
+└─── package.json                # Project configuration
 ```
 
 #### Quick Start Guide
@@ -162,7 +157,7 @@ js-chess-engine/
 
 Our development follows a structured, phase-based approach with clear milestones and priorities:
 
-### **📋 Phase 1: Documentation & Project Management** ✅ **COMPLETED**
+### **Phase 1: Documentation & Project Management** ✅ **COMPLETED**
 
 _Timeline: June 2025_
 
@@ -175,22 +170,23 @@ _Timeline: June 2025_
 
 ---
 
-### **♛ Phase 2: Core Move Generation** 🔄 **IN PROGRESS**
+### **Phase 2: Core Move Generation** 🔄 **IN PROGRESS**
 
 _Timeline: July-August 2025 | Priority: HIGH_
 
-- 🔄 **Rook Move Generation** ([#2](https://github.com/jane-alesi/js-chess-engine/issues/2)) - Horizontal and vertical movement patterns
-- 🔄 **Bishop Move Generation** ([#1](https://github.com/jane-alesi/js-chess-engine/issues/1)) - Diagonal movement patterns
+- ✅ **Pawn Move Generation** ([#4](https://github.com/jane-alesi/js-chess-engine/issues/4)) - Forward, double, and capture moves
+- ✅ **Rook Move Generation** ([#2](https://github.com/jane-alesi/js-chess-engine/issues/2)) - Horizontal and vertical movement patterns
+- ✅ **Bishop Move Generation** ([#1](https://github.com/jane-alesi/js-chess-engine/issues/1)) - Diagonal movement patterns
 - 🔄 **Knight Move Generation** ([#9](https://github.com/jane-alesi/js-chess-engine/issues/9)) - L-shaped movement patterns
 - 🔄 **King Move Generation** ([#7](https://github.com/jane-alesi/js-chess-engine/issues/7)) - Single-square movement patterns
 - 🔄 **Queen Move Generation** ([#6](https://github.com/jane-alesi/js-chess-engine/issues/6)) - Combined rook and bishop patterns
 
-**Current Status**: ✅ Pawn moves fully implemented with comprehensive testing  
-**Next Priority**: Rook move generation (foundational for queen moves)
+**Current Status**: ✅ Pawn, Rook, and Bishop moves fully implemented with comprehensive testing  
+**Next Priority**: Knight move generation (foundational for complex move validation)
 
 ---
 
-### **🎮 Phase 3: Core Game Logic** 📅 **PLANNED**
+### **Phase 3: Core Game Logic** 📅 **PLANNED**
 
 _Timeline: September-October 2025 | Priority: MEDIUM_
 
@@ -207,7 +203,7 @@ _Timeline: September-October 2025 | Priority: MEDIUM_
 
 ---
 
-### **🧠 Phase 4: AI Implementation** 📅 **PLANNED**
+### **Phase 4: AI Implementation** 📅 **PLANNED**
 
 _Timeline: November 2025-January 2026 | Priority: MEDIUM_
 
@@ -233,7 +229,7 @@ _Timeline: November 2025-January 2026 | Priority: MEDIUM_
 
 ---
 
-### **🎨 Phase 5: User Interface & Experience** 📅 **FUTURE**
+### **Phase 5: User Interface & Experience** 📅 **FUTURE**
 
 _Timeline: February-March 2026 | Priority: LOW_
 
@@ -256,7 +252,7 @@ _Timeline: February-March 2026 | Priority: LOW_
 
 ---
 
-### **⚡ Phase 6: Performance & Advanced Features** 📅 **FUTURE**
+### **Phase 6: Performance & Advanced Features** 📅 **FUTURE**
 
 _Timeline: April-June 2026 | Priority: LOW_
 
@@ -277,18 +273,18 @@ _Timeline: April-June 2026 | Priority: LOW_
 
 ---
 
-### **📊 Progress Tracking**
+### **Progress Tracking**
 
-| Phase       | Completion | Key Milestones                             | Target Date  |
-| ----------- | ---------- | ------------------------------------------ | ------------ |
-| **Phase 1** | ✅ 100%    | Professional documentation complete        | ✅ June 2025 |
-| **Phase 2** | 🔄 20%     | Pawn moves implemented, 4 pieces remaining | August 2025  |
-| **Phase 3** | 📅 0%      | Awaiting Phase 2 completion                | October 2025 |
-| **Phase 4** | 📅 0%      | Awaiting Phase 3 completion                | January 2026 |
-| **Phase 5** | 📅 0%      | UI/UX enhancements                         | March 2026   |
-| **Phase 6** | 📅 0%      | Performance & advanced features            | June 2026    |
+| Phase        | Completion | Key Milestones                                        | Target Date |
+|--------------|------------|-------------------------------------------------------|-------------|
+| **Phase 1**  | ✅ 100%    | Professional documentation complete                   | ✅ June 2025 |
+| **Phase 2**  | 🔄 60%     | Pawn, Rook, Bishop moves implemented, 2 pieces remaining | August 2025  |
+| **Phase 3**  | 📅 0%      | Awaiting Phase 2 completion                           | October 2025 |
+| **Phase 4**  | 📅 0%      | Awaiting Phase 3 completion                           | January 2026 |
+| **Phase 5**  | 📅 0%      | UI/UX enhancements                                    | March 2026   |
+| **Phase 6**  | 📅 0%      | Performance & advanced features                       | June 2026    |
 
-### **🎯 Success Metrics**
+### **Success Metrics**
 
 - **Technical**: All tests passing, zero linting errors, comprehensive coverage
 - **Functional**: Complete chess rule implementation with legal move validation
@@ -298,10 +294,9 @@ _Timeline: April-June 2026 | Priority: LOW_
 
 ---
 
-## 🚀 Current Status
+## 📊 Current Status
 
 This project is actively under development with a focus on:
-
 ✅ **Core Foundation Complete**
 
 - Board representation and piece management
@@ -315,7 +310,7 @@ This project is actively under development with a focus on:
 - Advanced game rules (castling, en passant, promotion)
 - Check and checkmate detection
 
-🎯 **Coming Next**
+🚀 **Coming Next**
 
 - AI opponent with multiple difficulty levels
 - Position evaluation and strategic play
@@ -324,13 +319,13 @@ This project is actively under development with a focus on:
 
 ---
 
-## 🏗️ Architecture
+## 🏛️ Architecture
 
 The engine follows a modular design inspired by classic chess programming principles, with clear separation of concerns and unidirectional data flow:
 
 ```mermaid
-flowchart TB
-    subgraph "🎮 User Interface Layer"
+flowchart TD
+    subgraph "🚀 User Interface Layer"
         UI[UI Module]
         BR[BoardRenderer]
         IH[InputHandler]
@@ -344,7 +339,7 @@ flowchart TB
         BOOK[Opening Book]
     end
 
-    subgraph "♛ Core Chess Logic"
+    subgraph "✨ Core Chess Logic"
         CORE[Core Module]
         BOARD[Board]
         PIECE[Piece]
@@ -354,7 +349,7 @@ flowchart TB
         RULES[Rules]
     end
 
-    subgraph "🔧 Utilities"
+    subgraph "🧩 Utilities"
         UTILS[Utils Module]
         CONST[Constants]
         FEN[FEN Parser]
@@ -369,7 +364,7 @@ flowchart TB
 
     style CORE fill:#e1f5fe
     style AI fill:#f3e5f5
-    style UI fill:#e8f5e8
+    style UI fill:#e8f5e9
     style UTILS fill:#fff3e0
 ```
 
@@ -389,7 +384,7 @@ flowchart TB
 
 ---
 
-## 🎮 The Atari Video Chess Legacy
+## Legacy
 
 This project draws inspiration from one of the most impressive programming achievements in gaming history. The original Atari Video Chess, programmed by Larry Wagner and Bob Whitehead, managed to implement a playable chess game in just 4KB of ROM - a constraint that forced elegant solutions and creative optimizations.
 
@@ -402,7 +397,7 @@ Our JavaScript implementation honors this legacy while embracing modern capabili
 
 ---
 
-## 🤝 Contributing
+## 💖 Contributing
 
 We welcome contributions from both human developers and AI agents! This project uses an **Issue-Driven Development** approach where all work is tracked through GitHub Issues.
 
@@ -439,12 +434,12 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - ✅ **Modification** - Modify and adapt the code
 - ✅ **Distribution** - Share and distribute freely
 - ✅ **Private use** - Use for personal projects
-- ❗ **License and copyright notice** - Include original license
-- ❗ **No warranty** - Software provided "as is"
+- ❌ **License and copyright notice** - Include original license
+- ❌ **No warranty** - Software provided "as is"
 
 ---
 
-## 🌟 Acknowledgments
+## 🙏 Acknowledgments
 
 - **Atari Video Chess** - The legendary inspiration for this project
 - **Chess Programming Community** - For decades of shared knowledge and algorithms
@@ -454,4 +449,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-_Built with ♛ by the chess programming community_
+_Built with ✨ by the chess programming community_
