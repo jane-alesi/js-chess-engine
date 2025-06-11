@@ -301,12 +301,15 @@ describe('MoveGenerator', () => {
                 expect(moveGenerator.isValidPawnCapture(28, 35)).toBe(true); // e4 to d5
                 expect(moveGenerator.isValidPawnCapture(28, 37)).toBe(true); // e4 to f5
                 
-                // Invalid captures (wrapping)
-                expect(moveGenerator.isValidPawnCapture(7, 14)).toBe(false); // h1 to g2 (wraps)
-                expect(moveGenerator.isValidPawnCapture(0, 9)).toBe(false); // a1 to b2 (wraps)
+                // Invalid captures (wrapping) - corrected examples
+                expect(moveGenerator.isValidPawnCapture(7, 8)).toBe(false); // h1 to a2 (wraps around)
+                expect(moveGenerator.isValidPawnCapture(0, 15)).toBe(false); // a1 to h2 (wraps around)
                 
                 // Same file (not a capture)
                 expect(moveGenerator.isValidPawnCapture(28, 36)).toBe(false); // e4 to e5
+                
+                // More than 1 file difference (invalid)
+                expect(moveGenerator.isValidPawnCapture(28, 34)).toBe(false); // e4 to c5 (2 files)
             });
         });
     });
