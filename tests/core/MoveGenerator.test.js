@@ -311,16 +311,257 @@ describe('MoveGenerator', () => {
                 // More than 1 file difference (invalid)
                 expect(moveGenerator.isValidPawnCapture(28, 34)).toBe(false); // e4 to c5 (2 files)
             });
+
+            test('isValidHorizontalMove should prevent board wrapping', () => {
+                // Valid horizontal moves (same rank)
+                expect(moveGenerator.isValidHorizontalMove(0, 7)).toBe(true); // a1 to h1
+                expect(moveGenerator.isValidHorizontalMove(56, 63)).toBe(true); // a8 to h8
+                expect(moveGenerator.isValidHorizontalMove(28, 31)).toBe(true); // e4 to h4
+
+                // Invalid horizontal moves (different ranks)
+                expect(moveGenerator.isValidHorizontalMove(0, 8)).toBe(false); // a1 to a2
+                expect(moveGenerator.isValidHorizontalMove(7, 15)).toBe(false); // h1 to h2
+                expect(moveGenerator.isValidHorizontalMove(28, 36)).toBe(false); // e4 to e5
+            });
+        });
+    });
+
+    describe('Rook Move Generation', () => {
+        describe('Basic Rook Movement', () => {
+            test('should generate all possible moves for rook in center of empty board', () => {
+                // Place white rook on e4 (index 28) - center position
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[28] = whiteRook;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 28);
+
+                expect(moves).toHaveLength(14); // 7 horizontal + 7 vertical moves
+
+                // Check that all moves are valid squares
+                moves.forEach((move) => {
+                    expect(move.from).toBe(28);
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                    expect(move.type).toBe('normal');
+                    expect(move.piece).toBe('rook');
+                    expect(move.color).toBe('white');
+                });
+
+                // Check specific directional moves
+                const upMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
+                const downMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 8 === 0);
+                const rightMoves = moves.filter(move => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+                const leftMoves = moves.filter(move => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+
+                expect(upMoves).toHaveLength(3); // e5, e6, e7, e8
+                expect(downMoves).toHaveLength(4); // e3, e2, e1
+                expect(rightMoves).toHaveLength(3); // f4, g4, h4
+                expect(leftMoves).toHaveLength(4); // d4, c4, b4, a4
+            });
+
+            test('should generate moves for rook in corner position', () => {
+                // Place white rook on a1 (index 56) - corner position
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[56] = whiteRook;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 56);
+
+                expect(moves).toHaveLength(14); // 7 horizontal + 7 vertical moves
+
+                // All moves should be valid
+                moves.forEach((move) => {
+                    expect(move.from).toBe(56);
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                    expect(move.type).toBe('normal');
+                });
+            });
+
+            test('should generate moves for rook on edge of board', () => {
+                // Place white rook on e1 (index 60) - bottom edge
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[60] = whiteRook;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 60);
+
+                expect(moves).toHaveLength(14); // 7 horizontal + 7 vertical moves
+
+                // Check that moves don't wrap around board
+                moves.forEach((move) => {
+                    expect(move.from).toBe(60);
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                });
+            });
+        });
+
+        describe('Rook Movement with Obstructions', () => {
+            test('should stop at friendly piece and not capture it', () => {
+                // Place white rook on e4 (index 28)
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[28] = whiteRook;
+
+                // Place friendly piece on e6 (index 44) - blocks upward movement
+                const whitePawn = new Piece('pawn', 'white', 1, '♙');
+                board.squares[44] = whitePawn;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 28);
+
+                // Should have fewer moves due to obstruction
+                expect(moves.length).toBeLessThan(14);
+
+                // Should not include e6 or beyond in upward direction
+                const upwardMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
+                expect(upwardMoves).toHaveLength(1); // Only e5 (index 36)
+                expect(upwardMoves[0].to).toBe(36);
+
+                // Should not capture friendly piece
+                const captureAtE6 = moves.find(move => move.to === 44);
+                expect(captureAtE6).toBeUndefined();
+            });
+
+            test('should capture enemy piece and stop', () => {
+                // Place white rook on e4 (index 28)
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[28] = whiteRook;
+
+                // Place enemy piece on e6 (index 44) - can be captured
+                const blackPawn = new Piece('pawn', 'black', 1, '♟');
+                board.squares[44] = blackPawn;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 28);
+
+                // Should include capture move at e6
+                const captureMove = moves.find(move => move.to === 44);
+                expect(captureMove).toBeDefined();
+                expect(captureMove).toEqual({
+                    from: 28,
+                    to: 44,
+                    type: 'capture',
+                    piece: 'rook',
+                    color: 'white',
+                    captured: 'pawn',
+                });
+
+                // Should not include moves beyond e6 in upward direction
+                const beyondCapture = moves.filter(move => move.to > 44 && (move.to - 28) % 8 === 0);
+                expect(beyondCapture).toHaveLength(0);
+            });
+
+            test('should handle multiple obstructions in different directions', () => {
+                // Place white rook on e4 (index 28)
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[28] = whiteRook;
+
+                // Place pieces in all directions
+                const whitePawn1 = new Piece('pawn', 'white', 1, '♙');
+                const blackPawn1 = new Piece('pawn', 'black', 1, '♟');
+                const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
+                const blackPawn2 = new Piece('pawn', 'black', 1, '♟');
+
+                board.squares[36] = whitePawn1; // e5 (up) - friendly, blocks
+                board.squares[20] = blackPawn1; // e3 (down) - enemy, can capture
+                board.squares[29] = whitePawn2; // f4 (right) - friendly, blocks
+                board.squares[27] = blackPawn2; // d4 (left) - enemy, can capture
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 28);
+
+                // Should have limited moves due to obstructions
+                expect(moves.length).toBeLessThan(14);
+
+                // Check specific blocked/capture scenarios
+                const upMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
+                expect(upMoves).toHaveLength(0); // Blocked by friendly piece
+
+                const downMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 8 === 0);
+                expect(downMoves.some(move => move.to === 20 && move.type === 'capture')).toBe(true);
+
+                const rightMoves = moves.filter(move => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+                expect(rightMoves).toHaveLength(0); // Blocked by friendly piece
+
+                const leftMoves = moves.filter(move => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+                expect(leftMoves.some(move => move.to === 27 && move.type === 'capture')).toBe(true);
+            });
+        });
+
+        describe('Rook Edge Cases and Validation', () => {
+            test('should throw error for invalid position', () => {
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+
+                expect(() => {
+                    moveGenerator.generateRookMoves(whiteRook, -1);
+                }).toThrow('Invalid position: -1 must be between 0 and 63');
+
+                expect(() => {
+                    moveGenerator.generateRookMoves(whiteRook, 64);
+                }).toThrow('Invalid position: 64 must be between 0 and 63');
+            });
+
+            test('should handle rook surrounded by pieces', () => {
+                // Place white rook on e4 (index 28)
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[28] = whiteRook;
+
+                // Surround with pieces in all 4 directions (adjacent squares)
+                const blackPawn1 = new Piece('pawn', 'black', 1, '♟');
+                const blackPawn2 = new Piece('pawn', 'black', 1, '♟');
+                const blackPawn3 = new Piece('pawn', 'black', 1, '♟');
+                const blackPawn4 = new Piece('pawn', 'black', 1, '♟');
+
+                board.squares[36] = blackPawn1; // e5 (up)
+                board.squares[20] = blackPawn2; // e3 (down)
+                board.squares[29] = blackPawn3; // f4 (right)
+                board.squares[27] = blackPawn4; // d4 (left)
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 28);
+
+                expect(moves).toHaveLength(4); // Can capture all 4 adjacent pieces
+                moves.forEach((move) => {
+                    expect(move.type).toBe('capture');
+                    expect(move.captured).toBe('pawn');
+                });
+            });
+
+            test('should not wrap around board edges', () => {
+                // Place white rook on h4 (index 31) - right edge
+                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                board.squares[31] = whiteRook;
+
+                const moves = moveGenerator.generateRookMoves(whiteRook, 31);
+
+                // Check that no moves wrap to the next rank
+                moves.forEach((move) => {
+                    if (move.to > 31) {
+                        // Upward moves should be on same file
+                        expect((move.to - 31) % 8).toBe(0);
+                    } else if (move.to < 31) {
+                        // Downward or leftward moves
+                        const isVertical = (31 - move.to) % 8 === 0;
+                        const isHorizontal = Math.floor(move.to / 8) === Math.floor(31 / 8);
+                        expect(isVertical || isHorizontal).toBe(true);
+                    }
+                });
+            });
+
+            test('should generate correct moves for black rook', () => {
+                // Place black rook on d5 (index 35)
+                const blackRook = new Piece('rook', 'black', 5, '♜');
+                board.squares[35] = blackRook;
+
+                const moves = moveGenerator.generateRookMoves(blackRook, 35);
+
+                expect(moves).toHaveLength(14); // Full movement on empty board
+                moves.forEach((move) => {
+                    expect(move.from).toBe(35);
+                    expect(move.piece).toBe('rook');
+                    expect(move.color).toBe('black');
+                    expect(move.type).toBe('normal');
+                });
+            });
         });
     });
 
     describe('Other Piece Move Generation (TODO)', () => {
-        test('should return empty array for rook moves (not implemented)', () => {
-            const rook = new Piece('rook', 'white', 5, '♖');
-            const moves = moveGenerator.generateRookMoves(rook, 0);
-            expect(moves).toEqual([]);
-        });
-
         test('should return empty array for knight moves (not implemented)', () => {
             const knight = new Piece('knight', 'white', 3, '♘');
             const moves = moveGenerator.generateKnightMoves(knight, 1);
@@ -347,7 +588,7 @@ describe('MoveGenerator', () => {
     });
 
     describe('Main generateMoves method', () => {
-        test('should route to correct piece-specific method', () => {
+        test('should route to correct piece-specific method for pawn', () => {
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
             board.squares[12] = whitePawn;
 
@@ -355,6 +596,16 @@ describe('MoveGenerator', () => {
 
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('pawn');
+        });
+
+        test('should route to correct piece-specific method for rook', () => {
+            const whiteRook = new Piece('rook', 'white', 5, '♖');
+            board.squares[28] = whiteRook;
+
+            const moves = moveGenerator.generateMoves(whiteRook, 28);
+
+            expect(moves.length).toBeGreaterThan(0);
+            expect(moves[0].piece).toBe('rook');
         });
 
         test('should return empty array for unknown piece type', () => {
