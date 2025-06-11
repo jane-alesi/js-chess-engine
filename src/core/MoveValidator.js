@@ -149,11 +149,15 @@ export class MoveValidator {
      * Checks if castling is legal for the specified color and side
      * TODO: Implement castling validation in future enhancement
      *
-     * @param {string} _color - Color attempting to castle
-     * @param {string} _side - Side to castle ('kingside' or 'queenside')
+     * @param {string} color - Color attempting to castle
+     * @param {string} side - Side to castle ('kingside' or 'queenside')
      * @returns {boolean} Currently returns false (not implemented)
      */
-    canCastle(_color, _side) {
+    canCastle(color, side) {
+        // Prevent ESLint unused parameter warnings
+        void color;
+        void side;
+        
         // TODO: Implement castling validation
         // - King and rook haven't moved
         // - No pieces between king and rook
@@ -230,12 +234,12 @@ export class MoveValidator {
                         if (!this.wouldMoveResultInCheck(move.from, move.to, color)) {
                             legalMoves.push(move);
                         }
-                    } catch (_error) {
+                    } catch {
                         // Skip moves that cause errors in self-check detection
                         continue;
                     }
                 }
-            } catch (_error) {
+            } catch {
                 // Skip pieces that cause errors in move generation
                 continue;
             }
@@ -272,7 +276,7 @@ export class MoveValidator {
 
             // Check if king would be in check after the move
             return tempValidator.isInCheck(color);
-        } catch (_error) {
+        } catch {
             // If there's an error in simulation, assume the move is invalid
             return true;
         }
@@ -305,7 +309,7 @@ export class MoveValidator {
                     }
 
                     boardCopy.squares[i] = pieceCopy;
-                } catch (_error) {
+                } catch {
                     // Skip pieces that cause errors during copying
                     continue;
                 }
