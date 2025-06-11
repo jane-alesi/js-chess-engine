@@ -266,7 +266,7 @@ export class Game {
      */
     indexToSquare(index) {
         const file = String.fromCharCode(97 + (index % 8)); // a-h
-        const rank = Math.floor(index / 8) + 1; // 1-8
+        const rank = 8 - Math.floor(index / 8); // 8-1 (Standard Chess Notation: rank 8 at top)
         return file + rank;
     }
 
