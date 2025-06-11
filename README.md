@@ -2,9 +2,14 @@
 
 > **A pure JavaScript chess engine inspired by the legendary Atari Video Chess, designed to outplay the original through superior AI and modern web technologies.**
 
+[![CI/CD Pipeline](https://github.com/jane-alesi/js-chess-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/jane-alesi/js-chess-engine/actions/workflows/ci.yml)
+[![Auto-Fix](https://github.com/jane-alesi/js-chess-engine/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/jane-alesi/js-chess-engine/actions/workflows/auto-fix.yml)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Chess Engine](https://img.shields.io/badge/Chess-Engine-green.svg)](https://www.chessprogramming.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-v16+-green.svg)](https://nodejs.org/)
+[![Chess Engine](https://img.shields.io/badge/Chess-Engine-red.svg)](https://www.chessprogramming.org/)
+[![Issues](https://img.shields.io/github/issues/jane-alesi/js-chess-engine.svg)](https://github.com/jane-alesi/js-chess-engine/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
@@ -153,6 +158,140 @@ js-chess-engine/
 
 ---
 
+## 🗺️ Development Roadmap
+
+Our development follows a structured, phase-based approach with clear milestones and priorities:
+
+### **📋 Phase 1: Documentation & Project Management** ✅ **COMPLETED**
+*Timeline: June 2025*
+
+- ✅ **Professional README.md** ([#35](https://github.com/jane-alesi/js-chess-engine/issues/35)) - Impactful header and project description
+- ✅ **Installation & Usage Guide** ([#36](https://github.com/jane-alesi/js-chess-engine/issues/36)) - Comprehensive setup instructions
+- ✅ **Architecture Documentation** ([#37](https://github.com/jane-alesi/js-chess-engine/issues/37)) - Mermaid diagrams and contribution guidelines
+- ✅ **Status Badges & Roadmap** ([#38](https://github.com/jane-alesi/js-chess-engine/issues/38)) - CI/CD transparency and project roadmap
+
+**Outcome**: Complete professional documentation foundation enabling efficient contributor onboarding
+
+---
+
+### **♛ Phase 2: Core Move Generation** 🔄 **IN PROGRESS**
+*Timeline: July-August 2025 | Priority: HIGH*
+
+- 🔄 **Rook Move Generation** ([#2](https://github.com/jane-alesi/js-chess-engine/issues/2)) - Horizontal and vertical movement patterns
+- 🔄 **Bishop Move Generation** ([#1](https://github.com/jane-alesi/js-chess-engine/issues/1)) - Diagonal movement patterns  
+- 🔄 **Knight Move Generation** ([#9](https://github.com/jane-alesi/js-chess-engine/issues/9)) - L-shaped movement patterns
+- 🔄 **King Move Generation** ([#7](https://github.com/jane-alesi/js-chess-engine/issues/7)) - Single-square movement patterns
+- 🔄 **Queen Move Generation** ([#6](https://github.com/jane-alesi/js-chess-engine/issues/6)) - Combined rook and bishop patterns
+
+**Current Status**: ✅ Pawn moves fully implemented with comprehensive testing  
+**Next Priority**: Rook move generation (foundational for queen moves)
+
+---
+
+### **🎮 Phase 3: Core Game Logic** 📅 **PLANNED**
+*Timeline: September-October 2025 | Priority: MEDIUM*
+
+- 📅 **Enhanced Move Validation** - Self-check prevention and legal move filtering
+- 📅 **Check Detection** - King threat analysis and validation
+- 📅 **Checkmate & Stalemate** - Game ending condition detection
+- 📅 **Special Moves Implementation**:
+  - Castling (kingside and queenside)
+  - En passant capture
+  - Pawn promotion
+- 📅 **Game Flow Orchestration** ([#14](https://github.com/jane-alesi/js-chess-engine/issues/14)) - Complete game state management
+
+**Dependencies**: Requires completion of Phase 2 (all piece move generation)
+
+---
+
+### **🧠 Phase 4: AI Implementation** 📅 **PLANNED**
+*Timeline: November 2025-January 2026 | Priority: MEDIUM*
+
+- 📅 **Basic AI Foundation**:
+  - Random move selection
+  - Legal move filtering
+  - Basic position evaluation
+- 📅 **Minimax Algorithm**:
+  - Recursive game tree search
+  - Alpha-Beta pruning optimization
+  - Configurable search depth
+- 📅 **Position Evaluation**:
+  - Material value calculation
+  - Positional factors (center control, piece development)
+  - King safety assessment
+- 📅 **Difficulty Levels**:
+  - Beginner (depth 1-2)
+  - Intermediate (depth 3-4)  
+  - Advanced (depth 5-6)
+  - Expert (depth 7+ with optimizations)
+
+**Target**: AI capable of defeating the original Atari Video Chess
+
+---
+
+### **🎨 Phase 5: User Interface & Experience** 📅 **FUTURE**
+*Timeline: February-March 2026 | Priority: LOW*
+
+- 📅 **Interactive Board Enhancements**:
+  - Drag-and-drop piece movement
+  - Move highlighting and validation
+  - Animated piece transitions
+- 📅 **Game Features**:
+  - Move history and notation
+  - Position analysis tools
+  - Save/load game functionality
+- 📅 **Visual Improvements**:
+  - Multiple board themes
+  - Piece set customization
+  - Responsive design for mobile
+- 📅 **Accessibility**:
+  - Keyboard navigation
+  - Screen reader support
+  - High contrast modes
+
+---
+
+### **⚡ Phase 6: Performance & Advanced Features** 📅 **FUTURE**
+*Timeline: April-June 2026 | Priority: LOW*
+
+- 📅 **Performance Optimizations**:
+  - Web Workers for AI computation
+  - Transposition tables for position caching
+  - Move ordering improvements
+  - Bitboard representation (optional)
+- 📅 **Advanced AI Features**:
+  - Opening book integration
+  - Endgame tablebase support
+  - Neural network evaluation (experimental)
+- 📅 **Additional Features**:
+  - Multiplayer support
+  - Tournament modes
+  - Chess variant support (Chess960, King of the Hill)
+  - Engine vs. engine matches
+
+---
+
+### **📊 Progress Tracking**
+
+| Phase | Completion | Key Milestones | Target Date |
+|-------|------------|----------------|-------------|
+| **Phase 1** | ✅ 100% | Professional documentation complete | ✅ June 2025 |
+| **Phase 2** | 🔄 20% | Pawn moves implemented, 4 pieces remaining | August 2025 |
+| **Phase 3** | 📅 0% | Awaiting Phase 2 completion | October 2025 |
+| **Phase 4** | 📅 0% | Awaiting Phase 3 completion | January 2026 |
+| **Phase 5** | 📅 0% | UI/UX enhancements | March 2026 |
+| **Phase 6** | 📅 0% | Performance & advanced features | June 2026 |
+
+### **🎯 Success Metrics**
+
+- **Technical**: All tests passing, zero linting errors, comprehensive coverage
+- **Functional**: Complete chess rule implementation with legal move validation
+- **Performance**: AI response time < 1 second for depth 4 search
+- **Quality**: Code review approval, documentation completeness
+- **Legacy Goal**: Demonstrably superior play compared to original Atari Video Chess
+
+---
+
 ## 🚀 Current Status
 
 This project is actively under development with a focus on:
@@ -191,14 +330,14 @@ flowchart TB
         IH[InputHandler]
         CSS[Styles & Themes]
     end
-
+    
     subgraph "🧠 AI Engine Layer"
         AI[AI Module]
         EVAL[Evaluation]
         SEARCH[Search Algorithms]
         BOOK[Opening Book]
     end
-
+    
     subgraph "♛ Core Chess Logic"
         CORE[Core Module]
         BOARD[Board]
@@ -208,7 +347,7 @@ flowchart TB
         VALID[MoveValidator]
         RULES[Rules]
     end
-
+    
     subgraph "🔧 Utilities"
         UTILS[Utils Module]
         CONST[Constants]
@@ -216,12 +355,12 @@ flowchart TB
         PGN[PGN Support]
         NOTATION[Notation]
     end
-
+    
     UI --> CORE
     AI --> CORE
     CORE --> UTILS
     AI --> UTILS
-
+    
     style CORE fill:#e1f5fe
     style AI fill:#f3e5f5
     style UI fill:#e8f5e8
@@ -251,7 +390,7 @@ This project draws inspiration from one of the most impressive programming achie
 Our JavaScript implementation honors this legacy while embracing modern capabilities:
 
 - **Then**: 4KB ROM, 128 bytes RAM → **Now**: Unlimited memory and processing power
-- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features
+- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features  
 - **Then**: Simple evaluation function → **Now**: Sophisticated AI with deep search algorithms
 - **Then**: Fixed difficulty → **Now**: Adaptive AI with multiple skill levels
 
@@ -309,4 +448,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-_Built with ♛ by the chess programming community_
+*Built with ♛ by the chess programming community*
