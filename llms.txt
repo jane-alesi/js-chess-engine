@@ -2,7 +2,9 @@
 
 ## 📋 Project Context Reference
 
-**IMPORTANT**: For project-specific context, objectives, and development workflows, see `llms_project_context.txt` in the repository root. This file contains comprehensive auto-coding specifications and implementation details.
+**IMPORTANT**: For current project status, active issues, and development workflows specific to chat.satware.ai, see `llms_project_context.txt` in the repository root. This file contains dynamic project context and immediate priorities.
+
+**This file (llms.txt)** provides comprehensive development guidelines for any LLM working on the project, while `llms_project_context.txt` focuses on current state and next steps.
 
 ## Project Overview
 
@@ -13,1053 +15,245 @@ This is a pure JavaScript chess engine inspired by the legendary Atari Video Che
 **Target**: Browser-based chess game with AI opponent
 **Architecture**: Modular, divide-and-conquer approach
 
-## 🎯 Complete Auto-Coding Specifications
+## 🎯 Development Philosophy
 
-### Core Architecture Components
+### Core Principles
+- **Issue-Driven Development** - All work tracked through GitHub Issues
+- **Modular Architecture** - Core, UI, AI, Utils components with incremental development
+- **AI-First Design** - Optimized for LLM collaboration and code generation
+- **File-Reference Approach** - Reference actual repository files instead of embedding large code examples
+
+### File Structure Overview
 
 ```
 src/
 ├── core/          # Chess logic (Board, Piece, Game)
 │   ├── Board.js              # Board representation and state management
-│   ├── Piece.js              # Piece definitions and movement rules
+│   ├── Piece.js              # Piece definitions with ES2022 private fields
 │   ├── GameState.js          # Game state, turns, check/checkmate detection
 │   ├── MoveGenerator.js      # Legal move generation for all pieces
 │   ├── MoveValidator.js      # Move validation and self-check prevention
-│   └── Rules.js              # Chess rules implementation (castling, en passant, etc.)
-├── ui/            # User interface (InputHandler, BoardRenderer)
+│   └── Rules.js              # Chess rules implementation
+├── ui/            # User interface
 │   ├── BoardRenderer.js      # Visual board rendering
 │   ├── InputHandler.js       # User input processing
 │   ├── UIController.js       # UI state management
-│   └── Themes.js             # Visual themes and styling
-├── ai/            # AI engine (Minimax, evaluation)
+│   └── styles.css            # Styling and themes
+├── ai/            # AI engine (Future implementation)
 │   ├── AIPlayer.js           # Main AI controller
 │   ├── Evaluation.js         # Position evaluation function
 │   ├── Search.js             # Minimax with alpha-beta pruning
 │   └── OpeningBook.js        # Basic opening moves database
-└── utils/         # Utilities (Constants, helpers)
+└── utils/         # Utilities
+    ├── Constants.js          # Game constants and piece values
     ├── Notation.js           # Algebraic notation conversion
     ├── FEN.js                # FEN string parsing/generation
-    ├── PGN.js                # PGN game notation support
-    └── Constants.js          # Game constants and piece values
+    └── PGN.js                # PGN game notation support
 ```
 
-### 🔧 Implementation Specifications
+## 🔧 Implementation Guidelines
 
-#### 1. Core Chess Logic
+### 1. Core Chess Logic
 
-**Board.js** - 64-square array representation
+**Key Files to Reference:**
+- `src/core/Board.js` - 64-square array representation with piece management
+- `src/core/Piece.js` - ES2022 implementation with private fields and comprehensive validation
+- `src/core/GameState.js` - Game state management including castling rights and move history
+- `src/core/MoveGenerator.js` - Piece-specific move generation (pawn moves completed)
+
+**Implementation Patterns:**
+- Use ES2022 private fields for encapsulation
+- Implement comprehensive input validation with descriptive errors
+- Follow getter/setter patterns for private field access
+- Maintain immutable game state for AI search
+
+### 2. Move Generation System
+
+**Current Status:**
+- ✅ Pawn moves fully implemented (see `src/core/MoveGenerator.js`)
+- 🔄 Other pieces: Rook, Bishop, Knight, King, Queen (see active issues)
+
+**Move Object Structure:**
 ```javascript
-export class Board {
-    constructor() {
-        this.squares = new Array(64).fill(null);
-    }
-
-    setupInitialBoard() {
-        // Place pieces in starting positions
-        // Implementation: Standard chess setup
-    }
-
-    movePiece(fromIndex, toIndex) {
-        // Validate and execute piece movement
-        // Error handling: Throw descriptive errors for invalid moves
-    }
-
-    isSquareAttacked(squareIndex, byColor) {
-        // Check if square is under attack by specified color
-        // Used for check detection and castling validation
-    }
-
-    clone() {
-        // Deep copy board state for AI search
-        // Performance critical: Optimize for speed
-    }
-}
-```
-
-**Piece.js** - Modern ES2022 implementation with private fields
-```javascript
-export class Piece {
-    // Static validation constants
-    static VALID_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-    static VALID_COLORS = ['white', 'black'];
-
-    // Private fields for encapsulation
-    #type;
-    #color;
-    #points;
-    #symbol;
-    #hasMoved = false;
-
-    constructor(type, color, points, symbol) {
-        // Comprehensive validation with descriptive errors
-        if (!type || typeof type !== 'string') {
-            throw new Error('Piece type must be a non-empty string');
-        }
-        if (!Piece.VALID_TYPES.includes(type.toLowerCase())) {
-            throw new Error(`Invalid piece type: ${type}. Must be one of: ${Piece.VALID_TYPES.join(', ')}`);
-        }
-        if (!color || typeof color !== 'string') {
-            throw new Error('Piece color must be a non-empty string');
-        }
-        if (!Piece.VALID_COLORS.includes(color.toLowerCase())) {
-            throw new Error(`Invalid piece color: ${color}. Must be one of: ${Piece.VALID_COLORS.join(', ')}`);
-        }
-        if (typeof points !== 'number' || points < 0) {
-            throw new Error('Piece points must be a non-negative number');
-        }
-        if (!symbol || typeof symbol !== 'string') {
-            throw new Error('Piece symbol must be a non-empty string');
-        }
-
-        this.#type = type.toLowerCase();
-        this.#color = color.toLowerCase();
-        this.#points = points;
-        this.#symbol = symbol;
-    }
-
-    // Public API methods
-    getType() { return this.#type; }
-    getColor() { return this.#color; }
-    getPoints() { return this.#points; }
-    getSymbol() { return this.#symbol; }
-    getHasMoved() { return this.#hasMoved; }
-
-    markAsMoved() {
-        if (this.#hasMoved) {
-            throw new Error(`${this.#color} ${this.#type} has already been marked as moved`);
-        }
-        this.#hasMoved = true;
-    }
-
-    resetMovedStatus() {
-        if (!this.#hasMoved) {
-            throw new Error(`${this.#color} ${this.#type} hasn't moved yet`);
-        }
-        this.#hasMoved = false;
-    }
-
-    // Utility methods for piece comparison
-    isOpponent(otherPiece) {
-        if (!(otherPiece instanceof Piece)) {
-            throw new Error('Parameter must be a Piece instance');
-        }
-        return this.#color !== otherPiece.getColor();
-    }
-
-    isAlly(otherPiece) {
-        if (!(otherPiece instanceof Piece)) {
-            throw new Error('Parameter must be a Piece instance');
-        }
-        return this.#color === otherPiece.getColor();
-    }
-
-    clone() {
-        const clonedPiece = new Piece(this.#type, this.#color, this.#points, this.#symbol);
-        if (this.#hasMoved) {
-            clonedPiece.markAsMoved();
-        }
-        return clonedPiece;
-    }
-
-    toString() {
-        return `${this.#color} ${this.#type} (${this.#symbol}) - ${this.#points} points${this.#hasMoved ? ' [moved]' : ''}`;
-    }
-
-    toJSON() {
-        return {
-            type: this.#type,
-            color: this.#color,
-            points: this.#points,
-            symbol: this.#symbol,
-            hasMoved: this.#hasMoved
-        };
-    }
-}
-```
-
-**MoveGenerator.js** - Legal move generation
-```javascript
-export class MoveGenerator {
-    static generateAllMoves(board, color) {
-        // Generate all legal moves for specified color
-        // Performance critical: Used by AI search
-        const moves = [];
-
-        for (let i = 0; i < 64; i++) {
-            const piece = board.squares[i];
-            if (piece && piece.getColor() === color) {
-                moves.push(...this.generatePieceMoves(board, i, piece));
-            }
-        }
-
-        return moves.filter(move => this.isLegalMove(board, move));
-    }
-
-    static generatePieceMoves(board, fromIndex, piece) {
-        // Generate pseudo-legal moves for specific piece
-        // Implementation: Piece-type specific generation
-    }
-
-    static isLegalMove(board, move) {
-        // Verify move doesn't leave king in check
-        // Implementation: Make move, check for self-check, unmake
-    }
-}
-```
-
-**GameState.js** - Game state management
-```javascript
-export class GameState {
-    constructor() {
-        this.board = new Board();
-        this.currentPlayer = 'white';
-        this.castlingRights = {
-            white: { kingside: true, queenside: true },
-            black: { kingside: true, queenside: true }
-        };
-        this.enPassantTarget = null;
-        this.halfmoveClock = 0;
-        this.fullmoveNumber = 1;
-        this.gameStatus = 'active'; // active, check, checkmate, stalemate, draw
-        this.moveHistory = [];
-    }
-
-    makeMove(move) {
-        // Execute move and update game state
-        // Update castling rights, en passant, clocks
-    }
-
-    isInCheck(color) {
-        // Check if specified color's king is in check
-    }
-
-    isCheckmate(color) {
-        // Check if specified color is in checkmate
-    }
-
-    isStalemate(color) {
-        // Check if specified color is in stalemate
-    }
-}
-```
-
-#### 2. User Interface Implementation
-
-**BoardRenderer.js** - Visual board rendering
-```javascript
-export class BoardRenderer {
-    constructor(canvasElement) {
-        this.canvas = canvasElement;
-        this.ctx = canvasElement.getContext('2d');
-        this.squareSize = 64;
-        this.theme = 'classic';
-    }
-
-    render(board, highlightSquares = []) {
-        // Render board with pieces and highlights
-        // Implementation: Canvas-based or DOM-based rendering
-    }
-
-    drawPiece(piece, x, y) {
-        // Draw individual piece at coordinates
-        // Use Unicode chess symbols or sprite images
-    }
-
-    highlightSquare(squareIndex, color) {
-        // Highlight square with specified color
-        // Used for move selection and valid moves
-    }
-
-    animateMove(fromSquare, toSquare, duration = 300) {
-        // Animate piece movement between squares
-        // Smooth visual feedback for moves
-    }
-}
-```
-
-**InputHandler.js** - User input processing
-```javascript
-export class InputHandler {
-    constructor(boardElement, onMoveCallback) {
-        this.boardElement = boardElement;
-        this.onMove = onMoveCallback;
-        this.selectedSquare = null;
-        this.validMoves = [];
-
-        this.attachEventListeners();
-    }
-
-    attachEventListeners() {
-        // Mouse and touch event handlers
-        // Support for drag-and-drop and click-to-move
-    }
-
-    handleSquareClick(squareIndex) {
-        // Process square selection and move execution
-        // Two-click interface: select piece, select destination
-    }
-
-    highlightValidMoves(fromSquare) {
-        // Show valid moves for selected piece
-        // Visual feedback for legal moves
-    }
-}
-```
-
-#### 3. AI Implementation
-
-**AIPlayer.js** - Main AI controller
-```javascript
-export class AIPlayer {
-    constructor(difficulty = 'medium') {
-        this.difficulty = difficulty;
-        this.maxDepth = this.getDifficultyDepth(difficulty);
-        this.evaluation = new Evaluation();
-        this.search = new Search();
-        this.openingBook = new OpeningBook();
-    }
-
-    async selectMove(gameState) {
-        // Select best move using search algorithm
-        // Use Web Workers for non-blocking computation
-
-        // Check opening book first
-        const bookMove = this.openingBook.getMove(gameState);
-        if (bookMove) return bookMove;
-
-        // Use minimax search
-        return this.search.findBestMove(gameState, this.maxDepth);
-    }
-
-    getDifficultyDepth(difficulty) {
-        // Map difficulty to search depth
-        const depths = { easy: 2, medium: 4, hard: 6, expert: 8 };
-        return depths[difficulty] || 4;
-    }
-}
-```
-
-**Search.js** - Minimax with alpha-beta pruning
-```javascript
-export class Search {
-    constructor() {
-        this.transpositionTable = new Map();
-        this.killerMoves = [];
-        this.historyTable = new Map();
-    }
-
-    findBestMove(gameState, maxDepth) {
-        // Iterative deepening minimax search
-        let bestMove = null;
-
-        for (let depth = 1; depth <= maxDepth; depth++) {
-            const result = this.minimax(gameState, depth, -Infinity, Infinity, true);
-            if (result.move) bestMove = result.move;
-        }
-
-        return bestMove;
-    }
-
-    minimax(gameState, depth, alpha, beta, maximizingPlayer) {
-        // Minimax algorithm with alpha-beta pruning
-        // Include quiescence search for tactical positions
-
-        if (depth === 0 || gameState.isGameOver()) {
-            return { score: this.evaluation.evaluate(gameState) };
-        }
-
-        const moves = this.orderMoves(
-            MoveGenerator.generateAllMoves(gameState.board, gameState.currentPlayer)
-        );
-
-        let bestMove = null;
-        let bestScore = maximizingPlayer ? -Infinity : Infinity;
-
-        for (const move of moves) {
-            const newState = gameState.clone();
-            newState.makeMove(move);
-
-            const result = this.minimax(newState, depth - 1, alpha, beta, !maximizingPlayer);
-
-            if (maximizingPlayer) {
-                if (result.score > bestScore) {
-                    bestScore = result.score;
-                    bestMove = move;
-                }
-                alpha = Math.max(alpha, result.score);
-            } else {
-                if (result.score < bestScore) {
-                    bestScore = result.score;
-                    bestMove = move;
-                }
-                beta = Math.min(beta, result.score);
-            }
-
-            if (beta <= alpha) break; // Alpha-beta pruning
-        }
-
-        return { score: bestScore, move: bestMove };
-    }
-
-    orderMoves(moves) {
-        // Order moves for better pruning
-        // Captures, checks, killer moves, history heuristic
-        return moves.sort((a, b) => {
-            if (a.captured && !b.captured) return -1;
-            if (b.captured && !a.captured) return 1;
-            return this.getMoveScore(b) - this.getMoveScore(a);
-        });
-    }
-}
-```
-
-**Evaluation.js** - Position evaluation function
-```javascript
-export class Evaluation {
-    static PIECE_VALUES = {
-        pawn: 100,
-        knight: 320,
-        bishop: 330,
-        rook: 500,
-        queen: 900,
-        king: 20000
-    };
-
-    static PIECE_SQUARE_TABLES = {
-        // Positional value tables for each piece type
-        // Encourage good piece placement
-    };
-
-    evaluate(gameState) {
-        // Comprehensive position evaluation
-        let score = 0;
-
-        score += this.evaluateMaterial(gameState.board);
-        score += this.evaluatePosition(gameState.board);
-        score += this.evaluateKingSafety(gameState.board);
-        score += this.evaluatePawnStructure(gameState.board);
-        score += this.evaluateMobility(gameState);
-
-        return gameState.currentPlayer === 'white' ? score : -score;
-    }
-
-    evaluateMaterial(board) {
-        // Count material balance
-        let material = 0;
-
-        for (let i = 0; i < 64; i++) {
-            const piece = board.squares[i];
-            if (piece) {
-                const value = this.PIECE_VALUES[piece.getType()];
-                material += piece.getColor() === 'white' ? value : -value;
-            }
-        }
-
-        return material;
-    }
-
-    evaluatePosition(board) {
-        // Evaluate piece placement using square tables
-        let positional = 0;
-
-        for (let i = 0; i < 64; i++) {
-            const piece = board.squares[i];
-            if (piece) {
-                const table = this.PIECE_SQUARE_TABLES[piece.getType()];
-                const squareValue = piece.getColor() === 'white' ? table[i] : table[63 - i];
-                positional += piece.getColor() === 'white' ? squareValue : -squareValue;
-            }
-        }
-
-        return positional;
-    }
-}
-```
-
-#### 4. Utility Functions
-
-**Constants.js** - Enhanced with helper functions
-```javascript
-export const PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-export const COLORS = ['white', 'black'];
-
-export const PIECE_SYMBOLS = {
-    white: {
-        king: '♔', queen: '♕', rook: '♖',
-        bishop: '♗', knight: '♘', pawn: '♙'
-    },
-    black: {
-        king: '♚', queen: '♛', rook: '♜',
-        bishop: '♝', knight: '♞', pawn: '♟'
-    }
+const move = {
+    from: 12,              // Source square index (0-63)
+    to: 28,                // Destination square index
+    type: 'normal',        // 'normal', 'double', 'capture', 'castling', 'enPassant'
+    piece: 'pawn',         // Moving piece type
+    color: 'white',        // Moving piece color
+    captured: 'knight'     // Captured piece type (if any)
 };
-
-export const PIECE_VALUES = {
-    pawn: 1, knight: 3, bishop: 3,
-    rook: 5, queen: 9, king: 1000
-};
-
-export const PIECE_TYPES_CONSTANTS = {
-    PAWN: 'pawn',
-    ROOK: 'rook',
-    KNIGHT: 'knight',
-    BISHOP: 'bishop',
-    QUEEN: 'queen',
-    KING: 'king'
-};
-
-export const PIECE_COLORS_CONSTANTS = {
-    WHITE: 'white',
-    BLACK: 'black'
-};
-
-export const STARTING_POSITIONS = {
-    // White pieces (bottom of board, indices 48-63)
-    white: {
-        rooks: [56, 63],
-        knights: [57, 62],
-        bishops: [58, 61],
-        queen: [59],
-        king: [60],
-        pawns: [48, 49, 50, 51, 52, 53, 54, 55]
-    },
-    // Black pieces (top of board, indices 0-15)
-    black: {
-        rooks: [0, 7],
-        knights: [1, 6],
-        bishops: [2, 5],
-        queen: [3],
-        king: [4],
-        pawns: [8, 9, 10, 11, 12, 13, 14, 15]
-    }
-};
-
-// Helper functions for validation and retrieval
-export function getPieceSymbol(type, color, useAlt = false) {
-    if (!PIECE_SYMBOLS[color]) {
-        throw new Error(`Invalid piece color: ${color}`);
-    }
-    if (!PIECE_SYMBOLS[color][type]) {
-        throw new Error(`Invalid piece type: ${type}`);
-    }
-    return PIECE_SYMBOLS[color][type];
-}
-
-export function getPieceValue(type) {
-    if (!PIECE_VALUES[type]) {
-        throw new Error(`Invalid piece type: ${type}`);
-    }
-    return PIECE_VALUES[type];
-}
-
-export function isValidPieceType(type) {
-    return PIECE_TYPES.includes(type);
-}
-
-export function isValidPieceColor(color) {
-    return COLORS.includes(color);
-}
-
-export function getAllPieceTypes() {
-    return [...PIECE_TYPES];
-}
-
-export function getAllPieceColors() {
-    return [...COLORS];
-}
-
-export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 ```
 
-**FEN.js** - FEN notation support
-```javascript
-export class FEN {
-    static parse(fenString) {
-        // Parse FEN string into game state
-        // Implementation: Standard FEN parsing
-    }
+### 3. Testing Strategy
 
-    static generate(gameState) {
-        // Generate FEN string from game state
-        // Implementation: Standard FEN generation
-    }
-
-    static validateFEN(fenString) {
-        // Validate FEN string format
-        // Return true if valid, false otherwise
-    }
-}
-```
-
-### 🧪 Comprehensive Testing Strategy
-
-#### Test Structure
+**Test Structure:**
 ```
 tests/
 ├── core/          # Core logic tests
-│   ├── Board.test.js
-│   ├── Piece.test.js
-│   ├── MoveGenerator.test.js
-│   ├── MoveValidator.test.js
-│   └── GameState.test.js
 ├── ui/            # UI component tests
-│   ├── BoardRenderer.test.js
-│   ├── InputHandler.test.js
-│   └── UIController.test.js
 ├── ai/            # AI engine tests
-│   ├── Search.test.js
-│   ├── Evaluation.test.js
-│   └── AIPlayer.test.js
 └── integration/   # Integration tests
-    ├── FullGame.test.js
-    └── AIBehavior.test.js
 ```
 
-#### Test Implementation Patterns
+**Key Testing Principles:**
+- Use getter methods for private field testing: `piece.getType()` not `piece.type`
+- Test error conditions with descriptive error messages
+- Update dependent tests when modifying core components
+- Reference `tests/core/MoveGenerator.test.js` for comprehensive test patterns
 
-**Unit Test Example**:
-```javascript
-// tests/core/Board.test.js
-import { Board } from '../../src/core/Board.js';
+### 4. Modern JavaScript Standards (2025)
 
-describe('Board', () => {
-    let board;
+**ES2022 Features:**
+- Private class fields with `#` syntax
+- Static class fields for constants
+- Proper error handling with descriptive exceptions
+- ES modules with explicit `.js` extensions
 
-    beforeEach(() => {
-        board = new Board();
-    });
+**Code Quality:**
+- ESLint flat config with Prettier integration
+- Automated linting pipeline prevents CI failures
+- Jest configuration for ES modules
+- Comprehensive error handling patterns
 
-    test('should initialize with 64 null squares', () => {
-        expect(board.squares.length).toBe(64);
-        expect(board.squares.every(square => square === null)).toBe(true);
-    });
+## 🚀 Development Workflow
 
-    test('should throw error when moving from empty square', () => {
-        expect(() => {
-            board.movePiece(20, 21);
-        }).toThrow('Invalid move: no piece found at square 20');
-    });
-
-    test('should setup initial board correctly', () => {
-        board.setupInitialBoard();
-
-        // Test piece placement using getter methods
-        expect(board.squares[0].getType()).toBe('rook');
-        expect(board.squares[0].getColor()).toBe('white');
-        expect(board.squares[8].getType()).toBe('pawn');
-        expect(board.squares[63].getType()).toBe('rook');
-        expect(board.squares[63].getColor()).toBe('black');
-    });
-});
-```
-
-#### Test Compatibility Patterns
-
-**When Implementing Private Fields:**
-```javascript
-// ❌ INCORRECT: Direct property access (will fail with private fields)
-test('should have correct piece type', () => {
-    const piece = new Piece('pawn', 'white', 1, '♙');
-    expect(piece.type).toBe('pawn'); // Fails with private fields
-});
-
-// ✅ CORRECT: Use getter methods
-test('should have correct piece type', () => {
-    const piece = new Piece('pawn', 'white', 1, '♙');
-    expect(piece.getType()).toBe('pawn'); // Works with private fields
-});
-```
-
-**Integration Test Updates:**
-```javascript
-// When core components change, update dependent tests
-test('board should setup pieces correctly', () => {
-    board.setupInitialBoard();
-
-    // Use getter methods for piece properties
-    expect(board.squares[8].getType()).toBe('pawn');
-    expect(board.squares[8].getColor()).toBe('white');
-});
-```
-
-### 🔧 Modern JavaScript Standards (2025)
-
-#### ESLint Configuration (Flat Config)
-```javascript
-// eslint.config.js
-import js from '@eslint/js';
-import prettierConfig from 'eslint-config-prettier';
-
-export default [
-    js.configs.recommended,
-    prettierConfig,
-    {
-        languageOptions: {
-            ecmaVersion: 2022,
-            sourceType: 'module',
-            globals: {
-                // Add globals here
-            },
-        },
-        rules: {
-            'no-unused-vars': [
-                'error',
-                {
-                    argsIgnorePattern: '^_',
-                    varsIgnorePattern: '^_',
-                },
-            ],
-        },
-    },
-];
-```
-
-#### Jest Configuration for ES Modules
-```javascript
-// jest.config.js
-export default {
-    testEnvironment: 'node',
-    transform: {},
-    extensionsToTreatAsEsm: ['.js'],
-    moduleNameMapper: {
-        '^(\\.{1,2}/.*)\\.js$': '$1.js',
-    },
-    injectGlobals: true,
-};
-```
-
-#### Package.json Configuration
-```json
-{
-    "name": "js-chess-engine",
-    "version": "0.1.0",
-    "type": "module",
-    "scripts": {
-        "start": "live-server --port=8080 --entry-file=index.html",
-        "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
-        "test:watch": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch",
-        "test:coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "lint:check": "eslint . --max-warnings 0",
-        "format": "prettier --write .",
-        "format:check": "prettier --check .",
-        "quality:check": "npm run format:check && npm run lint:check",
-        "quality:fix": "npm run format && npm run lint:fix",
-        "build": "echo 'Build script goes here'",
-        "prepare": "husky install",
-        "pre-commit": "lint-staged"
-    },
-    "devDependencies": {
-        "eslint": "^9.28.0",
-        "eslint-config-prettier": "^9.1.0",
-        "husky": "^9.1.7",
-        "jest": "^29.7.0",
-        "lint-staged": "^15.2.10",
-        "live-server": "^1.2.2",
-        "prettier": "^3.3.3"
-    }
-}
-```
-
-### 🚀 Performance Optimization Techniques
-
-#### Web Workers for AI Computation
-```javascript
-// ai-worker.js
-import { AIPlayer } from './src/ai/AIPlayer.js';
-
-const ai = new AIPlayer();
-
-self.onmessage = async function(e) {
-    const { gameState, difficulty } = e.data;
-
-    try {
-        const move = await ai.selectMove(gameState);
-        self.postMessage({ success: true, move });
-    } catch (error) {
-        self.postMessage({ success: false, error: error.message });
-    }
-};
-```
-
-#### Transposition Tables
-```javascript
-// Efficient position caching
-class TranspositionTable {
-    constructor(maxSize = 1000000) {
-        this.table = new Map();
-        this.maxSize = maxSize;
-    }
-
-    store(positionHash, depth, score, moveType, bestMove) {
-        if (this.table.size >= this.maxSize) {
-            // Remove oldest entries
-            const firstKey = this.table.keys().next().value;
-            this.table.delete(firstKey);
-        }
-
-        this.table.set(positionHash, {
-            depth, score, moveType, bestMove,
-            timestamp: Date.now()
-        });
-    }
-
-    lookup(positionHash, depth, alpha, beta) {
-        const entry = this.table.get(positionHash);
-        if (!entry || entry.depth < depth) return null;
-
-        if (entry.moveType === 'exact') return entry.score;
-        if (entry.moveType === 'lowerbound' && entry.score >= beta) return entry.score;
-        if (entry.moveType === 'upperbound' && entry.score <= alpha) return entry.score;
-
-        return null;
-    }
-}
-```
-
-### 📚 Implementation Priorities
-
-#### Phase 1: Core Foundation (Critical Priority)
-1. **Board representation and basic piece movement**
-2. **Move generation and validation system**
-3. **Game state management and rule enforcement**
-4. **Basic UI with board rendering and input handling**
-
-#### Phase 2: Game Logic (High Priority)
-1. **Complete chess rules (castling, en passant, promotion)**
-2. **Check, checkmate, and stalemate detection**
-3. **Move notation and game history**
-4. **FEN/PGN support for position import/export**
-
-#### Phase 3: AI Implementation (High Priority)
-1. **Basic AI with random moves**
-2. **Minimax search algorithm**
-3. **Position evaluation function**
-4. **Alpha-beta pruning optimization**
-
-#### Phase 4: Advanced Features (Medium Priority)
-1. **Multiple difficulty levels**
-2. **Opening book integration**
-3. **Performance optimizations (Web Workers, transposition tables)**
-4. **Advanced UI features (themes, animations)**
-
-#### Phase 5: Polish and Testing (Medium Priority)
-1. **Comprehensive test suite**
-2. **Cross-browser compatibility**
-3. **Accessibility improvements**
-4. **Documentation and examples**
-
-### 🔍 Code Quality Standards
-
-#### Error Handling Patterns
-```javascript
-// ✅ CORRECT: Descriptive error throwing
-function validateMove(fromIndex, toIndex) {
-    if (fromIndex < 0 || fromIndex >= 64) {
-        throw new Error(`Invalid move: fromIndex ${fromIndex} out of bounds`);
-    }
-    if (toIndex < 0 || toIndex >= 64) {
-        throw new Error(`Invalid move: toIndex ${toIndex} out of bounds`);
-    }
-}
-
-// ❌ INCORRECT: Console logging in library code
-function validateMove(fromIndex, toIndex) {
-    if (fromIndex < 0 || fromIndex >= 64) {
-        console.warn('Invalid fromIndex');
-        return false;
-    }
-}
-```
-
-#### Modern ES2022 Syntax
-```javascript
-// ✅ CORRECT: Modern class fields with private fields
-export class Rules {
-    static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-    static COLORS = ['white', 'black'];
-
-    #privateField = 'value';
-
-    constructor() {
-        this.publicField = 'value';
-    }
-}
-
-// ✅ CORRECT: Unused parameter handling
-function processMove(_unused, toSquare) {
-    return toSquare >= 0 && toSquare < 64;
-}
-```
-
-### 🛠️ Development Workflow
-
-#### Issue-Driven Development
+### Issue-Driven Development
 1. **Read Issue Carefully**: Understand requirements and acceptance criteria
 2. **Check Dependencies**: Ensure prerequisite issues are complete
-3. **Create Feature Branch**: Branch from main using issue number
-4. **Implement Solution**: Follow coding standards and test requirements
-5. **Update Tests**: Add/modify tests for new functionality
-6. **Submit Pull Request**: Link to issue and provide clear description
+3. **Reference Current Files**: Check actual implementation in repository
+4. **Follow Coding Standards**: Use patterns from existing code
+5. **Update Tests**: Maintain test compatibility with changes
+6. **Submit Pull Request**: Link to issue with clear description
 
-#### Git Workflow
+### Git Workflow Example
 ```bash
 # Create feature branch
 git checkout -b feature/issue-32-move-validation
 
-# Implement changes
-# ... code implementation ...
-
+# Reference existing files for patterns
+# Implement following established conventions
 # Run quality checks
-npm run lint
+npm run quality:check
 npm test
 
 # Commit with descriptive message
 git commit -m "✨ Implement move validation system (Issue #32)
 
-- Add MoveValidator class with comprehensive rule checking
+- Add MoveValidator class following Board.js patterns
 - Implement self-check prevention logic
-- Add unit tests for all validation scenarios
-- Update documentation with validation examples"
-
-# Push and create PR
-git push origin feature/issue-32-move-validation
+- Add comprehensive unit tests
+- Update documentation"
 ```
 
-### 🎮 Chess-Specific Implementation Details
+## 🎮 Chess-Specific Implementation
 
-#### Move Representation
+### Board Representation
+- 64-square array (0-63 indices)
+- Square mapping: `a1=56, h1=63, a8=0, h8=7`
+- Reference `src/utils/Constants.js` for piece positions and values
+
+### Piece Movement Patterns
+- Each piece type has specific movement vectors
+- Validation includes board boundaries and piece-specific rules
+- Reference `src/core/MoveGenerator.js` for implemented patterns
+
+### Game Rules Implementation
+- Standard chess rules with special moves (castling, en passant, promotion)
+- Check/checkmate detection
+- Move history and game state tracking
+
+## 🧪 Testing Best Practices
+
+### Test Compatibility Protocol
+When modifying core components:
+1. **Identify dependent tests** before making changes
+2. **Update tests** to use getter methods for private fields
+3. **Run full test suite** to verify compatibility
+4. **Document breaking changes** in commit messages
+
+### Example Test Updates
 ```javascript
-// Standard move object structure
-const move = {
-    from: 12,              // Source square index (0-63)
-    to: 28,                // Destination square index
-    piece: 'pawn',         // Moving piece type
-    captured: 'knight',    // Captured piece (if any)
-    promotion: 'queen',    // Promotion piece (if any)
-    castling: 'kingside',  // Castling type (if any)
-    enPassant: true        // En passant capture flag
-};
+// ❌ INCORRECT: Direct property access
+expect(piece.type).toBe('pawn');
+
+// ✅ CORRECT: Use getter methods
+expect(piece.getType()).toBe('pawn');
 ```
 
-#### Board Square Mapping
-```javascript
-// Square index to algebraic notation
-function indexToAlgebraic(index) {
-    const file = String.fromCharCode(97 + (index % 8)); // a-h
-    const rank = Math.floor(index / 8) + 1;             // 1-8
-    return file + rank;
-}
+## 🔍 Performance Considerations
 
-// Algebraic notation to square index
-function algebraicToIndex(notation) {
-    const file = notation.charCodeAt(0) - 97; // a=0, b=1, etc.
-    const rank = parseInt(notation[1]) - 1;   // 1=0, 2=1, etc.
-    return rank * 8 + file;
-}
-```
+### Optimization Strategies
+- Efficient board representation for fast move generation
+- Alpha-beta pruning for AI search
+- Transposition tables for position caching
+- Web Workers for non-blocking AI computation
 
-#### Piece Movement Patterns
-```javascript
-// Movement vectors for each piece type
-const MOVEMENT_PATTERNS = {
-    pawn: {
-        white: [[-8], [-16], [-7], [-9]], // forward, double, captures
-        black: [[8], [16], [7], [9]]
-    },
-    rook: [[-8, -16, -24, -32, -40, -48, -56], [8, 16, 24, 32, 40, 48, 56], \
-           [-1, -2, -3, -4, -5, -6, -7], [1, 2, 3, 4, 5, 6, 7]],
-    knight: [[-17, -15, -10, -6, 6, 10, 15, 17]],
-    bishop: [[-9, -18, -27, -36, -45, -54, -63], [-7, -14, -21, -28, -35, -42, -49], \
-             [7, 14, 21, 28, 35, 42, 49], [9, 18, 27, 36, 45, 54, 63]],
-    queen: [...MOVEMENT_PATTERNS.rook, ...MOVEMENT_PATTERNS.bishop],
-    king: [[-9, -8, -7, -1, 1, 7, 8, 9]]
-};
-```
+### Memory Management
+- Immutable game states for search
+- Efficient piece representation
+- Minimal object creation in hot paths
 
-### 📖 Resources and References
+## 📚 Key Resources
 
-#### Chess Programming
+### Chess Programming
 - **Chess Programming Wiki**: https://www.chessprogramming.org/
 - **Video Chess Analysis**: https://nanochess.org/video_chess.html
 - **Minimax Algorithm**: Standard game theory search algorithm
-- **Alpha-Beta Pruning**: Search optimization technique
 
-#### JavaScript Best Practices
+### JavaScript Best Practices
 - **MDN Web Docs**: Comprehensive JavaScript reference
-- **ES6+ Features**: Modern JavaScript language features
+- **ES2022 Features**: Modern JavaScript language features
 - **Testing with Jest**: Unit testing framework documentation
-- **Performance Optimization**: Browser performance guidelines
 
-#### Game Development
-- **Canvas API**: For advanced graphics rendering
-- **Web Workers**: For background AI computation
-- **Local Storage**: For saving game state and preferences
-- **Responsive Design**: Mobile-friendly user interfaces
+## 🛠️ Troubleshooting Guide
 
----
+### Common Issues
 
-This document serves as the complete guide for AI agents working on the JS Chess Engine project. Follow these guidelines to ensure consistent, high-quality contributions that advance the project goals while maintaining code quality and architectural integrity.
+**1. ESLint/Prettier Conflicts**
+- Solution: Project uses `eslint-config-prettier` to prevent conflicts
+- Run `npm run quality:fix` for automated fixing
 
-**For project context and development workflows, always reference `llms_project_context.txt` first.**
+**2. Test Failures with Private Fields**
+- Solution: Use getter methods (`piece.getType()`) instead of direct access
+- Update dependent tests when modifying core components
 
-## 🐛 **Troubleshooting Guide**
+**3. Module Resolution Errors**
+- Solution: Ensure `"type": "module"` in `package.json`
+- Use `.js` extensions in import paths
 
-This section provides solutions to common issues encountered during development.
+**4. Performance Issues**
+- Solution: Implement alpha-beta pruning, transposition tables
+- Use Web Workers for AI computation
 
-### **1. ESLint / Prettier Conflicts**
+### Development Environment
+- Node.js with ES2022 support
+- Jest with experimental VM modules
+- ESLint 9.x with flat config
+- Prettier for code formatting
 
-**Problem**: The CI build fails with linting errors (e.g., quote style, indentation) even after the auto-fixer runs.
+## 🎯 Implementation Priorities
 
-**Cause**: This happens when ESLint and Prettier have conflicting style rules. The auto-fixer might apply one style, and the CI linter expects another.
+### Phase 1: Core Foundation (Critical)
+1. Complete move generation for all pieces (Issues #1, #2, #6, #7, #9)
+2. Implement move validation and legal move filtering
+3. Add check/checkmate detection
+4. Complete game state management
 
-**Solution**: The project is now configured with `eslint-config-prettier` to prevent this. This package disables all ESLint style rules that Prettier already handles.
+### Phase 2: AI Implementation (High Priority)
+1. Basic AI with random moves
+2. Minimax search algorithm
+3. Position evaluation function
+4. Alpha-beta pruning optimization
 
-- **Ensure Correct Setup**: Your `eslint.config.js` should include `prettierConfig` to disable conflicting rules.
-- **Run `npm run quality:fix`**: This command now runs `prettier --write` first, then `eslint --fix`. This ensures code is formatted correctly before ESLint checks for logical errors.
-- **Check `.prettierrc.json`**: This file is the single source of truth for all formatting rules.
-
-### **2. Test Failures**
-
-**Problem**: Jest tests fail after implementing new features or refactoring existing code.
-
-**Solution**:
-- **Check console output**: Look for specific error messages in the test output.
-- **Verify getter methods**: If you are working with `Piece` objects or other classes using private fields, ensure you are using getter methods (e.g., `piece.getType()`) instead of direct property access (e.g., `piece.type`).
-- **Update dependent tests**: If you modified a core component, ensure all tests that depend on that component are updated to reflect the changes. Refer to the `Test Compatibility Protocol` in `llms_project_context.txt`.
-- **Re-run tests with `--watch`**: Use `npm test -- --watch` to continuously run tests and get immediate feedback.
-- **Debug with `console.log`**: Temporarily add `console.log` statements in your code and tests to inspect variable values and execution flow.
-
-### **3. Private Field Access Errors**
-
-**Problem**: You encounter errors like `TypeError: Cannot read private member #field from an object whose class did not declare it` or `SyntaxError: Private field '#field' must be declared in an enclosing class`.
-
-**Solution**:
-- **Ensure correct class context**: Private fields can only be accessed from within the class that declares them. If you are trying to access a private field from outside the class (e.g., in a test or another module), you must use a public getter method.
-- **Verify ES2022 support**: Ensure your Node.js environment and Jest configuration support ES2022 private class fields. The project's `package.json` and `jest.config.js` are configured for this, but verify your local setup.
-- **Check for typos**: Double-check the spelling of private field names and ensure consistency.
-
-### **4. Module Resolution Errors**
-
-**Problem**: `import` statements fail with errors like `SyntaxError: Cannot use import statement outside a module` or `ERR_MODULE_NOT_FOUND`.
-
-**Solution**:
-- **Verify `type: "module"` in `package.json`**: Ensure your project's `package.json` includes `"type": "module"` to enable ES module syntax.
-- **Use correct file extensions**: Ensure all imported files have the `.js` extension in the `import` path (e.g., `import { Piece } from './Piece.js';`).
-- **Check `moduleNameMapper` in `jest.config.js`**: If you are using Jest, ensure `moduleNameMapper` is correctly configured to resolve module paths.
-
-### **5. Performance Issues**
-
-**Problem**: The chess engine is slow, especially during AI computations.
-
-**Solution**:
-- **Optimize search algorithms**: Ensure Minimax with Alpha-Beta pruning is correctly implemented.
-- **Implement Transposition Tables**: Cache previously evaluated positions to avoid redundant computations.
-- **Utilize Web Workers**: Offload AI computations to a separate thread to prevent blocking the main UI thread.
-- **Profile code**: Use browser developer tools or Node.js profilers to identify performance bottlenecks.
-- **Review evaluation function**: Optimize the evaluation function for speed, as it is called frequently during search.
+### Phase 3: Advanced Features (Medium Priority)
+1. Multiple difficulty levels
+2. Opening book integration
+3. Performance optimizations
+4. Advanced UI features
 
 ---
 
-This troubleshooting guide will be continuously updated based on common issues encountered during development. Always refer to this section before seeking further assistance.
+This document serves as the comprehensive development guide for any LLM working on the JS Chess Engine project. Always reference actual repository files for current implementation details and use `llms_project_context.txt` for current project status and immediate priorities.
+
+**Remember**: This guide focuses on HOW to develop, while `llms_project_context.txt` focuses on WHAT to develop next.
