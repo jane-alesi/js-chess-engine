@@ -28,6 +28,7 @@
 - **Move Generation**: **Pawn moves fully implemented** (Issue #4 ✅)
 - **Testing Framework**: Jest configuration with ES module support
 - **Security**: Comprehensive dependency security fixes and npm overrides
+- **Automated Linting**: Auto-fix workflow for LLM code optimization (Issue #19 ✅)
 
 ### **🧪 Test Suite Status**
 - **All 21 tests passing** ✅
@@ -40,6 +41,7 @@
 - **Test Cases**: Fixed board wrapping validation logic
 - **Security**: Updated all vulnerable dependencies with npm overrides
 - **ESLint**: Modern flat config format with ES2022 support
+- **Automated Linting**: Auto-fix workflow prevents CI failures from LLM-generated code
 
 ---
 
@@ -83,7 +85,7 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 
 // ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\n\\n\\"sha\\" wasn't supplied. []"}
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\n\\n\\\"sha\\\" wasn't supplied. []"}
 ```
 
 **Update Workflow:**
@@ -91,6 +93,33 @@ await create_or_update_file(owner, repo, path, content, message, branch, current
 2. Extract SHA from response: `const currentSHA = fileData.sha`
 3. Include SHA in `create_or_update_file` call as final parameter
 4. Verify successful update completion
+
+### **🤖 Automated LLM Code Quality Protocol (NEW)**
+
+**CRITICAL**: The project now includes automated code quality fixes for LLM-generated code:
+
+```yaml
+# Auto-fix workflow (.github/workflows/auto-fix.yml)
+# - Runs before main CI pipeline
+# - Automatically fixes ESLint and Prettier issues
+# - Commits fixes back to branch with [auto-fix] tag
+# - Prevents CI failures from LLM code generation
+```
+
+**LLM Development Workflow:**
+1. **Generate Code**: LLMs can generate code without worrying about minor linting issues
+2. **Auto-Fix Triggers**: Push/PR automatically triggers auto-fix workflow
+3. **Automatic Fixes**: ESLint --fix and Prettier --write applied automatically
+4. **Auto-Commit**: Fixed code committed back to branch with [auto-fix] message
+5. **CI Validation**: Main CI pipeline runs on fixed code
+
+**Enhanced Scripts Available:**
+```bash
+npm run quality:check    # Check both linting and formatting
+npm run quality:fix      # Fix both linting and formatting
+npm run lint:check       # Check linting with zero warnings
+npm run format:check     # Check formatting without fixing
+```
 
 ### **🧪 Jest Test Execution (UPDATED 2025)**
 ```bash
@@ -185,6 +214,7 @@ function processMove(_unused, toSquare) { /* ... */ }
 - **Error Handling** - Descriptive exceptions, no console pollution
 - **Test Coverage** - All error paths and edge cases validated
 - **Test Compatibility** - Update tests when implementing private fields or new APIs
+- **Automated Linting** - Auto-fix workflow prevents CI failures from LLM code
 
 ### **File Structure**
 ```
@@ -213,6 +243,10 @@ tests/
 │   └── MoveGenerator.test.js # ✅ Implemented (21 tests passing)
 ├── ui/            # UI component tests
 └── ai/            # AI engine tests
+
+.github/workflows/
+├── auto-fix.yml              # ✅ Automated LLM code quality fixes
+└── ci.yml                    # ✅ Main CI/CD pipeline
 ```
 
 ---
@@ -226,12 +260,13 @@ tests/
 - **Progress Tracking** - Regular status updates and completion verification
 
 ### **Code Quality Gates**
-1. **ESLint passes** without errors or warnings
+1. **ESLint passes** without errors or warnings (auto-fixed if needed)
 2. **All tests pass** with 100% success rate
 3. **Error handling** uses exceptions, not console output
 4. **Documentation** updated for significant changes
 5. **Performance** considerations for LLM integration
 6. **Test compatibility** verified when modifying core components
+7. **Automated fixes** applied for LLM-generated code quality issues
 
 ### **Integration Testing Protocol**
 - **Dependency Mapping** - Before modifying core components, identify all dependent files
@@ -244,6 +279,13 @@ tests/
 - **Verification steps** - Confirm operations completed successfully
 - **Error recovery** - Implement retry strategies for tool failures
 - **Research validation** - Verify best practices through online research
+- **LLM-friendly workflow** - Auto-fix handles minor code quality issues automatically
+
+### **LLM Code Generation Best Practices**
+- **Focus on Logic** - LLMs can focus on implementing functionality without worrying about minor linting
+- **Trust Auto-Fix** - Let the automated workflow handle ESLint and Prettier issues
+- **Verify Results** - Check that auto-fixes don't change intended logic
+- **Quality Scripts** - Use `npm run quality:check` before major commits
 
 ---
 
@@ -310,7 +352,7 @@ tests/
 
 - **Technical Guide** - `llms.txt` (comprehensive development guidelines)
 - **Issue Tracker** - GitHub Issues for all development tasks
-- **CI/CD Pipeline** - GitHub Actions with automated testing
+- **CI/CD Pipeline** - GitHub Actions with automated testing and auto-fixing
 - **Code Standards** - ESLint flat config with ES2022 support
 
 ## 🔧 **TROUBLESHOOTING QUICK REFERENCE**
@@ -333,6 +375,16 @@ expect(piece.getType()).toBe('pawn');  // Not piece.type
 
 // ❌ Error: Board wrapping validation
 // ✅ Solution: Use correct wrapping examples (already fixed)
+```
+
+### **Auto-Fix Workflow Issues**
+```bash
+# ❌ Error: Auto-fix workflow fails
+# ✅ Solution: Check workflow logs, ensure dependencies install correctly
+# Auto-fix handles: ESLint errors, Prettier formatting, unused variables
+
+# ❌ Error: Infinite loop in auto-fix
+# ✅ Solution: [auto-fix] tag in commit message prevents loops (already implemented)
 ```
 
 **This context provides the essential framework for efficient development while maintaining the chess engine's core objectives and technical excellence.**
