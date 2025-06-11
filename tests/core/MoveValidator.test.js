@@ -22,11 +22,11 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
 
-            board.squares[12] = whitePawn;
-            board.squares[4] = whiteKing;
-            board.squares[60] = blackKing;
+            board.squares[52] = whitePawn;
+            board.squares[60] = whiteKing;
+            board.squares[4] = blackKing;
 
-            const isValid = moveValidator.isValidMove(12, 20);
+            const isValid = moveValidator.isValidMove(52, 44);
             expect(isValid).toBe(true);
         });
 
@@ -37,9 +37,9 @@ describe('MoveValidator', () => {
 
         test('should reject move when wrong player turn', () => {
             const blackPawn = new Piece('pawn', 'black', 1, '♟');
-            board.squares[52] = blackPawn;
+            board.squares[12] = blackPawn;
 
-            const isValid = moveValidator.isValidMove(52, 44);
+            const isValid = moveValidator.isValidMove(12, 20);
             expect(isValid).toBe(false);
         });
 
@@ -58,8 +58,8 @@ describe('MoveValidator', () => {
             const blackKing = new Piece('king', 'black', 1000, '♚');
 
             board.squares[28] = whiteRook;
-            board.squares[4] = whiteKing;
-            board.squares[60] = blackKing;
+            board.squares[60] = whiteKing;
+            board.squares[4] = blackKing;
 
             const isValid = moveValidator.isValidMove(28, 36);
             expect(isValid).toBe(true);
@@ -67,9 +67,9 @@ describe('MoveValidator', () => {
 
         test('should reject pseudo-illegal moves', () => {
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
-            board.squares[12] = whitePawn;
+            board.squares[52] = whitePawn;
 
-            const isValid = moveValidator.isValidMove(12, 13);
+            const isValid = moveValidator.isValidMove(52, 53);
             expect(isValid).toBe(false);
         });
     });
@@ -177,18 +177,28 @@ describe('MoveValidator', () => {
 
     describe('Checkmate Detection', () => {
         test('should detect back rank mate', () => {
+            // Classic back-rank mate setup
             const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚');
             const blackRook = new Piece('rook', 'black', 5, '♜');
             const whitePawn1 = new Piece('pawn', 'white', 1, '♙');
             const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
             const whitePawn3 = new Piece('pawn', 'white', 1, '♙');
 
-            board.squares[5] = whiteKing;
-            board.squares[61] = blackRook;
-            board.squares[13] = whitePawn1;
-            board.squares[14] = whitePawn2;
-            board.squares[15] = whitePawn3;
+            board.squares[60] = whiteKing;  // e1
+            board.squares[6] = blackKing;   // g8
+            board.squares[61] = blackRook;  // f1
+            board.squares[52] = whitePawn1; // e2
+            board.squares[53] = whitePawn2; // f2
+            board.squares[54] = whitePawn3; // g2
 
+            gameState.setCurrentPlayer('black');
+            moveValidator = new MoveValidator(board, gameState);
+            board.movePiece(61, 60); // Black moves rook to capture, but we just set it up
+
+            gameState.setCurrentPlayer('white');
+            moveValidator = new MoveValidator(board, gameState);
+            
             const isCheckmate = moveValidator.isCheckmate('white');
             expect(isCheckmate).toBe(true);
         });
@@ -228,13 +238,14 @@ describe('MoveValidator', () => {
 
     describe('Stalemate Detection', () => {
         test('should detect stalemate when no legal moves but not in check', () => {
+            // Classic stalemate setup
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
             const blackQueen = new Piece('queen', 'black', 9, '♛');
 
-            board.squares[0] = whiteKing;
-            board.squares[18] = blackKing;
-            board.squares[9] = blackQueen;
+            board.squares[0] = whiteKing;   // a8
+            board.squares[26] = blackKing;  // c6
+            board.squares[18] = blackQueen; // c7
 
             const isStalemate = moveValidator.isStalemate('white');
             expect(isStalemate).toBe(true);
@@ -341,12 +352,12 @@ describe('MoveValidator', () => {
         test('should handle complex position with multiple pieces', () => {
             board.setupInitialBoard();
 
-            board.movePiece(12, 28);
             board.movePiece(52, 36);
+            board.movePiece(12, 28);
 
             gameState.switchPlayer();
 
-            const isValid = moveValidator.isValidMove(57, 42);
+            const isValid = moveValidator.isValidMove(62, 45);
             expect(isValid).toBe(true);
         });
 
@@ -357,13 +368,13 @@ describe('MoveValidator', () => {
 
             board.squares[4] = whiteKing;
             board.squares[60] = blackKing;
-            board.squares[12] = whitePawn;
+            board.squares[52] = whitePawn;
 
-            expect(moveValidator.isValidMove(12, 20)).toBe(true);
+            expect(moveValidator.isValidMove(52, 44)).toBe(true);
 
             gameState.switchPlayer();
 
-            expect(moveValidator.isValidMove(12, 20)).toBe(false);
+            expect(moveValidator.isValidMove(52, 44)).toBe(false);
         });
     });
 
