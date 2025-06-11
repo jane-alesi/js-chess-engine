@@ -104,38 +104,6 @@ jobs:
           # Verify we have the latest code
           echo "Final commit: $(git log -1 --oneline)"
 
-      - name: Verify code quality synchronization
-        if: github.event_name == 'workflow_run'
-        run: |
-          echo "🔍 Verifying auto-fix synchronization..."
-          
-          # Quick lint check to verify fixes are present
-          if npm run lint --silent; then
-            echo "✅ Code quality verified - auto-fixes are present"
-          else
-            echo "⚠️ Lint issues still present - checking for propagation delay..."
-            
-            # Wait up to 30 seconds for commit propagation
-            for i in {1..6}; do
-              echo "Attempt $i/6: Fetching latest changes..."
-              git fetch origin ${{ github.event.workflow_run.head_branch }}
-              git reset --hard origin/${{ github.event.workflow_run.head_branch }}
-              
-              if npm run lint --silent; then
-                echo "✅ Auto-fixes synchronized successfully"
-                break
-              fi
-              
-              if [ $i -eq 6 ]; then
-                echo "❌ Auto-fix synchronization failed after 30 seconds"
-                echo "This may indicate an auto-fix workflow failure"
-                exit 1
-              fi
-              
-              sleep 5
-            done
-          fi
-          
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -146,6 +114,44 @@ jobs:
           echo "📦 Installing npm dependencies..."
           npm install --verbose
           echo "✅ Dependencies installed successfully"
+
+      - name: Verify auto-fix synchronization (post-install)
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "🔍 Verifying auto-fix synchronization after dependency installation..."
+          
+          # Now that dependencies are installed, we can run lint to verify fixes
+          if npm run lint --silent; then
+            echo "✅ Code quality verified - auto-fixes are properly synchronized"
+          else
+            echo "⚠️ Lint issues detected - checking for delayed propagation..."
+            
+            # Wait up to 30 seconds for any remaining commit propagation
+            for i in {1..6}; do
+              echo "Attempt $i/6: Re-fetching latest changes..."
+              git fetch origin ${{ github.event.workflow_run.head_branch }}
+              git reset --hard origin/${{ github.event.workflow_run.head_branch }}
+              
+              if npm run lint --silent; then
+                echo "✅ Auto-fixes synchronized successfully after retry"
+                break
+              fi
+              
+              if [ $i -eq 6 ]; then
+                echo "❌ Auto-fix synchronization verification failed after 30 seconds"
+                echo "This indicates either:"
+                echo "  1. Auto-fix workflow didn't actually fix the issues"
+                echo "  2. There are new lint issues not covered by auto-fix"
+                echo "  3. Synchronization is still incomplete"
+                echo ""
+                echo "Running lint with full output for debugging:"
+                npm run lint || true
+                exit 1
+              fi
+              
+              sleep 5
+            done
+          fi
     
       - name: Display dependency tree
         run: |
