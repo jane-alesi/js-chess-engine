@@ -274,7 +274,7 @@ describe('Game Class - Issue #14 Validation', () => {
         test('should generate move notation', () => {
             const notation = game.generateMoveNotation(8, 24, 'pawn', null);
 
-            expect(notation).toBe('pawna2a3');
+            expect(notation).toBe('pawna2a4');
         });
 
         test('should convert index to square notation', () => {
