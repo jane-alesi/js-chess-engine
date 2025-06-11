@@ -100,7 +100,7 @@ export class MoveValidator {
     isStalemate(color) {
         try {
             const kingPosition = this.findKing(color);
-            
+
             if (kingPosition === -1) {
                 const pieces = this.getAllPiecesOfColor(color);
                 return pieces.length === 0;
