@@ -181,17 +181,66 @@ This project is actively under development with a focus on:
 
 ## 🏗️ Architecture
 
-The engine follows a modular design inspired by classic chess programming principles:
+The engine follows a modular design inspired by classic chess programming principles, with clear separation of concerns and unidirectional data flow:
 
-```
-src/
-├── core/          # Chess logic foundation
-├── ui/            # User interface components
-├── ai/            # Artificial intelligence engine
-└── utils/         # Shared utilities and constants
+```mermaid
+flowchart TB
+    subgraph "🎮 User Interface Layer"
+        UI[UI Module]
+        BR[BoardRenderer]
+        IH[InputHandler]
+        CSS[Styles & Themes]
+    end
+    
+    subgraph "🧠 AI Engine Layer"
+        AI[AI Module]
+        EVAL[Evaluation]
+        SEARCH[Search Algorithms]
+        BOOK[Opening Book]
+    end
+    
+    subgraph "♛ Core Chess Logic"
+        CORE[Core Module]
+        BOARD[Board]
+        PIECE[Piece]
+        GAME[GameState]
+        MOVE[MoveGenerator]
+        VALID[MoveValidator]
+        RULES[Rules]
+    end
+    
+    subgraph "🔧 Utilities"
+        UTILS[Utils Module]
+        CONST[Constants]
+        FEN[FEN Parser]
+        PGN[PGN Support]
+        NOTATION[Notation]
+    end
+    
+    UI --> CORE
+    AI --> CORE
+    CORE --> UTILS
+    AI --> UTILS
+    
+    style CORE fill:#e1f5fe
+    style AI fill:#f3e5f5
+    style UI fill:#e8f5e8
+    style UTILS fill:#fff3e0
 ```
 
-Each module is designed for independence, testability, and future enhancement.
+### Architecture Principles
+
+- **Layered Design** - Clear separation between UI, AI, Core Logic, and Utilities
+- **Unidirectional Data Flow** - Data flows from UI/AI → Core → Utils
+- **Modular Independence** - Each module can be developed and tested independently
+- **Future Extensibility** - Architecture supports advanced AI features and UI enhancements
+
+### Module Responsibilities
+
+- **Core Module** - Pure chess logic, rules, and game state management
+- **UI Module** - Visual representation and user interaction handling
+- **AI Module** - Artificial intelligence, search algorithms, and position evaluation
+- **Utils Module** - Shared utilities, constants, and helper functions
 
 ---
 
@@ -202,7 +251,7 @@ This project draws inspiration from one of the most impressive programming achie
 Our JavaScript implementation honors this legacy while embracing modern capabilities:
 
 - **Then**: 4KB ROM, 128 bytes RAM → **Now**: Unlimited memory and processing power
-- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features
+- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features  
 - **Then**: Simple evaluation function → **Now**: Sophisticated AI with deep search algorithms
 - **Then**: Fixed difficulty → **Now**: Adaptive AI with multiple skill levels
 
@@ -210,22 +259,43 @@ Our JavaScript implementation honors this legacy while embracing modern capabili
 
 ## 🤝 Contributing
 
-This project uses an **Issue-Driven Development** approach where all work is tracked through GitHub Issues. Whether you're an AI agent or human developer, contributions are welcome!
-
-For detailed development guidelines, see [`llms.txt`](llms.txt) in the repository root.
+We welcome contributions from both human developers and AI agents! This project uses an **Issue-Driven Development** approach where all work is tracked through GitHub Issues.
 
 ### Quick Start for Contributors
 
-1. Browse [open issues](https://github.com/jane-alesi/js-chess-engine/issues) to find tasks
-2. Fork the repository and create a feature branch
-3. Follow the coding standards outlined in the project documentation
-4. Submit a pull request with clear description and issue reference
+1. **Browse [open issues](https://github.com/jane-alesi/js-chess-engine/issues)** to find tasks
+2. **Fork the repository** and create a feature branch
+3. **Follow our development standards** outlined in the contribution guidelines
+4. **Submit a pull request** with clear description and issue reference
+
+### Comprehensive Guidelines
+
+For detailed development workflows, coding standards, testing requirements, and contribution processes, see our comprehensive **[Contributing Guide](CONTRIBUTING.md)**.
+
+### For AI Agents
+
+This project is designed for AI collaboration. See [`llms.txt`](llms.txt) for specific guidelines on AI agent development workflows and best practices.
+
+### Development Resources
+
+- **[Issue Templates](https://github.com/jane-alesi/js-chess-engine/issues/new/choose)** - Structured issue creation
+- **[Development Guide](llms.txt)** - Comprehensive technical guidelines
+- **[Chess Programming Wiki](https://www.chessprogramming.org/)** - Chess algorithm reference
 
 ---
 
 ## 📜 License
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### License Summary
+
+- ✅ **Commercial use** - Use in commercial projects
+- ✅ **Modification** - Modify and adapt the code
+- ✅ **Distribution** - Share and distribute freely
+- ✅ **Private use** - Use for personal projects
+- ❗ **License and copyright notice** - Include original license
+- ❗ **No warranty** - Software provided "as is"
 
 ---
 
@@ -239,4 +309,4 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-_Built with ♛ by the chess programming community_
+*Built with ♛ by the chess programming community*
