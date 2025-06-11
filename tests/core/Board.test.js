@@ -11,7 +11,7 @@ describe('Board', () => {
 
     test('should initialize with 64 null squares', () => {
         expect(board.squares.length).toBe(64);
-        expect(board.squares.every(square => square === null)).toBe(true);
+        expect(board.squares.every((square) => square === null)).toBe(true);
     });
 
     test('should correctly set up initial board with pieces', () => {
@@ -45,7 +45,7 @@ describe('Board', () => {
         expect(() => {
             board.movePiece(20, 21); // Try to move from an empty square
         }).toThrow('Invalid move: no piece found at square 20');
-        
+
         // Board state should remain unchanged
         expect(board.squares[20]).toBeNull(); // Should remain null
         expect(board.squares[21]).toBeNull(); // Should remain null
@@ -56,7 +56,7 @@ describe('Board', () => {
         expect(() => {
             board.movePiece(-1, 20);
         }).toThrow('Invalid move: square indices out of bounds (from: -1, to: 20)');
-        
+
         expect(() => {
             board.movePiece(64, 20);
         }).toThrow('Invalid move: square indices out of bounds (from: 64, to: 20)');
@@ -67,7 +67,7 @@ describe('Board', () => {
         expect(() => {
             board.movePiece(0, -1);
         }).toThrow('Invalid move: square indices out of bounds (from: 0, to: -1)');
-        
+
         expect(() => {
             board.movePiece(0, 64);
         }).toThrow('Invalid move: square indices out of bounds (from: 0, to: 64)');

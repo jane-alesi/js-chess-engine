@@ -10,7 +10,7 @@ export class InputHandler {
         this.onSquareClick = onSquareClick; // Callback function for square clicks
         this.selectedSquare = null; // Currently selected square index
         this.isFirstClick = true; // Track if this is the first or second click
-        
+
         this.attachEventListeners();
     }
 
@@ -80,7 +80,7 @@ export class InputHandler {
             this.onSquareClick({
                 type: 'select',
                 squareIndex: squareIndex,
-                selectedSquare: this.selectedSquare
+                selectedSquare: this.selectedSquare,
             });
         }
     }
@@ -113,7 +113,7 @@ export class InputHandler {
                 type: 'move',
                 from: fromIndex,
                 to: toIndex,
-                selectedSquare: this.selectedSquare
+                selectedSquare: this.selectedSquare,
             });
         }
 
@@ -140,9 +140,9 @@ export class InputHandler {
         if (!this.boardElement) {
             return; // Gracefully handle null board element
         }
-        
+
         const squares = this.boardElement.querySelectorAll('.square');
-        squares.forEach(square => {
+        squares.forEach((square) => {
             square.classList.remove('selected', 'valid-move', 'last-move');
         });
     }
@@ -153,7 +153,7 @@ export class InputHandler {
      */
     highlightValidMoves(validMoves) {
         this.clearHighlights();
-        
+
         // Re-highlight selected square
         if (this.selectedSquare !== null) {
             const selectedElement = this.getSquareElement(this.selectedSquare);
@@ -163,7 +163,7 @@ export class InputHandler {
         }
 
         // Highlight valid moves
-        validMoves.forEach(moveIndex => {
+        validMoves.forEach((moveIndex) => {
             const squareElement = this.getSquareElement(moveIndex);
             if (squareElement) {
                 squareElement.classList.add('valid-move');
@@ -180,17 +180,17 @@ export class InputHandler {
         if (!this.boardElement) {
             return; // Gracefully handle null board element
         }
-        
+
         // Clear previous last-move highlights
         const lastMoveSquares = this.boardElement.querySelectorAll('.last-move');
-        lastMoveSquares.forEach(square => {
+        lastMoveSquares.forEach((square) => {
             square.classList.remove('last-move');
         });
 
         // Highlight the new last move
         const fromElement = this.getSquareElement(fromIndex);
         const toElement = this.getSquareElement(toIndex);
-        
+
         if (fromElement) fromElement.classList.add('last-move');
         if (toElement) toElement.classList.add('last-move');
     }

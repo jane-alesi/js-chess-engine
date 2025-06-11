@@ -1,20 +1,20 @@
 // tests/core/Piece.test.js
 
 import { Piece } from '../../src/core/Piece.js';
-import { 
-    PIECE_VALUES, 
-    PIECE_SYMBOLS, 
-    PIECE_TYPES, 
+import {
+    PIECE_VALUES,
+    PIECE_SYMBOLS,
+    PIECE_TYPES,
     PIECE_COLORS,
     getPieceSymbol,
-    getPieceValue
+    getPieceValue,
 } from '../../src/utils/Constants.js';
 
 describe('Piece Class', () => {
     describe('Constructor', () => {
         test('should create a valid piece with correct properties', () => {
             const piece = new Piece('pawn', 'white', 1, '♙');
-            
+
             expect(piece.getType()).toBe('pawn');
             expect(piece.getColor()).toBe('white');
             expect(piece.getPoints()).toBe(1);
@@ -24,20 +24,25 @@ describe('Piece Class', () => {
 
         test('should normalize type and color to lowercase', () => {
             const piece = new Piece('PAWN', 'WHITE', 1, '♙');
-            
+
             expect(piece.getType()).toBe('pawn');
             expect(piece.getColor()).toBe('white');
         });
 
         test('should create pieces for all valid types', () => {
-            Object.values(PIECE_TYPES).forEach(type => {
-                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS[type]['white']);
+            Object.values(PIECE_TYPES).forEach((type) => {
+                const piece = new Piece(
+                    type,
+                    'white',
+                    PIECE_VALUES[type],
+                    PIECE_SYMBOLS[type]['white']
+                );
                 expect(piece.getType()).toBe(type);
             });
         });
 
         test('should create pieces for all valid colors', () => {
-            Object.values(PIECE_COLORS).forEach(color => {
+            Object.values(PIECE_COLORS).forEach((color) => {
                 const piece = new Piece('pawn', color, 1, PIECE_SYMBOLS.pawn[color]);
                 expect(piece.getColor()).toBe(color);
             });
@@ -46,53 +51,61 @@ describe('Piece Class', () => {
 
     describe('Constructor Validation', () => {
         test('should throw error for invalid piece type', () => {
-            expect(() => new Piece('invalid', 'white', 1, '♙'))
-                .toThrow('Invalid piece type: invalid');
+            expect(() => new Piece('invalid', 'white', 1, '♙')).toThrow(
+                'Invalid piece type: invalid'
+            );
         });
 
         test('should throw error for empty piece type', () => {
-            expect(() => new Piece('', 'white', 1, '♙'))
-                .toThrow('Piece type must be a non-empty string');
+            expect(() => new Piece('', 'white', 1, '♙')).toThrow(
+                'Piece type must be a non-empty string'
+            );
         });
 
         test('should throw error for null piece type', () => {
-            expect(() => new Piece(null, 'white', 1, '♙'))
-                .toThrow('Piece type must be a non-empty string');
+            expect(() => new Piece(null, 'white', 1, '♙')).toThrow(
+                'Piece type must be a non-empty string'
+            );
         });
 
         test('should throw error for invalid piece color', () => {
-            expect(() => new Piece('pawn', 'red', 1, '♙'))
-                .toThrow('Invalid piece color: red');
+            expect(() => new Piece('pawn', 'red', 1, '♙')).toThrow('Invalid piece color: red');
         });
 
         test('should throw error for empty piece color', () => {
-            expect(() => new Piece('pawn', '', 1, '♙'))
-                .toThrow('Piece color must be a non-empty string');
+            expect(() => new Piece('pawn', '', 1, '♙')).toThrow(
+                'Piece color must be a non-empty string'
+            );
         });
 
         test('should throw error for null piece color', () => {
-            expect(() => new Piece('pawn', null, 1, '♙'))
-                .toThrow('Piece color must be a non-empty string');
+            expect(() => new Piece('pawn', null, 1, '♙')).toThrow(
+                'Piece color must be a non-empty string'
+            );
         });
 
         test('should throw error for negative points', () => {
-            expect(() => new Piece('pawn', 'white', -1, '♙'))
-                .toThrow('Piece points must be a non-negative number');
+            expect(() => new Piece('pawn', 'white', -1, '♙')).toThrow(
+                'Piece points must be a non-negative number'
+            );
         });
 
         test('should throw error for non-numeric points', () => {
-            expect(() => new Piece('pawn', 'white', 'invalid', '♙'))
-                .toThrow('Piece points must be a non-negative number');
+            expect(() => new Piece('pawn', 'white', 'invalid', '♙')).toThrow(
+                'Piece points must be a non-negative number'
+            );
         });
 
         test('should throw error for empty symbol', () => {
-            expect(() => new Piece('pawn', 'white', 1, ''))
-                .toThrow('Piece symbol must be a non-empty string');
+            expect(() => new Piece('pawn', 'white', 1, '')).toThrow(
+                'Piece symbol must be a non-empty string'
+            );
         });
 
         test('should throw error for null symbol', () => {
-            expect(() => new Piece('pawn', 'white', 1, null))
-                .toThrow('Piece symbol must be a non-empty string');
+            expect(() => new Piece('pawn', 'white', 1, null)).toThrow(
+                'Piece symbol must be a non-empty string'
+            );
         });
     });
 
@@ -138,8 +151,9 @@ describe('Piece Class', () => {
 
         test('should throw error when marking already moved piece', () => {
             piece.markAsMoved();
-            expect(() => piece.markAsMoved())
-                .toThrow('white pawn has already been marked as moved');
+            expect(() => piece.markAsMoved()).toThrow(
+                'white pawn has already been marked as moved'
+            );
         });
 
         test('should reset moved status', () => {
@@ -149,8 +163,7 @@ describe('Piece Class', () => {
         });
 
         test('should throw error when resetting unmoved piece', () => {
-            expect(() => piece.resetMovedStatus())
-                .toThrow("white pawn hasn't moved yet");
+            expect(() => piece.resetMovedStatus()).toThrow("white pawn hasn't moved yet");
         });
     });
 
@@ -184,11 +197,11 @@ describe('Piece Class', () => {
         });
 
         test('should throw error for invalid piece comparison', () => {
-            expect(() => whitePawn.isOpponent('not a piece'))
-                .toThrow('Parameter must be a Piece instance');
-            
-            expect(() => whitePawn.isAlly(null))
-                .toThrow('Parameter must be a Piece instance');
+            expect(() => whitePawn.isOpponent('not a piece')).toThrow(
+                'Parameter must be a Piece instance'
+            );
+
+            expect(() => whitePawn.isAlly(null)).toThrow('Parameter must be a Piece instance');
         });
     });
 
@@ -207,7 +220,7 @@ describe('Piece Class', () => {
         test('should preserve moved status in clone', () => {
             const original = new Piece('king', 'white', 1000, '♔');
             original.markAsMoved();
-            
+
             const clone = original.clone();
             expect(clone.getHasMoved()).toBe(true);
         });
@@ -234,9 +247,9 @@ describe('Piece Class', () => {
 
         test('should indicate moved status in string', () => {
             const piece = new Piece('bishop', 'white', 3, '♗');
-            
+
             expect(piece.toString()).not.toContain('[moved]');
-            
+
             piece.markAsMoved();
             expect(piece.toString()).toContain('[moved]');
         });
@@ -246,7 +259,7 @@ describe('Piece Class', () => {
         test('should serialize to JSON correctly', () => {
             const piece = new Piece('queen', 'white', 9, '♕');
             piece.markAsMoved();
-            
+
             const json = piece.toJSON();
 
             expect(json).toEqual({
@@ -254,7 +267,7 @@ describe('Piece Class', () => {
                 color: 'white',
                 points: 9,
                 symbol: '♕',
-                hasMoved: true
+                hasMoved: true,
             });
         });
 
@@ -268,16 +281,26 @@ describe('Piece Class', () => {
 
     describe('Integration with Constants', () => {
         test('should work with PIECE_VALUES constants', () => {
-            Object.keys(PIECE_VALUES).forEach(type => {
-                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS[type]['white']);
+            Object.keys(PIECE_VALUES).forEach((type) => {
+                const piece = new Piece(
+                    type,
+                    'white',
+                    PIECE_VALUES[type],
+                    PIECE_SYMBOLS[type]['white']
+                );
                 expect(piece.getPoints()).toBe(PIECE_VALUES[type]);
             });
         });
 
         test('should work with PIECE_SYMBOLS constants', () => {
-            Object.keys(PIECE_SYMBOLS).forEach(type => {
-                Object.keys(PIECE_SYMBOLS[type]).forEach(color => {
-                    const piece = new Piece(type, color, PIECE_VALUES[type], PIECE_SYMBOLS[type][color]);
+            Object.keys(PIECE_SYMBOLS).forEach((type) => {
+                Object.keys(PIECE_SYMBOLS[type]).forEach((color) => {
+                    const piece = new Piece(
+                        type,
+                        color,
+                        PIECE_VALUES[type],
+                        PIECE_SYMBOLS[type][color]
+                    );
                     expect(piece.getSymbol()).toBe(PIECE_SYMBOLS[type][color]);
                 });
             });
@@ -290,7 +313,7 @@ describe('Piece Class', () => {
             const value = getPieceValue(type);
 
             const piece = new Piece(type, color, value, symbol);
-            
+
             expect(piece.getType()).toBe(type);
             expect(piece.getColor()).toBe(color);
             expect(piece.getSymbol()).toBe(symbol);
@@ -300,7 +323,14 @@ describe('Piece Class', () => {
 
     describe('Static Properties', () => {
         test('should have correct valid types', () => {
-            expect(Piece.VALID_TYPES).toEqual(['pawn', 'rook', 'knight', 'bishop', 'queen', 'king']);
+            expect(Piece.VALID_TYPES).toEqual([
+                'pawn',
+                'rook',
+                'knight',
+                'bishop',
+                'queen',
+                'king',
+            ]);
         });
 
         test('should have correct valid colors', () => {
@@ -321,8 +351,8 @@ describe('Piece Class', () => {
 
         test('should handle Unicode symbols correctly', () => {
             const symbols = ['♔', '♕', '♖', '♗', '♘', '♙', '♚', '♛', '♜', '♝', '♞', '♟'];
-            
-            symbols.forEach(symbol => {
+
+            symbols.forEach((symbol) => {
                 const piece = new Piece('pawn', 'white', 1, symbol);
                 expect(piece.getSymbol()).toBe(symbol);
             });

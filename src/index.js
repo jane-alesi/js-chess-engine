@@ -1,9 +1,9 @@
 /**
  * JS Chess Engine - Main Entry Point
- * 
+ *
  * This is the main entry point for the chess game application.
  * It initializes the game components and starts the chess engine.
- * 
+ *
  * @author Jane Alesi <ja@satware.ai>
  * @version 0.1.0
  */
@@ -21,16 +21,15 @@ function initializeGame() {
         const game = new ChessGame();
         const ui = new UIController(game);
         const ai = new AIPlayer(game);
-        
+
         // Set up event listeners
         setupEventListeners(game, ui, ai);
-        
+
         // Initialize the UI
         ui.initialize();
-        
+
         console.log('🏁♟️ JS Chess Engine initialized successfully!');
         console.log('Inspired by Atari Video Chess (1979)');
-        
     } catch (error) {
         console.error('Failed to initialize chess game:', error);
         showError('Failed to load the chess game. Please refresh the page.');
@@ -49,7 +48,7 @@ function setupEventListeners(game, ui, ai) {
         game.reset();
         ui.render();
     });
-    
+
     // Undo move button
     document.getElementById('undo-move')?.addEventListener('click', () => {
         if (game.canUndo()) {
@@ -57,17 +56,17 @@ function setupEventListeners(game, ui, ai) {
             ui.render();
         }
     });
-    
+
     // Difficulty selector
     document.getElementById('difficulty')?.addEventListener('change', (event) => {
         ai.setDifficulty(event.target.value);
     });
-    
+
     // Listen for game events
     game.on('move', (move) => {
         ui.updateMoveHistory(move);
         ui.updateGameStatus();
-        
+
         // Trigger AI move if it's the AI's turn
         if (game.getCurrentPlayer() === 'black' && !game.isGameOver()) {
             setTimeout(() => {
@@ -75,7 +74,7 @@ function setupEventListeners(game, ui, ai) {
             }, 500); // Small delay for better UX
         }
     });
-    
+
     game.on('gameOver', (result) => {
         ui.showGameOverDialog(result);
     });
@@ -90,7 +89,7 @@ function showError(message) {
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
     document.body.appendChild(errorDiv);
-    
+
     // Remove error after 5 seconds
     setTimeout(() => {
         errorDiv.remove();

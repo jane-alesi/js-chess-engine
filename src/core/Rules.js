@@ -7,7 +7,7 @@
 export class Rules {
     static PIECE_TYPES = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
     static COLORS = ['white', 'black'];
-    
+
     static INITIAL_POSITIONS = {
         white: {
             rook: [0, 7],
@@ -15,7 +15,7 @@ export class Rules {
             bishop: [2, 5],
             queen: [3],
             king: [4],
-            pawn: [8, 9, 10, 11, 12, 13, 14, 15]
+            pawn: [8, 9, 10, 11, 12, 13, 14, 15],
         },
         black: {
             rook: [56, 63],
@@ -23,8 +23,8 @@ export class Rules {
             bishop: [58, 61],
             queen: [59],
             king: [60],
-            pawn: [48, 49, 50, 51, 52, 53, 54, 55]
-        }
+            pawn: [48, 49, 50, 51, 52, 53, 54, 55],
+        },
     };
 
     // TODO: Implement rule checking methods

@@ -3,7 +3,7 @@
 /**
  * Represents a chess piece with type, color, value, and movement tracking.
  * Implements ES2022 class fields syntax for modern JavaScript standards.
- * 
+ *
  * @class Piece
  * @author Jane Alesi Chess Engine
  * @version 1.0.0
@@ -22,7 +22,7 @@ export class Piece {
 
     /**
      * Creates a new chess piece instance.
-     * 
+     *
      * @param {string} type - The piece type ('pawn', 'rook', 'knight', 'bishop', 'queen', 'king')
      * @param {string} color - The piece color ('white', 'black')
      * @param {number} points - The piece value for AI evaluation
@@ -35,13 +35,17 @@ export class Piece {
             throw new Error('Piece type must be a non-empty string');
         }
         if (!Piece.VALID_TYPES.includes(type.toLowerCase())) {
-            throw new Error(`Invalid piece type: ${type}. Must be one of: ${Piece.VALID_TYPES.join(', ')}`);
+            throw new Error(
+                `Invalid piece type: ${type}. Must be one of: ${Piece.VALID_TYPES.join(', ')}`
+            );
         }
         if (!color || typeof color !== 'string') {
             throw new Error('Piece color must be a non-empty string');
         }
         if (!Piece.VALID_COLORS.includes(color.toLowerCase())) {
-            throw new Error(`Invalid piece color: ${color}. Must be one of: ${Piece.VALID_COLORS.join(', ')}`);
+            throw new Error(
+                `Invalid piece color: ${color}. Must be one of: ${Piece.VALID_COLORS.join(', ')}`
+            );
         }
         if (typeof points !== 'number' || points < 0) {
             throw new Error('Piece points must be a non-negative number');
@@ -59,7 +63,7 @@ export class Piece {
 
     /**
      * Gets the piece type.
-     * 
+     *
      * @returns {string} The piece type
      */
     getType() {
@@ -68,7 +72,7 @@ export class Piece {
 
     /**
      * Gets the piece color.
-     * 
+     *
      * @returns {string} The piece color
      */
     getColor() {
@@ -77,7 +81,7 @@ export class Piece {
 
     /**
      * Gets the piece point value for AI evaluation.
-     * 
+     *
      * @returns {number} The piece point value
      */
     getPoints() {
@@ -86,7 +90,7 @@ export class Piece {
 
     /**
      * Gets the piece Unicode symbol for display.
-     * 
+     *
      * @returns {string} The piece symbol
      */
     getSymbol() {
@@ -95,7 +99,7 @@ export class Piece {
 
     /**
      * Checks if the piece has moved (important for castling and pawn initial moves).
-     * 
+     *
      * @returns {boolean} True if the piece has moved, false otherwise
      */
     getHasMoved() {
@@ -105,7 +109,7 @@ export class Piece {
     /**
      * Marks the piece as having moved.
      * This is crucial for chess rules like castling and pawn double moves.
-     * 
+     *
      * @throws {Error} If piece has already moved
      */
     markAsMoved() {
@@ -117,7 +121,7 @@ export class Piece {
 
     /**
      * Resets the piece's moved status (useful for undo operations).
-     * 
+     *
      * @throws {Error} If piece hasn't moved yet
      */
     resetMovedStatus() {
@@ -129,7 +133,7 @@ export class Piece {
 
     /**
      * Checks if this piece is an opponent of another piece.
-     * 
+     *
      * @param {Piece} otherPiece - The piece to compare against
      * @returns {boolean} True if pieces are opponents, false otherwise
      * @throws {Error} If otherPiece is not a valid Piece instance
@@ -143,7 +147,7 @@ export class Piece {
 
     /**
      * Checks if this piece is an ally of another piece.
-     * 
+     *
      * @param {Piece} otherPiece - The piece to compare against
      * @returns {boolean} True if pieces are allies, false otherwise
      * @throws {Error} If otherPiece is not a valid Piece instance
@@ -157,7 +161,7 @@ export class Piece {
 
     /**
      * Creates a deep copy of the piece.
-     * 
+     *
      * @returns {Piece} A new Piece instance with the same properties
      */
     clone() {
@@ -170,7 +174,7 @@ export class Piece {
 
     /**
      * Returns a string representation of the piece.
-     * 
+     *
      * @returns {string} String representation for debugging
      */
     toString() {
@@ -179,7 +183,7 @@ export class Piece {
 
     /**
      * Returns a JSON representation of the piece.
-     * 
+     *
      * @returns {Object} JSON object with piece properties
      */
     toJSON() {
@@ -188,7 +192,7 @@ export class Piece {
             color: this.#color,
             points: this.#points,
             symbol: this.#symbol,
-            hasMoved: this.#hasMoved
+            hasMoved: this.#hasMoved,
         };
     }
 }

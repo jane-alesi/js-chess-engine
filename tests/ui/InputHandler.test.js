@@ -15,17 +15,17 @@ describe('InputHandler', () => {
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
             querySelector: jest.fn(),
-            querySelectorAll: jest.fn(() => [])
+            querySelectorAll: jest.fn(() => []),
         };
 
         mockSquareElement = {
             dataset: { index: '0' },
             classList: { add: jest.fn(), remove: jest.fn() },
-            closest: jest.fn()
+            closest: jest.fn(),
         };
 
         mockCallback = jest.fn();
-        
+
         // Setup default mock returns
         mockBoardElement.querySelector.mockReturnValue(mockSquareElement);
         mockSquareElement.closest.mockReturnValue(mockSquareElement);
@@ -41,7 +41,7 @@ describe('InputHandler', () => {
     describe('Constructor', () => {
         test('should initialize with correct properties', () => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            
+
             expect(inputHandler.boardElement).toBe(mockBoardElement);
             expect(inputHandler.onSquareClick).toBe(mockCallback);
             expect(inputHandler.selectedSquare).toBeNull();
@@ -50,8 +50,11 @@ describe('InputHandler', () => {
 
         test('should attach event listeners on initialization', () => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            
-            expect(mockBoardElement.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+
+            expect(mockBoardElement.addEventListener).toHaveBeenCalledWith(
+                'click',
+                expect.any(Function)
+            );
         });
 
         test('should handle missing board element gracefully', () => {
@@ -69,7 +72,7 @@ describe('InputHandler', () => {
 
         test('should select a square on first click', () => {
             const mockEvent = {
-                target: mockSquareElement
+                target: mockSquareElement,
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -80,7 +83,7 @@ describe('InputHandler', () => {
             expect(mockCallback).toHaveBeenCalledWith({
                 type: 'select',
                 squareIndex: 0,
-                selectedSquare: 0
+                selectedSquare: 0,
             });
         });
 
@@ -90,7 +93,7 @@ describe('InputHandler', () => {
             inputHandler.isFirstClick = false;
 
             const mockEvent = {
-                target: mockSquareElement
+                target: mockSquareElement,
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -111,12 +114,12 @@ describe('InputHandler', () => {
                 classList: { add: jest.fn(), remove: jest.fn() },
                 closest: jest.fn().mockReturnValue({
                     dataset: { index: '8' },
-                    classList: { add: jest.fn(), remove: jest.fn() }
-                })
+                    classList: { add: jest.fn(), remove: jest.fn() },
+                }),
             };
 
             const mockEvent = {
-                target: mockSecondSquare
+                target: mockSecondSquare,
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -125,7 +128,7 @@ describe('InputHandler', () => {
                 type: 'move',
                 from: 0,
                 to: 8,
-                selectedSquare: 0
+                selectedSquare: 0,
             });
             expect(inputHandler.selectedSquare).toBeNull();
             expect(inputHandler.isFirstClick).toBe(true);
@@ -139,7 +142,7 @@ describe('InputHandler', () => {
 
         test('should ignore clicks on non-square elements', () => {
             const mockEvent = {
-                target: { closest: jest.fn().mockReturnValue(null) }
+                target: { closest: jest.fn().mockReturnValue(null) },
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -152,12 +155,12 @@ describe('InputHandler', () => {
             const mockInvalidSquare = {
                 dataset: { index: 'invalid' },
                 closest: jest.fn().mockReturnValue({
-                    dataset: { index: 'invalid' }
-                })
+                    dataset: { index: 'invalid' },
+                }),
             };
 
             const mockEvent = {
-                target: mockInvalidSquare
+                target: mockInvalidSquare,
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -172,12 +175,12 @@ describe('InputHandler', () => {
             const mockOutOfBoundsSquare = {
                 dataset: { index: '64' },
                 closest: jest.fn().mockReturnValue({
-                    dataset: { index: '64' }
-                })
+                    dataset: { index: '64' },
+                }),
             };
 
             const mockEvent = {
-                target: mockOutOfBoundsSquare
+                target: mockOutOfBoundsSquare,
             };
 
             inputHandler.handleSquareClick(mockEvent);
@@ -195,8 +198,8 @@ describe('InputHandler', () => {
 
         test('should highlight valid moves', () => {
             const validMoves = [8, 16, 24];
-            const mockSquares = validMoves.map(_index => ({
-                classList: { add: jest.fn(), remove: jest.fn() }
+            const mockSquares = validMoves.map((_index) => ({
+                classList: { add: jest.fn(), remove: jest.fn() },
             }));
 
             mockBoardElement.querySelector
@@ -208,7 +211,7 @@ describe('InputHandler', () => {
             inputHandler.selectedSquare = 0;
             inputHandler.highlightValidMoves(validMoves);
 
-            mockSquares.forEach(square => {
+            mockSquares.forEach((square) => {
                 expect(square.classList.add).toHaveBeenCalledWith('valid-move');
             });
         });
@@ -230,14 +233,18 @@ describe('InputHandler', () => {
         test('should clear all highlights', () => {
             const mockSquares = [
                 { classList: { remove: jest.fn() } },
-                { classList: { remove: jest.fn() } }
+                { classList: { remove: jest.fn() } },
             ];
 
             mockBoardElement.querySelectorAll.mockReturnValue(mockSquares);
 
             inputHandler.clearHighlights();
-            mockSquares.forEach(square => {
-                expect(square.classList.remove).toHaveBeenCalledWith('selected', 'valid-move', 'last-move');
+            mockSquares.forEach((square) => {
+                expect(square.classList.remove).toHaveBeenCalledWith(
+                    'selected',
+                    'valid-move',
+                    'last-move'
+                );
             });
         });
     });
@@ -261,22 +268,27 @@ describe('InputHandler', () => {
             const squareIndex = 15;
             inputHandler.getSquareElement(squareIndex);
 
-            expect(mockBoardElement.querySelector).toHaveBeenCalledWith(`[data-index="${squareIndex}"]`);
+            expect(mockBoardElement.querySelector).toHaveBeenCalledWith(
+                `[data-index="${squareIndex}"]`
+            );
         });
     });
 
     describe('Cleanup', () => {
         test('should remove event listeners on destroy', () => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            
+
             inputHandler.destroy();
 
-            expect(mockBoardElement.removeEventListener).toHaveBeenCalledWith('click', inputHandler.handleSquareClick);
+            expect(mockBoardElement.removeEventListener).toHaveBeenCalledWith(
+                'click',
+                inputHandler.handleSquareClick
+            );
         });
 
         test('should reset state on destroy', () => {
             inputHandler = new InputHandler(mockBoardElement, mockCallback);
-            
+
             inputHandler.selectedSquare = 10;
             inputHandler.isFirstClick = false;
 
@@ -290,7 +302,7 @@ describe('InputHandler', () => {
             const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
             inputHandler = new InputHandler(null, mockCallback);
             consoleSpy.mockRestore();
-            
+
             // This should not throw an error
             expect(() => inputHandler.destroy()).not.toThrow();
         });
@@ -300,7 +312,7 @@ describe('InputHandler', () => {
         test('should handle missing callback function', () => {
             inputHandler = new InputHandler(mockBoardElement, null);
             const mockEvent = {
-                target: mockSquareElement
+                target: mockSquareElement,
             };
 
             expect(() => inputHandler.handleSquareClick(mockEvent)).not.toThrow();

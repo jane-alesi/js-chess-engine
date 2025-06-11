@@ -10,7 +10,7 @@ export class GameState {
         this.moveHistory = [];
         this.castlingRights = {
             white: { kingside: true, queenside: true },
-            black: { kingside: true, queenside: true }
+            black: { kingside: true, queenside: true },
         };
         this.enPassantTarget = null;
         this.halfmoveClock = 0;

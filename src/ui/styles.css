@@ -314,8 +314,12 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .error-message {
@@ -373,12 +377,12 @@ body {
         grid-template-rows: auto auto auto;
         gap: 1.5rem;
     }
-    
+
     .chess-board {
         width: 400px;
         height: 400px;
     }
-    
+
     .square {
         font-size: 2rem;
     }
@@ -388,20 +392,20 @@ body {
     .header h1 {
         font-size: 2rem;
     }
-    
+
     .chess-board {
         width: 320px;
         height: 320px;
     }
-    
+
     .square {
         font-size: 1.5rem;
     }
-    
+
     .controls {
         justify-content: center;
     }
-    
+
     .game-sidebar {
         order: -1;
     }
@@ -411,16 +415,16 @@ body {
     .main {
         padding: 0 0.5rem;
     }
-    
+
     .chess-board {
         width: 280px;
         height: 280px;
     }
-    
+
     .square {
         font-size: 1.2rem;
     }
-    
+
     .btn {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;

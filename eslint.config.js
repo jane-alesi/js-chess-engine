@@ -11,7 +11,7 @@ export default [
                 window: 'readonly',
                 document: 'readonly',
                 console: 'readonly',
-                
+
                 // Timer functions (Browser & Node.js)
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
@@ -19,14 +19,14 @@ export default [
                 clearInterval: 'readonly',
                 setImmediate: 'readonly',
                 clearImmediate: 'readonly',
-                
+
                 // Node.js globals
                 process: 'readonly',
                 Buffer: 'readonly',
                 __dirname: 'readonly',
                 __filename: 'readonly',
                 global: 'readonly',
-                
+
                 // Jest globals
                 describe: 'readonly',
                 test: 'readonly',
@@ -35,21 +35,21 @@ export default [
                 afterEach: 'readonly',
                 beforeAll: 'readonly',
                 afterAll: 'readonly',
-                jest: 'readonly'
-            }
+                jest: 'readonly',
+            },
         },
         rules: {
-            'indent': ['error', 4],
+            indent: ['error', 4],
             'linebreak-style': ['error', 'unix'],
-            'quotes': ['error', 'single'],
-            'semi': ['error', 'always'],
+            quotes: ['error', 'single'],
+            semi: ['error', 'always'],
             'no-unused-vars': [
                 'error',
                 {
-                    'argsIgnorePattern': '^_',
-                    'varsIgnorePattern': '^_'
-                }
-            ]
-        }
-    }
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                },
+            ],
+        },
+    },
 ];

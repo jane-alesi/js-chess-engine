@@ -21,17 +21,17 @@ To get a local copy up and running, follow these simple steps.
 ### Installation
 
 1. Clone the repo
-   ```bash
-   git clone https://github.com/jane-alesi/js-chess-engine.git
-   ```
+    ```bash
+    git clone https://github.com/jane-alesi/js-chess-engine.git
+    ```
 2. Navigate to the project directory
-   ```bash
-   cd js-chess-engine
-   ```
+    ```bash
+    cd js-chess-engine
+    ```
 3. Install NPM packages
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
 ## Usage
 

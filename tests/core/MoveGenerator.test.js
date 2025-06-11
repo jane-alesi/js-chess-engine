@@ -28,7 +28,7 @@ describe('MoveGenerator', () => {
                     to: 36, // e5
                     type: 'normal',
                     piece: 'pawn',
-                    color: 'white'
+                    color: 'white',
                 });
             });
 
@@ -45,14 +45,14 @@ describe('MoveGenerator', () => {
                     to: 20, // e3
                     type: 'normal',
                     piece: 'pawn',
-                    color: 'white'
+                    color: 'white',
                 });
                 expect(moves).toContainEqual({
                     from: 12,
                     to: 28, // e4
                     type: 'double',
                     piece: 'pawn',
-                    color: 'white'
+                    color: 'white',
                 });
             });
 
@@ -60,7 +60,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on e2 (index 12)
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[12] = whitePawn;
-                
+
                 // Block e4 (index 28)
                 const blockingPiece = new Piece('pawn', 'black', 1, '♟');
                 board.squares[28] = blockingPiece;
@@ -76,7 +76,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on e4 (index 28)
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[28] = whitePawn;
-                
+
                 // Block e5 (index 36)
                 const blockingPiece = new Piece('pawn', 'black', 1, '♟');
                 board.squares[36] = blockingPiece;
@@ -90,7 +90,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on e4 (index 28)
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[28] = whitePawn;
-                
+
                 // Place black pieces on d5 (index 35) and f5 (index 37)
                 const blackPawn1 = new Piece('pawn', 'black', 1, '♟');
                 const blackPawn2 = new Piece('pawn', 'black', 1, '♟');
@@ -100,26 +100,26 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generatePawnMoves(whitePawn, 28);
 
                 expect(moves).toHaveLength(3); // 1 forward + 2 captures
-                
-                const captureMoves = moves.filter(move => move.type === 'capture');
+
+                const captureMoves = moves.filter((move) => move.type === 'capture');
                 expect(captureMoves).toHaveLength(2);
-                
+
                 expect(captureMoves).toContainEqual({
                     from: 28,
                     to: 35, // d5
                     type: 'capture',
                     piece: 'pawn',
                     color: 'white',
-                    captured: 'pawn'
+                    captured: 'pawn',
                 });
-                
+
                 expect(captureMoves).toContainEqual({
                     from: 28,
                     to: 37, // f5
                     type: 'capture',
                     piece: 'pawn',
                     color: 'white',
-                    captured: 'pawn'
+                    captured: 'pawn',
                 });
             });
 
@@ -127,7 +127,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on e4 (index 28)
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[28] = whitePawn;
-                
+
                 // Place white pieces on d5 (index 35) and f5 (index 37)
                 const whitePawn1 = new Piece('pawn', 'white', 1, '♙');
                 const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
@@ -155,7 +155,7 @@ describe('MoveGenerator', () => {
                     to: 28, // e4
                     type: 'normal',
                     piece: 'pawn',
-                    color: 'black'
+                    color: 'black',
                 });
             });
 
@@ -172,14 +172,14 @@ describe('MoveGenerator', () => {
                     to: 44, // e6
                     type: 'normal',
                     piece: 'pawn',
-                    color: 'black'
+                    color: 'black',
                 });
                 expect(moves).toContainEqual({
                     from: 52,
                     to: 36, // e5
                     type: 'double',
                     piece: 'pawn',
-                    color: 'black'
+                    color: 'black',
                 });
             });
 
@@ -187,7 +187,7 @@ describe('MoveGenerator', () => {
                 // Place black pawn on e5 (index 36)
                 const blackPawn = new Piece('pawn', 'black', 1, '♟');
                 board.squares[36] = blackPawn;
-                
+
                 // Place white pieces on d4 (index 27) and f4 (index 29)
                 const whitePawn1 = new Piece('pawn', 'white', 1, '♙');
                 const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
@@ -197,26 +197,26 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generatePawnMoves(blackPawn, 36);
 
                 expect(moves).toHaveLength(3); // 1 forward + 2 captures
-                
-                const captureMoves = moves.filter(move => move.type === 'capture');
+
+                const captureMoves = moves.filter((move) => move.type === 'capture');
                 expect(captureMoves).toHaveLength(2);
-                
+
                 expect(captureMoves).toContainEqual({
                     from: 36,
                     to: 27, // d4
                     type: 'capture',
                     piece: 'pawn',
                     color: 'black',
-                    captured: 'pawn'
+                    captured: 'pawn',
                 });
-                
+
                 expect(captureMoves).toContainEqual({
                     from: 36,
                     to: 29, // f4
                     type: 'capture',
                     piece: 'pawn',
                     color: 'black',
-                    captured: 'pawn'
+                    captured: 'pawn',
                 });
             });
         });
@@ -226,7 +226,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on a4 (index 24) - left edge
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[24] = whitePawn;
-                
+
                 // Place black piece on b5 (index 33) for capture
                 const blackPawn = new Piece('pawn', 'black', 1, '♟');
                 board.squares[33] = blackPawn;
@@ -234,8 +234,8 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generatePawnMoves(whitePawn, 24);
 
                 expect(moves).toHaveLength(2); // 1 forward + 1 capture (only to the right)
-                
-                const captureMoves = moves.filter(move => move.type === 'capture');
+
+                const captureMoves = moves.filter((move) => move.type === 'capture');
                 expect(captureMoves).toHaveLength(1);
                 expect(captureMoves[0].to).toBe(33); // b5
             });
@@ -244,7 +244,7 @@ describe('MoveGenerator', () => {
                 // Place white pawn on h4 (index 31) - right edge
                 const whitePawn = new Piece('pawn', 'white', 1, '♙');
                 board.squares[31] = whitePawn;
-                
+
                 // Place black piece on g5 (index 38) for capture
                 const blackPawn = new Piece('pawn', 'black', 1, '♟');
                 board.squares[38] = blackPawn;
@@ -252,8 +252,8 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generatePawnMoves(whitePawn, 31);
 
                 expect(moves).toHaveLength(2); // 1 forward + 1 capture (only to the left)
-                
-                const captureMoves = moves.filter(move => move.type === 'capture');
+
+                const captureMoves = moves.filter((move) => move.type === 'capture');
                 expect(captureMoves).toHaveLength(1);
                 expect(captureMoves[0].to).toBe(38); // g5
             });
@@ -279,7 +279,7 @@ describe('MoveGenerator', () => {
 
                 // Should have forward moves but no invalid captures
                 expect(moves.length).toBeGreaterThan(0);
-                moves.forEach(move => {
+                moves.forEach((move) => {
                     expect(move.to).toBeGreaterThanOrEqual(0);
                     expect(move.to).toBeLessThan(64);
                 });
@@ -300,14 +300,14 @@ describe('MoveGenerator', () => {
                 // Valid captures
                 expect(moveGenerator.isValidPawnCapture(28, 35)).toBe(true); // e4 to d5
                 expect(moveGenerator.isValidPawnCapture(28, 37)).toBe(true); // e4 to f5
-                
+
                 // Invalid captures (wrapping) - corrected examples
                 expect(moveGenerator.isValidPawnCapture(7, 8)).toBe(false); // h1 to a2 (wraps around)
                 expect(moveGenerator.isValidPawnCapture(0, 15)).toBe(false); // a1 to h2 (wraps around)
-                
+
                 // Same file (not a capture)
                 expect(moveGenerator.isValidPawnCapture(28, 36)).toBe(false); // e4 to e5
-                
+
                 // More than 1 file difference (invalid)
                 expect(moveGenerator.isValidPawnCapture(28, 34)).toBe(false); // e4 to c5 (2 files)
             });
@@ -360,7 +360,7 @@ describe('MoveGenerator', () => {
         test('should return empty array for unknown piece type', () => {
             // Create a mock piece with invalid type
             const invalidPiece = {
-                getType: () => 'invalid'
+                getType: () => 'invalid',
             };
 
             const moves = moveGenerator.generateMoves(invalidPiece, 0);

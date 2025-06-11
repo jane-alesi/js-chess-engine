@@ -1,9 +1,9 @@
 /**
  * ChessGame - Main game controller
- * 
+ *
  * This class manages the overall chess game state and coordinates
  * between different components (board, rules, UI, AI).
- * 
+ *
  * @author Jane Alesi <ja@satware.ai>
  */
 
@@ -19,10 +19,10 @@ export class ChessGame extends EventEmitter {
         this.gameState = new GameState();
         this.moveValidator = new MoveValidator(this.board, this.gameState);
         this.moveHistory = [];
-        
+
         this.initialize();
     }
-    
+
     /**
      * Initialize the game to starting position
      */
@@ -32,7 +32,7 @@ export class ChessGame extends EventEmitter {
         this.moveHistory = [];
         this.emit('initialized');
     }
-    
+
     /**
      * Reset the game to initial state
      */
@@ -40,7 +40,7 @@ export class ChessGame extends EventEmitter {
         this.initialize();
         this.emit('reset');
     }
-    
+
     /**
      * Make a move on the board
      * @param {Object} move - Move object {from, to, promotion}
@@ -50,25 +50,25 @@ export class ChessGame extends EventEmitter {
         if (!this.moveValidator.isValidMove(move)) {
             return false;
         }
-        
+
         // Store move for history
         const moveRecord = this.board.makeMove(move);
         this.moveHistory.push(moveRecord);
-        
+
         // Update game state
         this.gameState.updateAfterMove(moveRecord);
-        
+
         // Emit move event
         this.emit('move', moveRecord);
-        
+
         // Check for game over conditions
         if (this.gameState.isGameOver()) {
             this.emit('gameOver', this.gameState.getGameResult());
         }
-        
+
         return true;
     }
-    
+
     /**
      * Undo the last move
      * @returns {boolean} True if undo was successful
@@ -77,15 +77,15 @@ export class ChessGame extends EventEmitter {
         if (this.moveHistory.length === 0) {
             return false;
         }
-        
+
         const lastMove = this.moveHistory.pop();
         this.board.undoMove(lastMove);
         this.gameState.undoMove();
-        
+
         this.emit('undoMove', lastMove);
         return true;
     }
-    
+
     /**
      * Get all legal moves for the current player
      * @returns {Array} Array of legal move objects
@@ -93,7 +93,7 @@ export class ChessGame extends EventEmitter {
     getLegalMoves() {
         return this.moveValidator.getAllLegalMoves(this.gameState.currentPlayer);
     }
-    
+
     /**
      * Get legal moves for a specific square
      * @param {number} square - Square index (0-63)
@@ -102,7 +102,7 @@ export class ChessGame extends EventEmitter {
     getLegalMovesFromSquare(square) {
         return this.moveValidator.getLegalMovesFromSquare(square);
     }
-    
+
     /**
      * Get the current player
      * @returns {string} 'white' or 'black'
@@ -110,7 +110,7 @@ export class ChessGame extends EventEmitter {
     getCurrentPlayer() {
         return this.gameState.currentPlayer;
     }
-    
+
     /**
      * Check if the game is over
      * @returns {boolean} True if game is over
@@ -118,7 +118,7 @@ export class ChessGame extends EventEmitter {
     isGameOver() {
         return this.gameState.isGameOver();
     }
-    
+
     /**
      * Get the current board state
      * @returns {Array} 64-element array representing the board
@@ -126,7 +126,7 @@ export class ChessGame extends EventEmitter {
     getBoard() {
         return this.board.getBoard();
     }
-    
+
     /**
      * Get the current game state
      * @returns {Object} Game state object
@@ -134,7 +134,7 @@ export class ChessGame extends EventEmitter {
     getGameState() {
         return this.gameState.getState();
     }
-    
+
     /**
      * Check if undo is possible
      * @returns {boolean} True if there are moves to undo
@@ -142,7 +142,7 @@ export class ChessGame extends EventEmitter {
     canUndo() {
         return this.moveHistory.length > 0;
     }
-    
+
     /**
      * Get move history
      * @returns {Array} Array of move records
@@ -150,7 +150,7 @@ export class ChessGame extends EventEmitter {
     getMoveHistory() {
         return [...this.moveHistory];
     }
-    
+
     /**
      * Get the game result
      * @returns {Object|null} Game result or null if game is ongoing
@@ -158,7 +158,7 @@ export class ChessGame extends EventEmitter {
     getGameResult() {
         return this.gameState.getGameResult();
     }
-    
+
     /**
      * Export game state as FEN string
      * @returns {string} FEN notation of current position
@@ -167,7 +167,7 @@ export class ChessGame extends EventEmitter {
         // TODO: Implement FEN export
         return 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     }
-    
+
     /**
      * Load game state from FEN string
      * @param {string} _fen - FEN notation string

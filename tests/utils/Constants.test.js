@@ -14,7 +14,7 @@ import {
     isValidPieceType,
     isValidPieceColor,
     getAllPieceTypes,
-    getAllPieceColors
+    getAllPieceColors,
 } from '../../src/utils/Constants.js';
 
 describe('Constants', () => {
@@ -30,7 +30,7 @@ describe('Constants', () => {
 
         test('should have all required piece types', () => {
             const expectedTypes = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'];
-            expectedTypes.forEach(type => {
+            expectedTypes.forEach((type) => {
                 expect(PIECE_VALUES).toHaveProperty(type);
                 expect(typeof PIECE_VALUES[type]).toBe('number');
                 expect(PIECE_VALUES[type]).toBeGreaterThan(0);
@@ -43,9 +43,9 @@ describe('Constants', () => {
             const types = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'];
             const colors = ['white', 'black'];
 
-            types.forEach(type => {
+            types.forEach((type) => {
                 expect(PIECE_SYMBOLS).toHaveProperty(type);
-                colors.forEach(color => {
+                colors.forEach((color) => {
                     expect(PIECE_SYMBOLS[type]).toHaveProperty(color);
                     expect(typeof PIECE_SYMBOLS[type][color]).toBe('string');
                     expect(PIECE_SYMBOLS[type][color].length).toBeGreaterThan(0);
@@ -54,23 +54,23 @@ describe('Constants', () => {
         });
 
         test('should have different symbols for white and black pieces', () => {
-            Object.keys(PIECE_SYMBOLS).forEach(type => {
+            Object.keys(PIECE_SYMBOLS).forEach((type) => {
                 expect(PIECE_SYMBOLS[type].white).not.toBe(PIECE_SYMBOLS[type].black);
             });
         });
 
         test('should have valid Unicode chess symbols', () => {
             // Test that symbols are actual Unicode chess pieces
-            const whiteSymbols = Object.values(PIECE_SYMBOLS).map(p => p.white);
-            const blackSymbols = Object.values(PIECE_SYMBOLS).map(p => p.black);
-            
+            const whiteSymbols = Object.values(PIECE_SYMBOLS).map((p) => p.white);
+            const blackSymbols = Object.values(PIECE_SYMBOLS).map((p) => p.black);
+
             // All symbols should be single characters (Unicode chess pieces)
-            [...whiteSymbols, ...blackSymbols].forEach(symbol => {
+            [...whiteSymbols, ...blackSymbols].forEach((symbol) => {
                 expect(symbol.length).toBe(1);
                 // Unicode chess pieces are in the range U+2654 to U+265F
                 const codePoint = symbol.codePointAt(0);
                 expect(codePoint).toBeGreaterThanOrEqual(0x2654);
-                expect(codePoint).toBeLessThanOrEqual(0x265F);
+                expect(codePoint).toBeLessThanOrEqual(0x265f);
             });
         });
     });
@@ -80,9 +80,9 @@ describe('Constants', () => {
             const types = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'];
             const colors = ['white', 'black'];
 
-            types.forEach(type => {
+            types.forEach((type) => {
                 expect(PIECE_SYMBOLS_ALT).toHaveProperty(type);
-                colors.forEach(color => {
+                colors.forEach((color) => {
                     expect(PIECE_SYMBOLS_ALT[type]).toHaveProperty(color);
                     expect(typeof PIECE_SYMBOLS_ALT[type][color]).toBe('string');
                     expect(PIECE_SYMBOLS_ALT[type][color].length).toBeGreaterThan(0);
@@ -162,10 +162,10 @@ describe('Constants', () => {
                 ...STARTING_POSITIONS.black.bishops,
                 ...STARTING_POSITIONS.black.queen,
                 ...STARTING_POSITIONS.black.king,
-                ...STARTING_POSITIONS.black.pawns
+                ...STARTING_POSITIONS.black.pawns,
             ];
 
-            allPositions.forEach(position => {
+            allPositions.forEach((position) => {
                 expect(position).toBeGreaterThanOrEqual(0);
                 expect(position).toBeLessThan(64);
                 expect(Number.isInteger(position)).toBe(true);
@@ -185,7 +185,7 @@ describe('Constants', () => {
                 ...STARTING_POSITIONS.black.bishops,
                 ...STARTING_POSITIONS.black.queen,
                 ...STARTING_POSITIONS.black.king,
-                ...STARTING_POSITIONS.black.pawns
+                ...STARTING_POSITIONS.black.pawns,
             ];
 
             const uniquePositions = new Set(allPositions);
@@ -206,13 +206,11 @@ describe('Constants', () => {
         });
 
         test('should throw error for invalid piece type', () => {
-            expect(() => getPieceSymbol('invalid', 'white'))
-                .toThrow('Invalid piece type: invalid');
+            expect(() => getPieceSymbol('invalid', 'white')).toThrow('Invalid piece type: invalid');
         });
 
         test('should throw error for invalid piece color', () => {
-            expect(() => getPieceSymbol('pawn', 'red'))
-                .toThrow('Invalid piece color: red');
+            expect(() => getPieceSymbol('pawn', 'red')).toThrow('Invalid piece color: red');
         });
     });
 
@@ -227,22 +225,21 @@ describe('Constants', () => {
         });
 
         test('should throw error for invalid piece type', () => {
-            expect(() => getPieceValue('invalid'))
-                .toThrow('Invalid piece type: invalid');
+            expect(() => getPieceValue('invalid')).toThrow('Invalid piece type: invalid');
         });
     });
 
     describe('isValidPieceType', () => {
         test('should return true for valid piece types', () => {
             const validTypes = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-            validTypes.forEach(type => {
+            validTypes.forEach((type) => {
                 expect(isValidPieceType(type)).toBe(true);
             });
         });
 
         test('should return false for invalid piece types', () => {
             const invalidTypes = ['invalid', '', null, undefined, 123];
-            invalidTypes.forEach(type => {
+            invalidTypes.forEach((type) => {
                 expect(isValidPieceType(type)).toBe(false);
             });
         });
@@ -256,7 +253,7 @@ describe('Constants', () => {
 
         test('should return false for invalid piece colors', () => {
             const invalidColors = ['red', 'blue', '', null, undefined, 123];
-            invalidColors.forEach(color => {
+            invalidColors.forEach((color) => {
                 expect(isValidPieceColor(color)).toBe(false);
             });
         });
@@ -295,26 +292,26 @@ describe('Constants', () => {
     describe('Integration Tests', () => {
         test('should have consistent data across all constants', () => {
             // All piece types in PIECE_VALUES should have symbols
-            Object.keys(PIECE_VALUES).forEach(type => {
+            Object.keys(PIECE_VALUES).forEach((type) => {
                 expect(PIECE_SYMBOLS).toHaveProperty(type);
                 expect(PIECE_SYMBOLS_ALT).toHaveProperty(type);
             });
 
             // All piece types in PIECE_SYMBOLS should have values
-            Object.keys(PIECE_SYMBOLS).forEach(type => {
+            Object.keys(PIECE_SYMBOLS).forEach((type) => {
                 expect(PIECE_VALUES).toHaveProperty(type);
             });
 
             // PIECE_TYPES values should match keys in other constants
-            Object.values(PIECE_TYPES).forEach(type => {
+            Object.values(PIECE_TYPES).forEach((type) => {
                 expect(PIECE_VALUES).toHaveProperty(type);
                 expect(PIECE_SYMBOLS).toHaveProperty(type);
             });
         });
 
         test('should work together with helper functions', () => {
-            getAllPieceTypes().forEach(type => {
-                getAllPieceColors().forEach(color => {
+            getAllPieceTypes().forEach((type) => {
+                getAllPieceColors().forEach((color) => {
                     expect(() => getPieceSymbol(type, color)).not.toThrow();
                     expect(() => getPieceValue(type)).not.toThrow();
                     expect(isValidPieceType(type)).toBe(true);
