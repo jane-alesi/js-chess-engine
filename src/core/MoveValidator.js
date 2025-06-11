@@ -157,7 +157,7 @@ export class MoveValidator {
         try {
             // 🔧 FIX 4: Enhanced stalemate detection with proper edge case handling
             const kingPosition = this.findKing(color);
-            
+
             // Special case: If there's no king, consider it stalemate (empty board scenario)
             if (kingPosition === -1) {
                 const pieces = this.getAllPiecesOfColor(color);
