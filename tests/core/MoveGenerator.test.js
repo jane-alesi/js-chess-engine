@@ -348,10 +348,14 @@ describe('MoveGenerator', () => {
                 });
 
                 // Check specific directional moves
-                const upMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
-                const downMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 8 === 0);
-                const rightMoves = moves.filter(move => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
-                const leftMoves = moves.filter(move => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+                const upMoves = moves.filter((move) => move.to > 28 && (move.to - 28) % 8 === 0);
+                const downMoves = moves.filter((move) => move.to < 28 && (28 - move.to) % 8 === 0);
+                const rightMoves = moves.filter(
+                    (move) => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8)
+                );
+                const leftMoves = moves.filter(
+                    (move) => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8)
+                );
 
                 expect(upMoves).toHaveLength(3); // e5, e6, e7, e8
                 expect(downMoves).toHaveLength(4); // e3, e2, e1
@@ -411,12 +415,14 @@ describe('MoveGenerator', () => {
                 expect(moves.length).toBeLessThan(14);
 
                 // Should not include e6 or beyond in upward direction
-                const upwardMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
+                const upwardMoves = moves.filter(
+                    (move) => move.to > 28 && (move.to - 28) % 8 === 0
+                );
                 expect(upwardMoves).toHaveLength(1); // Only e5 (index 36)
                 expect(upwardMoves[0].to).toBe(36);
 
                 // Should not capture friendly piece
-                const captureAtE6 = moves.find(move => move.to === 44);
+                const captureAtE6 = moves.find((move) => move.to === 44);
                 expect(captureAtE6).toBeUndefined();
             });
 
@@ -432,7 +438,7 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generateRookMoves(whiteRook, 28);
 
                 // Should include capture move at e6
-                const captureMove = moves.find(move => move.to === 44);
+                const captureMove = moves.find((move) => move.to === 44);
                 expect(captureMove).toBeDefined();
                 expect(captureMove).toEqual({
                     from: 28,
@@ -444,7 +450,9 @@ describe('MoveGenerator', () => {
                 });
 
                 // Should not include moves beyond e6 in upward direction
-                const beyondCapture = moves.filter(move => move.to > 44 && (move.to - 28) % 8 === 0);
+                const beyondCapture = moves.filter(
+                    (move) => move.to > 44 && (move.to - 28) % 8 === 0
+                );
                 expect(beyondCapture).toHaveLength(0);
             });
 
@@ -470,17 +478,25 @@ describe('MoveGenerator', () => {
                 expect(moves.length).toBeLessThan(14);
 
                 // Check specific blocked/capture scenarios
-                const upMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 8 === 0);
+                const upMoves = moves.filter((move) => move.to > 28 && (move.to - 28) % 8 === 0);
                 expect(upMoves).toHaveLength(0); // Blocked by friendly piece
 
-                const downMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 8 === 0);
-                expect(downMoves.some(move => move.to === 20 && move.type === 'capture')).toBe(true);
+                const downMoves = moves.filter((move) => move.to < 28 && (28 - move.to) % 8 === 0);
+                expect(downMoves.some((move) => move.to === 20 && move.type === 'capture')).toBe(
+                    true
+                );
 
-                const rightMoves = moves.filter(move => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
+                const rightMoves = moves.filter(
+                    (move) => move.to > 28 && Math.floor(move.to / 8) === Math.floor(28 / 8)
+                );
                 expect(rightMoves).toHaveLength(0); // Blocked by friendly piece
 
-                const leftMoves = moves.filter(move => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8));
-                expect(leftMoves.some(move => move.to === 27 && move.type === 'capture')).toBe(true);
+                const leftMoves = moves.filter(
+                    (move) => move.to < 28 && Math.floor(move.to / 8) === Math.floor(28 / 8)
+                );
+                expect(leftMoves.some((move) => move.to === 27 && move.type === 'capture')).toBe(
+                    true
+                );
             });
         });
 
