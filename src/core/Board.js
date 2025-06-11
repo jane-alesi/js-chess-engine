@@ -107,7 +107,7 @@ export class Board {
     /**
      * Enhanced method to move a piece and track game logic details.
      * Updates piece properties and returns comprehensive move information.
-     * 
+     *
      * @param {number} fromIndex - Source square index (0-63)
      * @param {number} toIndex - Destination square index (0-63)
      * @returns {Object} Move details including from, to, pieceMoved, pieceCaptured, and success status
@@ -145,7 +145,7 @@ export class Board {
             to: toIndex,
             pieceMoved: movingPiece.getType(),
             pieceCaptured: capturedPiece ? capturedPiece.getType() : null,
-            success: true
+            success: true,
         };
     }
 }
