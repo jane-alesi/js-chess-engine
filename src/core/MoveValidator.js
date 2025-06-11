@@ -262,7 +262,7 @@ export class MoveValidator {
                 const pieceCopy = new Piece(
                     piece.getType(),
                     piece.getColor(),
-                    piece.getValue(),
+                    piece.getPoints(),
                     piece.getSymbol()
                 );
                 
