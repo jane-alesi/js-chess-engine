@@ -23,12 +23,13 @@ This guide provides step-by-step instructions to implement the documentation and
 
 1.  **Append the following sections** to your `README.md` file:
 
-    ```markdown
+    ````markdown
     ## 🚀 Getting Started
 
     ### Prerequisites
 
     Ensure you have Node.js installed on your system.
+
     - **Node.js** (v18.x or higher recommended)
 
     ### Installation
@@ -51,9 +52,14 @@ This guide provides step-by-step instructions to implement the documentation and
     To run the project and see the chess engine in action, you can open the `index.html` file in the `src/ui/` directory in your web browser.
 
     To run the automated tests:
+
     ```bash
     npm test
     ```
+    ````
+
+    ```
+
     ```
 
 ### **Issue #37: Add Architecture Diagram and Contribution Guidelines**
@@ -83,7 +89,7 @@ This guide provides step-by-step instructions to implement the documentation and
 
 2.  **Append the following sections** to your `README.md` file:
 
-    ```markdown
+    ````markdown
     ## 🏗️ Architecture
 
     The project follows a modular architecture, separating concerns into distinct components:
@@ -110,6 +116,7 @@ This guide provides step-by-step instructions to implement the documentation and
             D(Constants.js, Notation.js)
         end
     ```
+    ````
 
     ## 🤝 Contributing
 
@@ -118,6 +125,9 @@ This guide provides step-by-step instructions to implement the documentation and
     ## 📜 License
 
     This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+    ```
+
     ```
 
 ### **Issue #38: Add Status Badges and Roadmap**
@@ -134,20 +144,20 @@ This guide provides step-by-step instructions to implement the documentation and
     ```markdown
     ## 🗺️ Roadmap
 
-    -   [ ] **Phase 1: Core Move Generation**
-        -   [ ] Rook Move Generation (#2)
-        -   [ ] Bishop Move Generation (#1)
-        -   [ ] Knight Move Generation (#9)
-        -   [ ] King Move Generation (#7)
-        -   [ ] Queen Move Generation (#6)
-    -   [ ] **Phase 2: Core Game Logic**
-        -   [ ] Self-Check Prevention
-        -   [ ] Check/Checkmate Detection
-    -   [ ] **Phase 3: AI Implementation**
-        -   [ ] Minimax Algorithm with Alpha-Beta Pruning
-    -   [ ] **Phase 4: Advanced Features**
-        -   [ ] Castling, En Passant, and Promotion
-        -   [ ] UI Enhancements
+    - [ ] **Phase 1: Core Move Generation**
+        - [ ] Rook Move Generation (#2)
+        - [ ] Bishop Move Generation (#1)
+        - [ ] Knight Move Generation (#9)
+        - [ ] King Move Generation (#7)
+        - [ ] Queen Move Generation (#6)
+    - [ ] **Phase 2: Core Game Logic**
+        - [ ] Self-Check Prevention
+        - [ ] Check/Checkmate Detection
+    - [ ] **Phase 3: AI Implementation**
+        - [ ] Minimax Algorithm with Alpha-Beta Pruning
+    - [ ] **Phase 4: Advanced Features**
+        - [ ] Castling, En Passant, and Promotion
+        - [ ] UI Enhancements
 
     See the [open issues](https://github.com/jane-alesi/js-chess-engine/issues) for a full list of proposed features and known issues.
     ```
@@ -172,6 +182,7 @@ This guide provides step-by-step instructions to implement the documentation and
 
     **To Reproduce**
     Steps to reproduce the behavior:
+
     1. Go to '...'
     2. Click on '....'
     3. Scroll down to '....'
@@ -184,6 +195,7 @@ This guide provides step-by-step instructions to implement the documentation and
     If applicable, add screenshots to help explain your problem.
 
     **Environment (please complete the following information):**
+
     - OS: [e.g. iOS]
     - Browser [e.g. chrome, safari]
     - Version [e.g. 22]
@@ -209,6 +221,7 @@ This guide provides step-by-step instructions to implement the documentation and
     A clear and concise description of any alternative solutions or features you've considered.
 
     **Acceptance Criteria**
+
     - [ ] Criteria 1
     - [ ] Criteria 2
 
@@ -219,15 +232,16 @@ This guide provides step-by-step instructions to implement the documentation and
 ### **Issue #40: Implement Intelligent Issue Labeling and Automation**
 
 1.  **Create the required labels** in your repository's `Labels` settings (`https://github.com/jane-alesi/js-chess-engine/labels`):
-    *   `priority:critical` (Color: `#b60205`)
-    *   `priority:high` (Color: `#d93f0b`)
-    *   `priority:medium` (Color: `#fbca04`)
-    *   `priority:low` (Color: `#0e8a16`)
-    *   `type:bug` 🐛 (Color: `#d73a4a`)
-    *   `type:feature` ✨ (Color: `#a2eeef`)
-    *   `type:security` 🔒 (Color: `#ee0701`)
-    *   `type:docs` 📚 (Color: `#0075ca`)
-    *   `stale` 🏷️ (Color: `#ededed`)
+
+    - `priority:critical` (Color: `#b60205`)
+    - `priority:high` (Color: `#d93f0b`)
+    - `priority:medium` (Color: `#fbca04`)
+    - `priority:low` (Color: `#0e8a16`)
+    - `type:bug` 🐛 (Color: `#d73a4a`)
+    - `type:feature` ✨ (Color: `#a2eeef`)
+    - `type:security` 🔒 (Color: `#ee0701`)
+    - `type:docs` 📚 (Color: `#0075ca`)
+    - `stale` 🏷️ (Color: `#ededed`)
 
 2.  **Create the directory `.github/workflows`** if it doesn't exist.
 3.  Inside this directory, create a file named `auto-triage.yml` with the following content:
@@ -235,31 +249,31 @@ This guide provides step-by-step instructions to implement the documentation and
     ```yaml
     name: Issue Triage
     on:
-      issues:
-        types: [opened]
+        issues:
+            types: [opened]
     jobs:
-      label:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/github-script@v6
-            with:
-              script: |
-                const issueBody = context.payload.issue.body;
-                const labels = [];
-                if (issueBody.includes('crash') || issueBody.includes('error')) {
-                  labels.push('type:bug');
-                }
-                if (issueBody.includes('feature request')) {
-                  labels.push('type:feature');
-                }
-                if (labels.length > 0) {
-                  await github.rest.issues.addLabels({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    labels: labels
-                  });
-                }
+        label:
+            runs-on: ubuntu-latest
+            steps:
+                - uses: actions/github-script@v6
+                  with:
+                      script: |
+                          const issueBody = context.payload.issue.body;
+                          const labels = [];
+                          if (issueBody.includes('crash') || issueBody.includes('error')) {
+                            labels.push('type:bug');
+                          }
+                          if (issueBody.includes('feature request')) {
+                            labels.push('type:feature');
+                          }
+                          if (labels.length > 0) {
+                            await github.rest.issues.addLabels({
+                              issue_number: context.issue.number,
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              labels: labels
+                            });
+                          }
     ```
 
 4.  Create another file named `stale.yml` with the following content:
@@ -267,16 +281,16 @@ This guide provides step-by-step instructions to implement the documentation and
     ```yaml
     name: Stale Issues
     on:
-      schedule:
-        - cron: "0 0 * * *"
+        schedule:
+            - cron: '0 0 * * *'
     jobs:
-      stale:
-        uses: actions/stale@v8
-        with:
-          days-before-stale: 60
-          days-before-close: 14
-          stale-issue-label: 'stale'
-          stale-issue-message: 'This issue is stale because it has been open for 60 days with no activity. Remove stale label or comment or this will be closed in 14 days.'
+        stale:
+            uses: actions/stale@v8
+            with:
+                days-before-stale: 60
+                days-before-close: 14
+                stale-issue-label: 'stale'
+                stale-issue-message: 'This issue is stale because it has been open for 60 days with no activity. Remove stale label or comment or this will be closed in 14 days.'
     ```
 
 5.  **Update `CONTRIBUTING.md`** to include a section on the new labeling strategy.
