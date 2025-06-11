@@ -282,7 +282,10 @@ export class MoveGenerator {
             const currentSquare = position + direction;
 
             // Check if the target square is on the board and the move is valid
-            if (this.isValidSquare(currentSquare) && this.isValidKnightMove(position, currentSquare)) {
+            if (
+                this.isValidSquare(currentSquare) &&
+                this.isValidKnightMove(position, currentSquare)
+            ) {
                 const targetPiece = this.board.squares[currentSquare];
 
                 if (!targetPiece) {
