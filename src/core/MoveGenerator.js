@@ -50,7 +50,7 @@ export class MoveGenerator {
 
         // 🔧 CRITICAL FIX: Corrected direction and starting ranks to match Board.js layout
         // Board layout: 0-7 (black back rank), 8-15 (white pawns), 48-55 (black pawns), 56-63 (white back rank)
-        const direction = color === 'white' ? 8 : -8;  // WHITE moves UP (+8), BLACK moves DOWN (-8)
+        const direction = color === 'white' ? 8 : -8; // WHITE moves UP (+8), BLACK moves DOWN (-8)
         const startingRank = color === 'white' ? 1 : 6; // WHITE rank 1 (8-15), BLACK rank 6 (48-55)
         const currentRank = Math.floor(position / 8);
 
