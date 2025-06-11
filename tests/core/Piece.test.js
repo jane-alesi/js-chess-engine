@@ -163,7 +163,7 @@ describe('Piece Class', () => {
         });
 
         test('should throw error when resetting unmoved piece', () => {
-            expect(() => piece.resetMovedStatus()).toThrow('white pawn hasn\'t moved yet');
+            expect(() => piece.resetMovedStatus()).toThrow("white pawn hasn't moved yet");
         });
     });
 
