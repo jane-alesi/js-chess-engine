@@ -17,15 +17,19 @@ describe('Board', () => {
     test('should correctly set up initial board with pieces', () => {
         board.setupInitialBoard();
         // Check a few specific squares
-        expect(board.squares[0]).not.toBeNull(); // Rook at a1
-        expect(board.squares[1]).not.toBeNull(); // Knight at b1
-        expect(board.squares[8]).not.toBeNull(); // Pawn at a2
-        expect(board.squares[63]).not.toBeNull(); // Rook at h8
-        expect(board.squares[55]).not.toBeNull(); // Pawn at h7
+        expect(board.squares[0]).not.toBeNull(); // Rook at a8 (black back rank)
+        expect(board.squares[1]).not.toBeNull(); // Knight at b8
+        expect(board.squares[8]).not.toBeNull(); // Pawn at a7 (black pawn)
+        expect(board.squares[63]).not.toBeNull(); // Rook at h1 (white back rank)
+        expect(board.squares[48]).not.toBeNull(); // Pawn at a2 (white pawn)
 
-        // Check piece types and colors using getter methods (example for white pawn at a2)
+        // Check piece types and colors using getter methods (black pawn at a7)
         expect(board.squares[8].getType()).toBe('pawn');
-        expect(board.squares[8].getColor()).toBe('white');
+        expect(board.squares[8].getColor()).toBe('black');
+
+        // Check white pawn at a2 (position 48)
+        expect(board.squares[48].getType()).toBe('pawn');
+        expect(board.squares[48].getColor()).toBe('white');
 
         // Check empty square in the middle
         expect(board.squares[20]).toBeNull();
@@ -33,8 +37,8 @@ describe('Board', () => {
 
     test('should move a piece from one square to another', () => {
         board.setupInitialBoard();
-        const originalPiece = board.squares[0]; // Rook at a1
-        const moveResult = board.movePiece(0, 16); // Move rook to a3
+        const originalPiece = board.squares[0]; // Rook at a8 (black back rank)
+        const moveResult = board.movePiece(0, 16); // Move rook to a6
 
         expect(board.squares[16]).toBe(originalPiece);
         expect(board.squares[0]).toBeNull();
@@ -53,17 +57,17 @@ describe('Board', () => {
         board.setupInitialBoard();
 
         // Move white pawn to capture position
-        board.movePiece(8, 16); // Move pawn from a2 to a3
-        board.movePiece(16, 24); // Move pawn from a3 to a4
-        board.movePiece(24, 32); // Move pawn from a4 to a5
-        board.movePiece(32, 40); // Move pawn from a5 to a6
+        board.movePiece(48, 40); // Move pawn from a2 to a6
+        board.movePiece(40, 32); // Move pawn from a6 to a5
+        board.movePiece(32, 24); // Move pawn from a5 to a4
+        board.movePiece(24, 16); // Move pawn from a4 to a6
 
         // Now capture black pawn
-        const moveResult = board.movePiece(40, 48); // Capture black pawn at a7
+        const moveResult = board.movePiece(16, 8); // Capture black pawn at a7
 
         expect(moveResult).toEqual({
-            from: 40,
-            to: 48,
+            from: 16,
+            to: 8,
             pieceMoved: 'pawn',
             pieceCaptured: 'pawn',
             success: true,
@@ -72,7 +76,7 @@ describe('Board', () => {
 
     test('should mark pieces as moved after first move', () => {
         board.setupInitialBoard();
-        const rook = board.squares[0]; // White rook at a1
+        const rook = board.squares[0]; // Black rook at a8
 
         // Initially, piece should not have moved
         expect(rook.getHasMoved()).toBe(false);
@@ -86,7 +90,7 @@ describe('Board', () => {
 
     test('should not mark piece as moved again if already moved', () => {
         board.setupInitialBoard();
-        const rook = board.squares[0]; // White rook at a1
+        const rook = board.squares[0]; // Black rook at a8
 
         // Move the piece first time
         board.movePiece(0, 16);
@@ -140,43 +144,43 @@ describe('Board', () => {
 
     test('should handle king moves and mark as moved (important for castling)', () => {
         board.setupInitialBoard();
-        const whiteKing = board.squares[4]; // White king at e1
+        const blackKing = board.squares[4]; // Black king at e8
 
-        expect(whiteKing.getType()).toBe('king');
-        expect(whiteKing.getHasMoved()).toBe(false);
+        expect(blackKing.getType()).toBe('king');
+        expect(blackKing.getHasMoved()).toBe(false);
 
         // Move king
-        const moveResult = board.movePiece(4, 12); // Move king to e2
+        const moveResult = board.movePiece(4, 12); // Move king to e7
 
         expect(moveResult.pieceMoved).toBe('king');
-        expect(whiteKing.getHasMoved()).toBe(true);
+        expect(blackKing.getHasMoved()).toBe(true);
     });
 
     test('should handle rook moves and mark as moved (important for castling)', () => {
         board.setupInitialBoard();
-        const whiteRook = board.squares[0]; // White rook at a1
+        const blackRook = board.squares[0]; // Black rook at a8
 
-        expect(whiteRook.getType()).toBe('rook');
-        expect(whiteRook.getHasMoved()).toBe(false);
+        expect(blackRook.getType()).toBe('rook');
+        expect(blackRook.getHasMoved()).toBe(false);
 
         // Move rook
-        const moveResult = board.movePiece(0, 8); // Move rook to a2
+        const moveResult = board.movePiece(0, 8); // Move rook to a7
 
         expect(moveResult.pieceMoved).toBe('rook');
-        expect(whiteRook.getHasMoved()).toBe(true);
+        expect(blackRook.getHasMoved()).toBe(true);
     });
 
     test('should handle pawn moves and mark as moved (important for double move rules)', () => {
         board.setupInitialBoard();
-        const whitePawn = board.squares[8]; // White pawn at a2
+        const blackPawn = board.squares[8]; // Black pawn at a7
 
-        expect(whitePawn.getType()).toBe('pawn');
-        expect(whitePawn.getHasMoved()).toBe(false);
+        expect(blackPawn.getType()).toBe('pawn');
+        expect(blackPawn.getHasMoved()).toBe(false);
 
         // Move pawn
-        const moveResult = board.movePiece(8, 16); // Move pawn to a3
+        const moveResult = board.movePiece(8, 16); // Move pawn to a6
 
         expect(moveResult.pieceMoved).toBe('pawn');
-        expect(whitePawn.getHasMoved()).toBe(true);
+        expect(blackPawn.getHasMoved()).toBe(true);
     });
 });
