@@ -142,9 +142,9 @@ describe('Game Class - Issue #14 Validation', () => {
             // Initially no selection
             expect(game.selectedSquare).toBe(null);
 
-            // Select a white pawn
-            game.processSquareSelection(8); // White pawn at a2
-            expect(game.selectedSquare).toBe(8);
+            // Select a white pawn (position 48 = a2)
+            game.processSquareSelection(48); // White pawn at a2
+            expect(game.selectedSquare).toBe(48);
 
             // Clear selection
             game.clearSelection();
@@ -164,16 +164,16 @@ describe('Game Class - Issue #14 Validation', () => {
         test('should only allow selection of current player pieces', () => {
             const _consoleSpy = jest.spyOn(console, 'log');
 
-            // Try to select black piece when white to move
-            game.handlePieceSelection(56, game.board.squares[56]); // Black rook
+            // Try to select black piece when white to move (position 0 = a8, black rook)
+            game.handlePieceSelection(0, game.board.squares[0]); // Black rook
             expect(game.selectedSquare).toBe(null);
             expect(_consoleSpy).toHaveBeenCalledWith(
                 expect.stringContaining('Cannot select black piece')
             );
 
-            // Select white piece
-            game.handlePieceSelection(8, game.board.squares[8]); // White pawn
-            expect(game.selectedSquare).toBe(8);
+            // Select white pawn (position 48 = a2)
+            game.handlePieceSelection(48, game.board.squares[48]); // White pawn
+            expect(game.selectedSquare).toBe(48);
         });
     });
 
@@ -188,16 +188,16 @@ describe('Game Class - Issue #14 Validation', () => {
 
             // Mock a successful move
             movePieceSpy.mockReturnValue({
-                from: 8,
-                to: 24,
+                from: 48,
+                to: 40,
                 pieceMoved: 'pawn',
                 pieceCaptured: null,
                 success: true,
             });
 
-            const moveResult = game.attemptMove(8, 24); // Pawn move
+            const moveResult = game.attemptMove(48, 40); // Pawn move (a2 to a6)
 
-            expect(movePieceSpy).toHaveBeenCalledWith(8, 24);
+            expect(movePieceSpy).toHaveBeenCalledWith(48, 40);
 
             if (moveResult.success) {
                 game.processMoveSuccess(moveResult);
@@ -216,7 +216,7 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should prevent moving opponent pieces', () => {
-            const result = game.attemptMove(56, 48); // Try to move black rook when white to move
+            const result = game.attemptMove(0, 8); // Try to move black rook (a8 to a7) when white to move
 
             expect(result.success).toBe(false);
             expect(result.reason).toBe('Not your piece');
@@ -234,11 +234,11 @@ describe('Game Class - Issue #14 Validation', () => {
             // Mock successful move
             const mockMoveResult = {
                 success: true,
-                from: 8,
-                to: 24,
+                from: 48,
+                to: 40,
                 pieceMoved: 'pawn',
                 pieceCaptured: null,
-                notation: 'a2a3',
+                notation: 'a2a6',
             };
 
             game.processMoveSuccess(mockMoveResult);
@@ -252,11 +252,11 @@ describe('Game Class - Issue #14 Validation', () => {
 
             const mockMoveResult = {
                 success: true,
-                from: 8,
-                to: 24,
+                from: 48,
+                to: 40,
                 pieceMoved: 'pawn',
                 pieceCaptured: null,
-                notation: 'a2a3',
+                notation: 'a2a6',
             };
 
             game.processMoveSuccess(mockMoveResult);
@@ -272,20 +272,20 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should generate move notation', () => {
-            const notation = game.generateMoveNotation(8, 24, 'pawn', null);
+            const notation = game.generateMoveNotation(48, 40, 'pawn', null);
 
-            expect(notation).toBe('pawna2a4');
+            expect(notation).toBe('pawna2a6');
         });
 
         test('should convert index to square notation', () => {
-            expect(game.indexToSquare(0)).toBe('a1');
-            expect(game.indexToSquare(7)).toBe('h1');
-            expect(game.indexToSquare(56)).toBe('a8');
-            expect(game.indexToSquare(63)).toBe('h8');
+            expect(game.indexToSquare(0)).toBe('a8');
+            expect(game.indexToSquare(7)).toBe('h8');
+            expect(game.indexToSquare(56)).toBe('a1');
+            expect(game.indexToSquare(63)).toBe('h1');
         });
 
         test('should handle square highlighting', () => {
-            game.highlightSelectedSquare(8);
+            game.highlightSelectedSquare(48);
             // Verify highlight functionality (mocked DOM)
             expect(document.querySelectorAll).toHaveBeenCalledWith('.square');
         });
@@ -303,7 +303,7 @@ describe('Game Class - Issue #14 Validation', () => {
         test('should support game reset', () => {
             // Make a move first
             game.currentPlayer = 'black';
-            game.selectedSquare = 8;
+            game.selectedSquare = 48;
 
             game.resetGame();
 
@@ -326,20 +326,20 @@ describe('Game Class - Issue #14 Validation', () => {
 
         test('should work with enhanced movePiece method', () => {
             // The enhanced movePiece returns detailed move information
-            const result = game.board.movePiece(8, 24);
+            const result = game.board.movePiece(48, 40); // White pawn a2 to a6
 
-            expect(result).toHaveProperty('from', 8);
-            expect(result).toHaveProperty('to', 24);
+            expect(result).toHaveProperty('from', 48);
+            expect(result).toHaveProperty('to', 40);
             expect(result).toHaveProperty('pieceMoved', 'pawn');
             expect(result).toHaveProperty('pieceCaptured', null);
             expect(result).toHaveProperty('success', true);
         });
 
         test('should handle piece movement tracking', () => {
-            const piece = game.board.squares[8]; // White pawn
+            const piece = game.board.squares[48]; // White pawn
             expect(piece.getHasMoved()).toBe(false);
 
-            game.board.movePiece(8, 24);
+            game.board.movePiece(48, 40);
 
             expect(piece.getHasMoved()).toBe(true);
         });
@@ -371,7 +371,7 @@ describe('Game Class - Issue #14 Validation', () => {
         });
 
         test('should handle same square selection', () => {
-            const result = game.attemptMove(8, 8);
+            const result = game.attemptMove(48, 48);
 
             expect(result.success).toBe(false);
             expect(result.reason).toBe('Cannot move to the same square');
