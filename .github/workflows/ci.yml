@@ -1,6 +1,17 @@
 name: CI/CD Pipeline
 
+# This workflow runs AFTER the auto-fix workflow completes to ensure code quality fixes are applied first
 on:
+  # Primary trigger: Run after auto-fix workflow completes
+  workflow_run:
+    workflows: ["Auto-Fix Code Quality"]
+    types:
+      - completed
+    branches:
+      - main
+  
+  # Fallback trigger: Run directly on push/PR if auto-fix doesn't run
+  # This handles cases where auto-fix is skipped (e.g., [auto-fix] commits)
   push:
     branches:
       - main
@@ -9,61 +20,108 @@ on:
       - main
 
 jobs:
+  # Wait for auto-fix completion (only for workflow_run triggers)
+  wait-for-auto-fix:
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-latest
+    outputs:
+      auto-fix-status: ${{ steps.check-status.outputs.status }}
+    
+    steps:
+      - name: Check auto-fix workflow status
+        id: check-status
+        run: |
+          echo "🔍 Checking auto-fix workflow status..."
+          if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
+            echo "✅ Auto-fix workflow completed successfully"
+            echo "status=success" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.workflow_run.conclusion }}" == "skipped" ]; then
+            echo "⏭️ Auto-fix workflow was skipped (no fixes needed)"
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Auto-fix workflow failed with status: ${{ github.event.workflow_run.conclusion }}"
+            echo "status=failure" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+  # Main CI/CD pipeline
   build:
+    # Run after auto-fix check (for workflow_run) or directly (for push/PR)
+    needs: [wait-for-auto-fix]
+    if: always() && (needs.wait-for-auto-fix.result == 'success' || github.event_name != 'workflow_run')
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Workflow execution context
+        run: |
+          echo "🚀 Starting CI/CD Pipeline"
+          echo "Trigger: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" == "workflow_run" ]; then
+            echo "Auto-fix status: ${{ needs.wait-for-auto-fix.outputs.auto-fix-status }}"
+            echo "✅ Auto-fix workflow completed - proceeding with CI/CD"
+          else
+            echo "📝 Direct trigger - auto-fix may run concurrently"
+          fi
+          echo ""
+
+      - uses: actions/checkout@v4
+        with:
+          # For workflow_run, checkout the head commit that triggered auto-fix
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
     
-    - name: Install dependencies
-      run: |
-        echo "📦 Installing npm dependencies..."
-        npm install --verbose
-        echo "✅ Dependencies installed successfully"
+      - name: Install dependencies
+        run: |
+          echo "📦 Installing npm dependencies..."
+          npm install --verbose
+          echo "✅ Dependencies installed successfully"
     
-    - name: Display dependency tree
-      run: |
-        echo "🌳 Dependency tree overview:"
-        npm list --depth=0 || true
-        echo ""
+      - name: Display dependency tree
+        run: |
+          echo "🌳 Dependency tree overview:"
+          npm list --depth=0 || true
+          echo ""
     
-    - name: Security Audit
-      run: |
-        echo "🔒 Running comprehensive npm security audit..."
-        echo "📊 Audit level: moderate (catches moderate and high severity)"
-        npm audit --audit-level=moderate
-        echo "✅ Security audit completed - no vulnerabilities found"
+      - name: Security Audit
+        run: |
+          echo "🔒 Running comprehensive npm security audit..."
+          echo "🔍 Audit level: moderate (catches moderate and high severity)"
+          npm audit --audit-level=moderate
+          echo "✅ Security audit completed - no vulnerabilities found"
     
-    - name: Show npm audit summary
-      if: failure()
-      run: |
-        echo "❌ Security audit failed - showing detailed report:"
-        npm audit || true
-        echo ""
-        echo "🔧 Available fixes:"
-        npm audit fix --dry-run || true
+      - name: Show npm audit summary
+        if: failure()
+        run: |
+          echo "⚠️ Security audit failed - showing detailed report:"
+          npm audit || true
+          echo ""
+          echo "🔧 Available fixes:"
+          npm audit fix --dry-run || true
     
-    - name: Run tests
-      run: |
-        echo "🧪 Running test suite..."
-        npm test
-        echo "✅ All tests passed"
+      - name: Run tests
+        run: |
+          echo "🧪 Running test suite..."
+          npm test
+          echo "✅ All tests passed"
     
-    - name: Run lint
-      run: |
-        echo "🔍 Running ESLint code quality checks..."
-        npm run lint
-        echo "✅ Code quality checks passed"
+      - name: Run lint
+        run: |
+          echo "🔍 Running ESLint code quality checks..."
+          npm run lint
+          echo "✅ Code quality checks passed"
     
-    - name: Build summary
-      if: success()
-      run: |
-        echo "🎉 Build completed successfully!"
-        echo "✅ Dependencies: Installed"
-        echo "✅ Security: No vulnerabilities"
-        echo "✅ Tests: All passing"
-        echo "✅ Linting: No issues"
+      - name: Build summary
+        if: success()
+        run: |
+          echo "🎉 Build completed successfully!"
+          echo "✅ Dependencies: Installed"
+          echo "✅ Security: No vulnerabilities"
+          echo "✅ Tests: All passing"
+          echo "✅ Linting: No issues"
+          if [ "${{ github.event_name }}" == "workflow_run" ]; then
+            echo "✅ Auto-fix: Completed before CI/CD"
+          fi
