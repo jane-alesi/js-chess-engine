@@ -50,6 +50,105 @@ Can a modern JavaScript implementation, with access to decades of chess programm
 
 ---
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (v16.0.0 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js)
+- **Modern web browser** (Chrome, Firefox, Safari, Edge)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/jane-alesi/js-chess-engine.git
+   ```
+
+2. **Navigate to the project directory**
+   ```bash
+   cd js-chess-engine
+   ```
+
+3. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+4. **Verify installation**
+   ```bash
+   npm run quality:check
+   npm test
+   ```
+
+### Usage
+
+#### Running the Chess Engine
+
+1. **Start the development server**
+   ```bash
+   npm start
+   ```
+
+2. **Open your browser**
+   
+   Navigate to `http://localhost:8080` to see the chess engine in action.
+
+#### Development Commands
+
+```bash
+# Development server
+npm start                    # Start live development server on port 8080
+
+# Testing
+npm test                     # Run all tests
+npm run test:watch          # Run tests in watch mode
+npm run test:coverage       # Run tests with coverage report
+
+# Code Quality
+npm run quality:check       # Check code formatting and linting
+npm run quality:fix         # Auto-fix formatting and linting issues
+npm run lint:check          # Check ESLint rules (zero warnings)
+npm run format:check        # Check Prettier formatting
+
+# Security
+npm run security-check      # Check for security vulnerabilities
+npm run security-fix        # Fix security vulnerabilities
+```
+
+#### Project Structure
+
+```
+js-chess-engine/
+├── src/
+│   ├── core/               # Chess logic foundation
+│   │   ├── Board.js        # Board representation and state
+│   │   ├── Piece.js        # Piece definitions and validation
+│   │   ├── GameState.js    # Game state management
+│   │   ├── MoveGenerator.js # Move generation algorithms
+│   │   └── ...
+│   ├── ui/                 # User interface components
+│   │   ├── BoardRenderer.js # Visual board rendering
+│   │   ├── InputHandler.js  # User input processing
+│   │   └── styles.css       # Styling and themes
+│   ├── ai/                 # AI engine (future implementation)
+│   └── utils/              # Shared utilities
+│       └── Constants.js     # Game constants and piece values
+├── tests/                  # Test files
+├── index.html              # Main HTML entry point
+└── package.json            # Project configuration
+```
+
+#### Quick Start Guide
+
+1. **For Players**: Simply run `npm start` and open `http://localhost:8080` to play chess
+2. **For Developers**: Check out the [open issues](https://github.com/jane-alesi/js-chess-engine/issues) to contribute
+3. **For AI Researchers**: Explore the `src/core/` directory for chess logic implementation
+
+---
+
 ## 🚀 Current Status
 
 This project is actively under development with a focus on:
@@ -83,7 +182,7 @@ The engine follows a modular design inspired by classic chess programming princi
 ```
 src/
 ├── core/          # Chess logic foundation
-├── ui/            # User interface components
+├── ui/            # User interface components  
 ├── ai/            # Artificial intelligence engine
 └── utils/         # Shared utilities and constants
 ```
@@ -99,7 +198,7 @@ This project draws inspiration from one of the most impressive programming achie
 Our JavaScript implementation honors this legacy while embracing modern capabilities:
 
 - **Then**: 4KB ROM, 128 bytes RAM → **Now**: Unlimited memory and processing power
-- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features
+- **Then**: 6502 assembly language → **Now**: Modern JavaScript with advanced language features  
 - **Then**: Simple evaluation function → **Now**: Sophisticated AI with deep search algorithms
 - **Then**: Fixed difficulty → **Now**: Adaptive AI with multiple skill levels
 
@@ -136,4 +235,4 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 **Project Link:** [https://github.com/jane-alesi/js-chess-engine](https://github.com/jane-alesi/js-chess-engine)
 
-_Built with ♛ by the chess programming community_
+*Built with ♛ by the chess programming community*
