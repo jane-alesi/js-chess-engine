@@ -30,18 +30,14 @@ describe('Piece Class', () => {
         });
 
         test('should create pieces for all valid types', () => {
-            const validTypes = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
-            
-            validTypes.forEach(type => {
-                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS.white[type]);
+            Object.values(PIECE_TYPES).forEach(type => {
+                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS[type]['white']);
                 expect(piece.getType()).toBe(type);
             });
         });
 
         test('should create pieces for all valid colors', () => {
-            const validColors = ['white', 'black'];
-            
-            validColors.forEach(color => {
+            Object.values(PIECE_COLORS).forEach(color => {
                 const piece = new Piece('pawn', color, 1, PIECE_SYMBOLS.pawn[color]);
                 expect(piece.getColor()).toBe(color);
             });
@@ -273,14 +269,14 @@ describe('Piece Class', () => {
     describe('Integration with Constants', () => {
         test('should work with PIECE_VALUES constants', () => {
             Object.entries(PIECE_VALUES).forEach(([type, value]) => {
-                const piece = new Piece(type, 'white', value, PIECE_SYMBOLS.white[type]);
+                const piece = new Piece(type, 'white', value, PIECE_SYMBOLS[type]['white']);
                 expect(piece.getPoints()).toBe(value);
             });
         });
 
         test('should work with PIECE_SYMBOLS constants', () => {
-            Object.entries(PIECE_SYMBOLS).forEach(([color, symbols]) => {
-                Object.entries(symbols).forEach(([type, symbol]) => {
+            Object.entries(PIECE_SYMBOLS).forEach(([type, symbols]) => {
+                Object.entries(symbols).forEach(([color, symbol]) => {
                     const piece = new Piece(type, color, PIECE_VALUES[type], symbol);
                     expect(piece.getSymbol()).toBe(symbol);
                 });
@@ -288,8 +284,8 @@ describe('Piece Class', () => {
         });
 
         test('should work with helper functions', () => {
-            const type = PIECE_TYPES[2]; // knight
-            const color = PIECE_COLORS[1]; // black
+            const type = PIECE_TYPES.KNIGHT;
+            const color = PIECE_COLORS.BLACK;
             const symbol = getPieceSymbol(type, color);
             const value = getPieceValue(type);
 
