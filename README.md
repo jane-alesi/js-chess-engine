@@ -22,16 +22,19 @@ In 1979, Atari released Video Chess for the Atari 2600 - a groundbreaking achiev
 ### What Problem Does This Solve?
 
 **For Chess Enthusiasts:**
+
 - Provides a pure JavaScript chess implementation that runs entirely in the browser
 - Offers an AI opponent with adjustable difficulty levels
 - Enables chess learning through position analysis and move suggestions
 
 **For Developers:**
+
 - Demonstrates advanced JavaScript patterns including ES2022 private fields
 - Showcases modular architecture with clean separation of concerns
 - Provides a comprehensive testing framework for complex game logic
 
 **For AI Researchers:**
+
 - Implements classic game AI algorithms (Minimax with Alpha-Beta pruning)
 - Offers a platform for experimenting with chess evaluation functions
 - Enables comparison with historical chess engines
@@ -103,6 +106,7 @@ Before you begin, ensure you have the following installed:
     Navigate to `http://localhost:8080` to see the chess engine in action.
 
 #### Development Commands
+
 ```bash
 # Development server
 npm start                   # Start live development server on port 8080
@@ -124,6 +128,7 @@ npm run security-fix        # Fix security vulnerabilities
 ```
 
 #### Project Structure
+
 ```
 js-chess-engine/
 ├─── src/
@@ -275,14 +280,14 @@ _Timeline: April-June 2026 | Priority: LOW_
 
 ### **Progress Tracking**
 
-| Phase        | Completion | Key Milestones                                        | Target Date |
-|--------------|------------|-------------------------------------------------------|-------------|
-| **Phase 1**  | ✅ 100%    | Professional documentation complete                   | ✅ June 2025 |
-| **Phase 2**  | 🔄 60%     | Pawn, Rook, Bishop moves implemented, 2 pieces remaining | August 2025  |
-| **Phase 3**  | 📅 0%      | Awaiting Phase 2 completion                           | October 2025 |
-| **Phase 4**  | 📅 0%      | Awaiting Phase 3 completion                           | January 2026 |
-| **Phase 5**  | 📅 0%      | UI/UX enhancements                                    | March 2026   |
-| **Phase 6**  | 📅 0%      | Performance & advanced features                       | June 2026    |
+| Phase       | Completion | Key Milestones                                           | Target Date  |
+| ----------- | ---------- | -------------------------------------------------------- | ------------ |
+| **Phase 1** | ✅ 100%    | Professional documentation complete                      | ✅ June 2025 |
+| **Phase 2** | 🔄 60%     | Pawn, Rook, Bishop moves implemented, 2 pieces remaining | August 2025  |
+| **Phase 3** | 📅 0%      | Awaiting Phase 2 completion                              | October 2025 |
+| **Phase 4** | 📅 0%      | Awaiting Phase 3 completion                              | January 2026 |
+| **Phase 5** | 📅 0%      | UI/UX enhancements                                       | March 2026   |
+| **Phase 6** | 📅 0%      | Performance & advanced features                          | June 2026    |
 
 ### **Success Metrics**
 
