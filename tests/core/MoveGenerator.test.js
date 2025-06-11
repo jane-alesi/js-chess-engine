@@ -599,13 +599,13 @@ describe('MoveGenerator', () => {
                 });
 
                 // Check specific diagonal moves
-                const neMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 7 === 0);
-                const nwMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 9 === 0);
-                const seMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 9 === 0);
-                const swMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 7 === 0);
+                const neMoves = moves.filter((move) => move.to > 28 && (move.to - 28) % 7 === 0);
+                const nwMoves = moves.filter((move) => move.to > 28 && (move.to - 28) % 9 === 0);
+                const seMoves = moves.filter((move) => move.to < 28 && (28 - move.to) % 9 === 0);
+                const swMoves = moves.filter((move) => move.to < 28 && (28 - move.to) % 7 === 0);
 
                 expect(neMoves.length).toBeGreaterThan(0); // NE diagonal
-                expect(nwMoves.length).toBeGreaterThan(0); // NW diagonal  
+                expect(nwMoves.length).toBeGreaterThan(0); // NW diagonal
                 expect(seMoves.length).toBeGreaterThan(0); // SE diagonal
                 expect(swMoves.length).toBeGreaterThan(0); // SW diagonal
             });
@@ -642,11 +642,11 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generateBishopMoves(whiteBishop, 28);
 
                 // Should not capture friendly piece
-                const captureAtG6 = moves.find(move => move.to === 46);
+                const captureAtG6 = moves.find((move) => move.to === 46);
                 expect(captureAtG6).toBeUndefined();
 
                 // Should not include moves beyond g6 in SE direction
-                const beyondG6 = moves.filter(move => move.to > 46 && (move.to - 28) % 9 === 0);
+                const beyondG6 = moves.filter((move) => move.to > 46 && (move.to - 28) % 9 === 0);
                 expect(beyondG6).toHaveLength(0);
             });
 
@@ -662,7 +662,7 @@ describe('MoveGenerator', () => {
                 const moves = moveGenerator.generateBishopMoves(whiteBishop, 28);
 
                 // Should include capture move at g6
-                const captureMove = moves.find(move => move.to === 46);
+                const captureMove = moves.find((move) => move.to === 46);
                 expect(captureMove).toBeDefined();
                 expect(captureMove).toEqual({
                     from: 28,

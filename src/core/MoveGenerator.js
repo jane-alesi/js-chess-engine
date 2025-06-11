@@ -207,8 +207,8 @@ export class MoveGenerator {
         const directions = [
             -9, // Up-Left (NW)
             -7, // Up-Right (NE)
-            7,  // Down-Left (SW)
-            9   // Down-Right (SE)
+            7, // Down-Left (SW)
+            9, // Down-Right (SE)
         ];
 
         // Generate moves in each diagonal direction
