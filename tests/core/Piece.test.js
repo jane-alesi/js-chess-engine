@@ -33,7 +33,7 @@ describe('Piece Class', () => {
             const validTypes = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king'];
             
             validTypes.forEach(type => {
-                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS[type].white);
+                const piece = new Piece(type, 'white', PIECE_VALUES[type], PIECE_SYMBOLS.white[type]);
                 expect(piece.getType()).toBe(type);
             });
         });
@@ -100,6 +100,30 @@ describe('Piece Class', () => {
         });
     });
 
+    describe('Getters', () => {
+        const piece = new Piece('pawn', 'white', 1, '♙');
+
+        test('getType() should return the correct type', () => {
+            expect(piece.getType()).toBe('pawn');
+        });
+
+        test('getColor() should return the correct color', () => {
+            expect(piece.getColor()).toBe('white');
+        });
+
+        test('getPoints() should return the correct points', () => {
+            expect(piece.getPoints()).toBe(1);
+        });
+
+        test('getSymbol() should return the correct symbol', () => {
+            expect(piece.getSymbol()).toBe('♙');
+        });
+
+        test('getHasMoved() should return the initial moved status', () => {
+            expect(piece.getHasMoved()).toBe(false);
+        });
+    });
+
     describe('Movement Tracking', () => {
         let piece;
 
@@ -130,7 +154,7 @@ describe('Piece Class', () => {
 
         test('should throw error when resetting unmoved piece', () => {
             expect(() => piece.resetMovedStatus())
-                .toThrow('white pawn hasn\'t moved yet');
+                .toThrow("white pawn hasn't moved yet");
         });
     });
 
@@ -249,24 +273,23 @@ describe('Piece Class', () => {
     describe('Integration with Constants', () => {
         test('should work with PIECE_VALUES constants', () => {
             Object.entries(PIECE_VALUES).forEach(([type, value]) => {
-                const piece = new Piece(type, 'white', value, PIECE_SYMBOLS[type].white);
+                const piece = new Piece(type, 'white', value, PIECE_SYMBOLS.white[type]);
                 expect(piece.getPoints()).toBe(value);
             });
         });
 
         test('should work with PIECE_SYMBOLS constants', () => {
-            Object.entries(PIECE_SYMBOLS).forEach(([type, symbols]) => {
-                const whitePiece = new Piece(type, 'white', PIECE_VALUES[type], symbols.white);
-                const blackPiece = new Piece(type, 'black', PIECE_VALUES[type], symbols.black);
-                
-                expect(whitePiece.getSymbol()).toBe(symbols.white);
-                expect(blackPiece.getSymbol()).toBe(symbols.black);
+            Object.entries(PIECE_SYMBOLS).forEach(([color, symbols]) => {
+                Object.entries(symbols).forEach(([type, symbol]) => {
+                    const piece = new Piece(type, color, PIECE_VALUES[type], symbol);
+                    expect(piece.getSymbol()).toBe(symbol);
+                });
             });
         });
 
         test('should work with helper functions', () => {
-            const type = PIECE_TYPES.KNIGHT;
-            const color = PIECE_COLORS.BLACK;
+            const type = PIECE_TYPES[2]; // knight
+            const color = PIECE_COLORS[1]; // black
             const symbol = getPieceSymbol(type, color);
             const value = getPieceValue(type);
 
