@@ -1,0 +1,94 @@
+name: Auto-Fix Code Quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  auto-fix:
+    # Skip if commit message contains [auto-fix] to prevent infinite loops
+    if: "!contains(github.event.head_commit.message, '[auto-fix]')"
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          echo "📦 Installing npm dependencies..."
+          npm install --verbose
+          echo "✅ Dependencies installed successfully"
+          
+      - name: Check for linting issues
+        id: lint-check
+        run: |
+          echo "🔍 Checking for ESLint issues..."
+          if npm run lint; then
+            echo "✅ No linting issues found"
+            echo "needs_fix=false" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Linting issues detected - will attempt auto-fix"
+            echo "needs_fix=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+        
+      - name: Run ESLint auto-fix
+        if: steps.lint-check.outputs.needs_fix == 'true'
+        run: |
+          echo "🔧 Running ESLint auto-fix..."
+          npm run lint:fix
+          echo "✅ ESLint auto-fix completed"
+          
+      - name: Run Prettier formatting
+        run: |
+          echo "💅 Running Prettier formatting..."
+          npm run format
+          echo "✅ Prettier formatting completed"
+          
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected:"
+            git diff --name-only
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Commit auto-fixes
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: '🔧 Auto-fix: ESLint and Prettier code quality [auto-fix]'
+          file_pattern: '*.js *.json *.md *.yml *.yaml'
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+          
+      - name: Auto-fix summary
+        run: |
+          if [ "${{ steps.changes.outputs.has_changes }}" == "true" ]; then
+            echo "🎉 Auto-fix completed successfully!"
+            echo "✅ Code quality issues automatically resolved"
+            echo "✅ Changes committed to branch"
+          else
+            echo "✅ No auto-fixes needed - code quality is good!"
+          fi
