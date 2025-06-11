@@ -740,13 +740,77 @@ describe('MoveGenerator', () => {
         });
     });
 
-    describe('Other Piece Move Generation (TODO)', () => {
-        test('should return empty array for knight moves (not implemented)', () => {
+    describe('Knight Move Generation', () => {
+        test('should generate all 8 moves for knight in center of empty board', () => {
             const knight = new Piece('knight', 'white', 3, '♘');
-            const moves = moveGenerator.generateKnightMoves(knight, 1);
-            expect(moves).toEqual([]);
+            board.squares[28] = knight; // e4
+    
+            const moves = moveGenerator.generateKnightMoves(knight, 28);
+            expect(moves).toHaveLength(8);
         });
+    
+        test('should generate 2 moves for knight in corner (a1)', () => {
+            const knight = new Piece('knight', 'white', 3, '♘');
+            board.squares[56] = knight; // a1
+    
+            const moves = moveGenerator.generateKnightMoves(knight, 56);
+            expect(moves).toHaveLength(2);
+            const destinations = moves.map(m => m.to);
+            expect(destinations).toEqual(expect.arrayContaining([41, 50])); // c2, b3
+        });
+    
+        test('should generate 4 moves for knight on edge (a4)', () => {
+            const knight = new Piece('knight', 'white', 3, '♘');
+            board.squares[32] = knight; // a4
+    
+            const moves = moveGenerator.generateKnightMoves(knight, 32);
+            expect(moves).toHaveLength(4);
+        });
+    
+        test('should not be blocked by surrounding pieces', () => {
+            const knight = new Piece('knight', 'white', 3, '♘');
+            board.squares[28] = knight; // e4
+    
+            // Surround the knight
+            board.squares[27] = new Piece('pawn', 'black', 1, '♟'); // d4
+            board.squares[29] = new Piece('pawn', 'black', 1, '♟'); // f4
+            board.squares[36] = new Piece('pawn', 'black', 1, '♟'); // e5
+            board.squares[20] = new Piece('pawn', 'black', 1, '♟'); // e3
+    
+            const moves = moveGenerator.generateKnightMoves(knight, 28);
+            expect(moves).toHaveLength(8); // Still has 8 moves
+        });
+    
+        test('should capture enemy pieces but not land on friendly pieces', () => {
+            const knight = new Piece('knight', 'white', 3, '♘');
+            board.squares[28] = knight; // e4
+    
+            // Friendly piece at one destination
+            board.squares[11] = new Piece('pawn', 'white', 1, '♙'); // d2, blocks one move
+            // Enemy piece at another
+            board.squares[13] = new Piece('pawn', 'black', 1, '♟'); // f2, can be captured
+    
+            const moves = moveGenerator.generateKnightMoves(knight, 28);
+            expect(moves).toHaveLength(7); // 8 possible moves - 1 blocked by friendly
+    
+            const captureMove = moves.find(m => m.to === 13);
+            expect(captureMove).toBeDefined();
+            expect(captureMove.type).toBe('capture');
+            expect(captureMove.captured).toBe('pawn');
+        });
+    
+        test('isValidKnightMove should prevent wrapping', () => {
+            // Valid moves
+            expect(moveGenerator.isValidKnightMove(0, 10)).toBe(true); // a8 to b6
+            expect(moveGenerator.isValidKnightMove(28, 11)).toBe(true); // e4 to d2
+    
+            // Invalid moves (wrapping from h-file to a-file)
+            expect(moveGenerator.isValidKnightMove(7, 22)).toBe(false);  // h8 to a6
+            expect(moveGenerator.isValidKnightMove(15, 25)).toBe(false); // h7 to b5
+        });
+    });
 
+    describe('Other Piece Move Generation (TODO)', () => {
         test('should return empty array for queen moves (not implemented)', () => {
             const queen = new Piece('queen', 'white', 9, '♕');
             const moves = moveGenerator.generateQueenMoves(queen, 3);
@@ -789,6 +853,16 @@ describe('MoveGenerator', () => {
 
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('bishop');
+        });
+
+        test('should route to correct piece-specific method for knight', () => {
+            const whiteKnight = new Piece('knight', 'white', 3, '♘');
+            board.squares[28] = whiteKnight;
+        
+            const moves = moveGenerator.generateMoves(whiteKnight, 28);
+        
+            expect(moves.length).toBeGreaterThan(0);
+            expect(moves[0].piece).toBe('knight');
         });
 
         test('should return empty array for unknown piece type', () => {
