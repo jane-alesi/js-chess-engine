@@ -51,7 +51,8 @@ export class MoveGenerator {
         // Determine direction and starting ranks based on color
         // ✅ FIXED: Corrected direction based on test expectations
         const direction = color === 'white' ? 8 : -8; // White moves down (+8), black moves up (-8)
-        const startingRank = color === 'white' ? 6 : 1; // White starts on rank 6 (e2=52), black on rank 1 (e7=12)
+        // ✅ FIXED: Corrected starting ranks based on test analysis
+        const startingRank = color === 'white' ? 1 : 6; // White starts on rank 1 (position 12), black on rank 6 (position 52)
         const currentRank = Math.floor(position / 8);
 
         // Single square forward move
