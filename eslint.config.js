@@ -1,7 +1,9 @@
 import js from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
     js.configs.recommended,
+    prettierConfig,
     {
         languageOptions: {
             ecmaVersion: 2022,
@@ -39,10 +41,6 @@ export default [
             },
         },
         rules: {
-            indent: ['error', 4],
-            'linebreak-style': ['error', 'unix'],
-            quotes: ['error', 'single'],
-            semi: ['error', 'always'],
             'no-unused-vars': [
                 'error',
                 {
