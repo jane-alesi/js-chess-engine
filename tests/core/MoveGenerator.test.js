@@ -896,11 +896,11 @@ describe('MoveGenerator', () => {
 
             const moves = moveGenerator.generateQueenMoves(queen, 28);
             expect(moves.length).toBeLessThan(27);
-            
-            const movesToE5 = moves.find(m => m.to === 36);
+
+            const movesToE5 = moves.find((m) => m.to === 36);
             expect(movesToE5).toBeUndefined(); // Cannot land on friendly piece
 
-            const movesToF5 = moves.find(m => m.to === 37);
+            const movesToF5 = moves.find((m) => m.to === 37);
             expect(movesToF5).toBeUndefined(); // Cannot land on friendly piece
         });
 
@@ -914,13 +914,13 @@ describe('MoveGenerator', () => {
             board.squares[37] = new Piece('pawn', 'black', 1, '♟'); // f5
 
             const moves = moveGenerator.generateQueenMoves(queen, 28);
-            
-            const captureAtE5 = moves.find(m => m.to === 36);
+
+            const captureAtE5 = moves.find((m) => m.to === 36);
             expect(captureAtE5).toBeDefined();
             expect(captureAtE5.type).toBe('capture');
             expect(captureAtE5.captured).toBe('pawn');
 
-            const captureAtF5 = moves.find(m => m.to === 37);
+            const captureAtF5 = moves.find((m) => m.to === 37);
             expect(captureAtF5).toBeDefined();
             expect(captureAtF5.type).toBe('capture');
             expect(captureAtF5.captured).toBe('pawn');
@@ -931,7 +931,7 @@ describe('MoveGenerator', () => {
             board.squares[28] = queen; // e4
 
             const moves = moveGenerator.generateQueenMoves(queen, 28);
-            moves.forEach(move => {
+            moves.forEach((move) => {
                 expect(move.piece).toBe('queen');
                 expect(move.color).toBe('white');
             });
