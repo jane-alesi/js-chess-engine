@@ -18,9 +18,14 @@ describe('MoveValidator', () => {
 
     describe('Basic Move Validation', () => {
         test('should validate basic pawn move', () => {
-            // Place white pawn on e2 (index 12)
+            // Place white pawn on e2 (index 12) and add kings for proper validation
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
-            board.squares[12] = whitePawn;
+            const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚');
+            
+            board.squares[12] = whitePawn; // e2
+            board.squares[4] = whiteKing;  // e1
+            board.squares[60] = blackKing; // e8
 
             const isValid = moveValidator.isValidMove(12, 20); // e2 to e3
             expect(isValid).toBe(true);
@@ -50,8 +55,14 @@ describe('MoveValidator', () => {
         });
 
         test('should validate rook move', () => {
+            // Add kings to prevent self-check validation errors
             const whiteRook = new Piece('rook', 'white', 5, '♖');
+            const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚');
+            
             board.squares[28] = whiteRook; // e4
+            board.squares[4] = whiteKing;  // e1
+            board.squares[60] = blackKing; // e8
 
             const isValid = moveValidator.isValidMove(28, 36); // e4 to e5
             expect(isValid).toBe(true);
@@ -166,14 +177,14 @@ describe('MoveValidator', () => {
         });
 
         test('should prevent king from moving into check', () => {
-            // White king on e1, black rook on e8
+            // White king on e1, black rook on d8 (not on same file)
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
 
             board.squares[4] = whiteKing; // e1
-            board.squares[60] = blackRook; // e8
+            board.squares[59] = blackRook; // d8
 
-            // King cannot move to d1 (still in check from rook)
+            // King cannot move to d1 (would be in check from rook on d8)
             const isValid = moveValidator.isValidMove(4, 3); // e1 to d1
             expect(isValid).toBe(false);
         });
@@ -267,7 +278,10 @@ describe('MoveValidator', () => {
         test('should not detect stalemate when legal moves exist', () => {
             // King has legal moves available
             const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚'); // Add black king to prevent errors
+            
             board.squares[28] = whiteKing; // e4
+            board.squares[60] = blackKing; // e8
 
             const isStalemate = moveValidator.isStalemate('white');
             expect(isStalemate).toBe(false);
@@ -369,9 +383,11 @@ describe('MoveValidator', () => {
 
         test('should correctly validate game state transitions', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚');
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
 
             board.squares[4] = whiteKing; // e1
+            board.squares[60] = blackKing; // e8
             board.squares[12] = whitePawn; // e2
 
             // White's turn - should be able to move pawn
@@ -387,6 +403,7 @@ describe('MoveValidator', () => {
 
     describe('Edge Cases', () => {
         test('should handle empty board gracefully', () => {
+            // Test that methods handle missing kings appropriately
             expect(() => moveValidator.isInCheck('white')).toThrow(
                 'No white king found on the board'
             );
@@ -409,7 +426,10 @@ describe('MoveValidator', () => {
 
         test('should handle piece at board boundaries correctly', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚'); // Add black king to prevent errors
+            
             board.squares[0] = whiteKing; // a1 (corner)
+            board.squares[63] = blackKing; // h8 (opposite corner)
 
             const legalMoves = moveValidator.getAllLegalMoves('white');
             expect(legalMoves.length).toBe(3); // Only 3 moves from corner
