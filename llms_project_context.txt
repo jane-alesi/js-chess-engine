@@ -14,6 +14,8 @@
 - **Issue-Driven Development** - All work tracked through GitHub Issues
 - **Modular Architecture** - Core, UI, AI, Utils components with incremental development
 - **AI-First Design** - Optimized for LLM collaboration and code generation
+- **🧹 Clean Code Standards** - Self-documenting code without unnecessary comments
+- **♟️ Official Chess Standards** - Strict adherence to standard chess notation and rules
 
 **Repository:** https://github.com/jane-alesi/js-chess-engine
 
@@ -36,7 +38,7 @@
 
 ### **🚨 CRITICAL STATUS UPDATE (June 11, 2025)**
 
-**⚠️ IMPORTANT DISCOVERY**: Previous documentation claiming "All tests passing ✅" was **INACCURATE**. 
+**⚠️ IMPORTANT DISCOVERY**: Previous documentation claiming "All tests passing ✅" was **INACCURATE**.
 
 **Actual Test Status:**
 - **Total Tests**: 223 tests across all suites
@@ -59,23 +61,6 @@
 - **Board Tests**: ✅ ALL 12 tests passing
 - **Game Tests**: ✅ ALL 25 tests passing
 - **MoveValidator Tests**: 🔧 **FIXED** - Previously 4 failing tests, now resolved with enhanced integration
-
-### **🔧 Recent Critical Fixes**
-- **Jest Configuration**: Removed deprecated `--harmony-private-fields` flag
-- **Test Cases**: Fixed board wrapping validation logic
-- **Security**: Updated all vulnerable dependencies with npm overrides
-- **ESLint & Prettier**: Synchronized tooling with `.prettierrc.json` and `eslint-config-prettier` to resolve all style conflicts
-- **CI/CD Pipeline**: Implemented robust, multi-stage CI workflow that correctly handles auto-fix commits, race conditions, and dependency installation order
-- **🚨 MoveValidator Integration**: **CRITICAL FIXES APPLIED** - Enhanced integration between MoveValidator and MoveGenerator with comprehensive error handling
-- **🧹 ESLint Compliance**: **PROPER CODE QUALITY FIX** - Removed unused error variables entirely instead of prefixing, following project's strict no-unused-vars rule
-
-### **📝 Documentation Foundation Complete**
-- **✅ Professional README.md** (Issue #35) - Impactful header, project description, and vision
-- **✅ Installation & Usage Guide** (Issue #36) - Comprehensive setup and development instructions
-- **✅ Architecture Documentation** (Issue #37) - Mermaid diagrams, CONTRIBUTING.md (10.7KB), and technical framework
-- **✅ Status Badges & Roadmap** (Issue #38) - 8 dynamic status badges and 6-phase development roadmap
-- **📊 README Growth**: From 2.5KB → 16.9KB with world-class professional documentation
-- **🎯 Project Credibility**: Complete documentation foundation suitable for portfolio and enterprise use
 
 ### **🎯 PHASE 3 PROGRESS: Enhanced Board Logic & Move Validation**
 - **✅ Issue #15 COMPLETED**: Enhanced Board.js movePiece for Game Logic
@@ -124,29 +109,9 @@ read_graph({})
 3. Implement fallback strategies for initialization failures
 4. Verify successful memory integration before proceeding
 
-### **🔧 GitHub File Update Protocol (Enhanced)**
+### **🤖 Automated LLM Code Quality Protocol (ENHANCED)**
 
-**CRITICAL**: When updating EXISTING files, ALWAYS provide the SHA to prevent 422 errors:
-
-```javascript
-// ✅ CORRECT: SHA-based update sequence
-const fileData = await get_file_contents(owner, repo, path);
-const currentSHA = fileData.sha;
-await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
-
-// ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"sha\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" wasn't supplied. []"}
-```
-
-**Update Workflow:**
-1. Get current file contents and SHA using `get_file_contents`
-2. Extract SHA from response: `const currentSHA = fileData.sha`
-3. Include SHA in `create_or_update_file` call as final parameter
-4. Verify successful update completion
-
-### **🤖 Automated LLM Code Quality Protocol (NEW & IMPROVED)**
-
-**CRITICAL**: The project now includes a fully synchronized, automated code quality workflow.
+**CRITICAL**: The project includes a fully synchronized, automated code quality workflow.
 
 ```yaml
 # Auto-fix workflow (.github/workflows/auto-fix.yml)
@@ -157,69 +122,38 @@ await create_or_update_file(owner, repo, path, content, message, branch, current
 ```
 
 **LLM Development Workflow:**
-1. **Generate Code**: LLMs can generate code without worrying about minor linting or formatting issues.
-2. **Auto-Fix Triggers**: Push/PR automatically triggers the auto-fix workflow.
-3. **Automatic Fixes**: Prettier and ESLint are run in the correct order to automatically format and fix the code.
-4. **Auto-Commit**: Fixed code is committed back to the branch with an `[auto-fix]` message.
-5. **CI Validation**: The main CI pipeline runs on the *already fixed* code, ensuring a smooth and reliable build.
+1. **Generate Code**: LLMs can generate code without worrying about minor linting or formatting issues
+2. **Auto-Fix Triggers**: Push/PR automatically triggers the auto-fix workflow
+3. **Automatic Fixes**: Prettier and ESLint are run in the correct order to automatically format and fix the code
+4. **Auto-Commit**: Fixed code is committed back to the branch with an `[auto-fix]` message
+5. **CI Validation**: The main CI pipeline runs on the *already fixed* code, ensuring a smooth and reliable build
 
 **🧹 CODE QUALITY BEST PRACTICES (CRITICAL):**
 - **Remove unused variables entirely** - Never introduce unused variables, they are useless clutter
 - **Follow .eslintrc.json standards strictly** - Project has strict no-unused-vars rule
 - **Use parameterless catch blocks** when error details aren't needed: `catch { ... }` instead of `catch (error) { ... }`
 - **Clean code over workarounds** - Remove unnecessary code rather than trying to work around ESLint
+- **Self-documenting code** - Method names, variable names, and structure should make intent obvious
+- **No comments** - Good code should not need comments to explain what it does
 
-**Enhanced Scripts Available:**
-```bash
-npm run quality:check    # Check both formatting and linting
-npm run quality:fix      # Fix both formatting and linting (Prettier runs first)
-npm run lint:check       # Check linting with zero warnings
-npm run format:check     # Check formatting without fixing
+### **♟️ Chess Standards Compliance (CRITICAL)**
+
+**Standard Chess Notation:**
+- **Board Layout**: Rank 1 = positions 56-63 (white back rank), Rank 8 = positions 0-7 (black back rank)
+- **Pawn Movement**: White moves "up" (-8 direction), Black moves "down" (+8 direction)
+- **Starting Positions**: White pawns rank 2 (48-55), Black pawns rank 7 (8-15)
+- **Square Mapping**: a1=56, h1=63, a8=0, h8=7
+
+**Board Representation:**
 ```
-
-### **🧪 Jest Test Execution (UPDATED 2025)**
-```bash
-# ✅ CORRECT: Modern Jest configuration
-npm test
-
-# Test scripts (package.json):
-"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
-"test:watch": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch"
-"test:coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage"
-
-# ❌ DEPRECATED: Do not use --harmony-private-fields (causes errors)
-```
-
-### **🧪 Test Compatibility Protocol (MANDATORY)**
-```javascript
-// When modifying core components with private fields or new APIs:
-const testUpdateWorkflow = {
-    1: "Identify all dependent test files before making changes",
-    2: "Update tests to use getter methods instead of direct property access",
-    3: "Run full test suite to verify compatibility",
-    4: "Document breaking changes in commit message",
-    5: "Update any integration tests that depend on the modified component"
-};
-
-// Example: After implementing private fields in Piece.js
-// ❌ OLD: expect(piece.type).toBe('pawn');
-// ✅ NEW: expect(piece.getType()).toBe('pawn');
-
-// Integration test updates
-// ❌ OLD: expect(board.squares[8].color).toBe('white');
-// ✅ NEW: expect(board.squares[8].getColor()).toBe('white');
-```
-
-### **📝 Enhanced Move Object Structure (IMPLEMENTED)**
-```javascript
-// Enhanced move object format (implemented in Issue #15)
-const moveResult = {
-    from: 12,              // Source square index (0-63)
-    to: 28,                // Destination square index
-    pieceMoved: 'pawn',    // Moving piece type
-    pieceCaptured: 'knight', // Captured piece type (if any, null otherwise)
-    success: true          // Move execution status
-};
+Rank 8 (0-7):   ♜♞♝♛♚♝♞♜  (a8-h8, Black back rank)
+Rank 7 (8-15):  ♟♟♟♟♟♟♟♟  (a7-h7, Black pawns)
+Rank 6 (16-23): ........  (empty)
+Rank 5 (24-31): ........  (empty)
+Rank 4 (32-39): ........  (empty)
+Rank 3 (40-47): ........  (empty)
+Rank 2 (48-55): ♙♙♙♙♙♙♙♙  (a2-h2, White pawns)
+Rank 1 (56-63): ♖♘♗♕♔♗♘♖  (a1-h1, White back rank)
 ```
 
 ---
@@ -272,13 +206,13 @@ function processMove(_unused, toSquare) { /* ... */ }
 ```
 
 ### **Testing & Quality**
-- **Jest Configuration** - ES modules with experimental VM support (NO deprecated flags).
-- **ESLint & Prettier** - Synchronized flat config with `.prettierrc.json` and `eslint-config-prettier`.
-- **Error Handling** - Descriptive exceptions, no console pollution.
-- **Test Coverage** - All error paths and edge cases validated.
-- **Test Compatibility** - Update tests when implementing private fields or new APIs.
-- **Automated Linting** - Auto-fix workflow prevents CI failures from LLM code.
-- **🧹 Code Cleanliness** - Remove unused variables entirely, follow strict no-unused-vars rule.
+- **Jest Configuration** - ES modules with experimental VM support (NO deprecated flags)
+- **ESLint & Prettier** - Synchronized flat config with `.prettierrc.json` and `eslint-config-prettier`
+- **Error Handling** - Descriptive exceptions, no console pollution
+- **Test Coverage** - All error paths and edge cases validated
+- **Test Compatibility** - Update tests when implementing private fields or new APIs
+- **Automated Linting** - Auto-fix workflow prevents CI failures from LLM code
+- **🧹 Code Cleanliness** - Remove unused variables entirely, follow strict no-unused-vars rule
 
 ### **File Structure**
 ```
@@ -330,34 +264,27 @@ tests/
 - **Progress Tracking** - Regular status updates and completion verification
 
 ### **Code Quality Gates**
-1. **ESLint passes** without errors or warnings (auto-fixed if needed).
-2. **All tests pass** with 100% success rate.
-3. **Error handling** uses exceptions, not console output.
-4. **Documentation** updated for significant changes.
-5. **Performance** considerations for LLM integration.
-6. **Test compatibility** verified when modifying core components.
-7. **Automated fixes** applied for LLM-generated code quality issues.
-8. **🧹 Clean code** - Remove unused variables entirely, follow strict ESLint rules.
+1. **ESLint passes** without errors or warnings (auto-fixed if needed)
+2. **All tests pass** with 100% success rate
+3. **Error handling** uses exceptions, not console output
+4. **Documentation** updated for significant changes
+5. **Performance** considerations for LLM integration
+6. **Test compatibility** verified when modifying core components
+7. **Automated fixes** applied for LLM-generated code quality issues
+8. **🧹 Clean code** - Remove unused variables entirely, follow strict ESLint rules
 
 ### **Integration Testing Protocol**
-- **Dependency Mapping** - Before modifying core components, identify all dependent files.
-- **API Compatibility** - When changing public interfaces, update all consumers.
-- **Test Cascade** - Run tests for modified component AND all dependent components.
-- **Breaking Change Documentation** - Clearly document any API changes in commit messages.
-
-### **Collaboration Protocol**
-- **SHA-based updates** - Always get current SHA before file modifications.
-- **Verification steps** - Confirm operations completed successfully.
-- **Error recovery** - Implement retry strategies for tool failures.
-- **Research validation** - Verify best practices through online research.
-- **LLM-friendly workflow** - Auto-fix handles minor code quality issues automatically.
+- **Dependency Mapping** - Before modifying core components, identify all dependent files
+- **API Compatibility** - When changing public interfaces, update all consumers
+- **Test Cascade** - Run tests for modified component AND all dependent components
+- **Breaking Change Documentation** - Clearly document any API changes in commit messages
 
 ### **LLM Code Generation Best Practices**
-- **Focus on Logic** - LLMs can focus on implementing functionality without worrying about minor linting.
-- **Trust Auto-Fix** - Let the automated workflow handle ESLint and Prettier issues.
-- **Verify Results** - Check that auto-fixes don't change intended logic.
-- **Quality Scripts** - Use `npm run quality:check` before major commits.
-- **🧹 Clean Code Principle** - Remove unused variables entirely instead of working around them.
+- **Focus on Logic** - LLMs can focus on implementing functionality without worrying about minor linting
+- **Trust Auto-Fix** - Let the automated workflow handle ESLint and Prettier issues
+- **Verify Results** - Check that auto-fixes don't change intended logic
+- **Quality Scripts** - Use `npm run quality:check` before major commits
+- **🧹 Clean Code Principle** - Remove unused variables entirely instead of working around them
 
 ---
 
@@ -425,13 +352,6 @@ tests/
 
 ---
 
-## 📚 **REFERENCE RESOURCES**
-
-- **Technical Guide** - `llms.txt` (comprehensive development guidelines)
-- **Issue Tracker** - GitHub Issues for all development tasks
-- **CI/CD Pipeline** - GitHub Actions with automated testing and auto-fixing
-- **Code Standards** - ESLint flat config with ES2022 support
-
 ## 🔧 **TROUBLESHOOTING QUICK REFERENCE**
 
 ### **Common Jest Issues**
@@ -484,5 +404,26 @@ expect(piece.getType()).toBe('pawn');  // Not piece.type
 // ✅ Solution: Enhanced checkmate/stalemate detection algorithms
 // 🧹 Solution: Clean code with unused variables removed entirely
 ```
+
+### **Enhanced Move Object Structure (IMPLEMENTED)**
+```javascript
+// Enhanced move object format (implemented in Issue #15)
+const moveResult = {
+    from: 12,              // Source square index (0-63)
+    to: 28,                // Destination square index
+    pieceMoved: 'pawn',    // Moving piece type
+    pieceCaptured: 'knight', // Captured piece type (if any, null otherwise)
+    success: true          // Move execution status
+};
+```
+
+---
+
+## 📚 **REFERENCE RESOURCES**
+
+- **Technical Guide** - `llms.txt` (comprehensive development guidelines)
+- **Issue Tracker** - GitHub Issues for all development tasks
+- **CI/CD Pipeline** - GitHub Actions with automated testing and auto-fixing
+- **Code Standards** - ESLint flat config with ES2022 support
 
 **This context provides the essential framework for efficient development while maintaining the chess engine's core objectives and technical excellence.**
