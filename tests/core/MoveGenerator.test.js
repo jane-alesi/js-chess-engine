@@ -825,7 +825,7 @@ describe('MoveGenerator', () => {
 
             const moves = moveGenerator.generateKingMoves(king, 56);
             expect(moves).toHaveLength(3);
-            const destinations = moves.map(m => m.to);
+            const destinations = moves.map((m) => m.to);
             expect(destinations).toEqual(expect.arrayContaining([48, 49, 57])); // a2, b2, b1
         });
 
@@ -849,7 +849,7 @@ describe('MoveGenerator', () => {
             const moves = moveGenerator.generateKingMoves(king, 28);
             expect(moves).toHaveLength(7); // 8 possible moves - 1 blocked by friendly
 
-            const captureMove = moves.find(m => m.to === 29);
+            const captureMove = moves.find((m) => m.to === 29);
             expect(captureMove).toBeDefined();
             expect(captureMove.type).toBe('capture');
             expect(captureMove.captured).toBe('pawn');
@@ -857,15 +857,15 @@ describe('MoveGenerator', () => {
 
         test('isValidKingMove should prevent wrapping', () => {
             // Valid moves
-            expect(moveGenerator.isValidKingMove(0, 9)).toBe(true);  // a8 to b7
+            expect(moveGenerator.isValidKingMove(0, 9)).toBe(true); // a8 to b7
             expect(moveGenerator.isValidKingMove(28, 27)).toBe(true); // e4 to d4
 
             // Invalid moves (wrapping from h-file to a-file)
-            expect(moveGenerator.isValidKingMove(7, 8)).toBe(false);   // h8 to a7
+            expect(moveGenerator.isValidKingMove(7, 8)).toBe(false); // h8 to a7
             expect(moveGenerator.isValidKingMove(15, 16)).toBe(false); // h7 to a6
         });
     });
-    
+
     describe('Other Piece Move Generation (TODO)', () => {
         test('should return empty array for queen moves (not implemented)', () => {
             const queen = new Piece('queen', 'white', 9, '♕');
@@ -914,7 +914,7 @@ describe('MoveGenerator', () => {
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('knight');
         });
-        
+
         test('should route to correct piece-specific method for king', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             board.squares[28] = whiteKing;
