@@ -49,8 +49,8 @@ export class MoveGenerator {
         }
 
         // Determine direction and starting ranks based on color
-        const direction = color === 'white' ? 8 : -8; // White moves up (+8), black moves down (-8)
-        const startingRank = color === 'white' ? 1 : 6; // White starts on rank 2 (indices 8-15), black on rank 7 (indices 48-55)
+        const direction = color === 'white' ? -8 : 8; // ✅ FIXED: White moves up (-8), black moves down (+8)
+        const startingRank = color === 'white' ? 6 : 1; // ✅ FIXED: White starts on rank 6 (e2=52), black on rank 1 (e7=12)
         const currentRank = Math.floor(position / 8);
 
         // Single square forward move
@@ -83,7 +83,7 @@ export class MoveGenerator {
         }
 
         // Diagonal capture moves
-        const captureOffsets = color === 'white' ? [7, 9] : [-7, -9]; // Diagonal offsets for captures
+        const captureOffsets = color === 'white' ? [-9, -7] : [7, 9]; // ✅ FIXED: Adjusted for correct direction
 
         for (const offset of captureOffsets) {
             const captureSquare = position + offset;
