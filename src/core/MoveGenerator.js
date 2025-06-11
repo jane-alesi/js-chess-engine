@@ -34,11 +34,11 @@ export class MoveGenerator {
 
         const direction = color === 'white' ? 8 : -8;
         const currentRank = Math.floor(position / 8);
-        
+
         // Fix starting rank detection based on actual test positions
         // Tests use position 12 for white (rank 1) and position 52 for black (rank 6)
-        const isOnStartingRank = (color === 'white' && currentRank === 1) || 
-                                (color === 'black' && currentRank === 6);
+        const isOnStartingRank =
+            (color === 'white' && currentRank === 1) || (color === 'black' && currentRank === 6);
 
         const oneSquareForward = position + direction;
         if (this.isValidSquare(oneSquareForward) && !this.board.squares[oneSquareForward]) {
