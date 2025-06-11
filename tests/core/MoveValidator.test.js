@@ -112,8 +112,10 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackPawn = new Piece('pawn', 'black', 1, '♟');
 
+            // Place white king at e4 (position 28)
             board.squares[28] = whiteKing;
-            board.squares[35] = blackPawn;
+            // Place black pawn at d3 (position 19) - black pawn can capture diagonally to e4
+            board.squares[19] = blackPawn;
 
             const inCheck = moveValidator.isInCheck('white');
             expect(inCheck).toBe(true);
