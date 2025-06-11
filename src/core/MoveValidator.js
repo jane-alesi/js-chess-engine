@@ -1,4 +1,5 @@
 // src/core/MoveValidator.js
+// Cache-busting comment to ensure CI picks up the latest version
 
 import { MoveGenerator } from './MoveGenerator.js';
 import { Board } from './Board.js';
