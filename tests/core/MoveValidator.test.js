@@ -185,13 +185,13 @@ describe('MoveValidator', () => {
             const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
             const whitePawn3 = new Piece('pawn', 'white', 1, '♙');
 
-            board.squares[60] = whiteKing;  // e1
-            board.squares[6] = blackKing;   // g8
-            board.squares[61] = blackRook;  // f1
+            board.squares[60] = whiteKing; // e1
+            board.squares[6] = blackKing; // g8
+            board.squares[61] = blackRook; // f1
             board.squares[52] = whitePawn1; // e2
             board.squares[53] = whitePawn2; // f2
             board.squares[54] = whitePawn3; // g2
-            
+
             board.squares[61] = null;
             board.squares[58] = blackRook;
 
@@ -239,8 +239,8 @@ describe('MoveValidator', () => {
             const blackKing = new Piece('king', 'black', 1000, '♚');
             const blackQueen = new Piece('queen', 'black', 9, '♛');
 
-            board.squares[0] = whiteKing;   // a8
-            board.squares[26] = blackKing;  // c6
+            board.squares[0] = whiteKing; // a8
+            board.squares[26] = blackKing; // c6
             board.squares[18] = blackQueen; // c7
 
             const isStalemate = moveValidator.isStalemate('white');

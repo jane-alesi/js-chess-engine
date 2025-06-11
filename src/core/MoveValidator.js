@@ -157,7 +157,7 @@ export class MoveValidator {
         // Prevent ESLint unused parameter warnings
         void color;
         void side;
-        
+
         // TODO: Implement castling validation
         // - King and rook haven't moved
         // - No pieces between king and rook
