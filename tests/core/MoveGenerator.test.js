@@ -382,7 +382,7 @@ describe('MoveGenerator', () => {
             });
 
             test('should generate moves for rook on edge of board', () => {
-                // Place white rook on e1 (index 60) - bottom edge
+                // Place white rook on a4 (index 60) - bottom edge
                 const whiteRook = new Piece('rook', 'white', 5, '♖');
                 board.squares[60] = whiteRook;
 
@@ -458,7 +458,7 @@ describe('MoveGenerator', () => {
 
             test('should handle multiple obstructions in different directions', () => {
                 // Place white rook on e4 (index 28)
-                const whiteRook = new Piece('rook', 'white', 5, '♖');
+                const whiteRook = new Piece('rook', 'white', 1, '♖');
                 board.squares[28] = whiteRook;
 
                 // Place pieces in all directions
@@ -577,16 +577,173 @@ describe('MoveGenerator', () => {
         });
     });
 
+    describe('Bishop Move Generation', () => {
+        describe('Basic Bishop Movement', () => {
+            test('should generate all possible moves for bishop in center of empty board', () => {
+                // Place white bishop on e4 (index 28) - center position
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+                board.squares[28] = whiteBishop;
+
+                const moves = moveGenerator.generateBishopMoves(whiteBishop, 28);
+
+                expect(moves).toHaveLength(13); // 4 diagonal directions with varying lengths
+
+                // Check that all moves are valid squares
+                moves.forEach((move) => {
+                    expect(move.from).toBe(28);
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                    expect(move.type).toBe('normal');
+                    expect(move.piece).toBe('bishop');
+                    expect(move.color).toBe('white');
+                });
+
+                // Check specific diagonal moves
+                const neMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 7 === 0);
+                const nwMoves = moves.filter(move => move.to > 28 && (move.to - 28) % 9 === 0);
+                const seMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 9 === 0);
+                const swMoves = moves.filter(move => move.to < 28 && (28 - move.to) % 7 === 0);
+
+                expect(neMoves.length).toBeGreaterThan(0); // NE diagonal
+                expect(nwMoves.length).toBeGreaterThan(0); // NW diagonal  
+                expect(seMoves.length).toBeGreaterThan(0); // SE diagonal
+                expect(swMoves.length).toBeGreaterThan(0); // SW diagonal
+            });
+
+            test('should generate moves for bishop in corner position', () => {
+                // Place white bishop on a1 (index 56) - corner position
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+                board.squares[56] = whiteBishop;
+
+                const moves = moveGenerator.generateBishopMoves(whiteBishop, 56);
+
+                expect(moves).toHaveLength(7); // Only one diagonal available from corner
+
+                // All moves should be valid
+                moves.forEach((move) => {
+                    expect(move.from).toBe(56);
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                    expect(move.type).toBe('normal');
+                });
+            });
+        });
+
+        describe('Bishop Movement with Obstructions', () => {
+            test('should stop at friendly piece and not capture it', () => {
+                // Place white bishop on e4 (index 28)
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+                board.squares[28] = whiteBishop;
+
+                // Place friendly piece on g6 (index 46) - blocks NE diagonal
+                const whitePawn = new Piece('pawn', 'white', 1, '♙');
+                board.squares[46] = whitePawn;
+
+                const moves = moveGenerator.generateBishopMoves(whiteBishop, 28);
+
+                // Should not capture friendly piece
+                const captureAtG6 = moves.find(move => move.to === 46);
+                expect(captureAtG6).toBeUndefined();
+
+                // Should not include moves beyond g6 in NE direction
+                const beyondG6 = moves.filter(move => move.to > 46 && (move.to - 28) % 7 === 0);
+                expect(beyondG6).toHaveLength(0);
+            });
+
+            test('should capture enemy piece and stop', () => {
+                // Place white bishop on e4 (index 28)
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+                board.squares[28] = whiteBishop;
+
+                // Place enemy piece on g6 (index 46) - can be captured
+                const blackPawn = new Piece('pawn', 'black', 1, '♟');
+                board.squares[46] = blackPawn;
+
+                const moves = moveGenerator.generateBishopMoves(whiteBishop, 28);
+
+                // Should include capture move at g6
+                const captureMove = moves.find(move => move.to === 46);
+                expect(captureMove).toBeDefined();
+                expect(captureMove).toEqual({
+                    from: 28,
+                    to: 46,
+                    type: 'capture',
+                    piece: 'bishop',
+                    color: 'white',
+                    captured: 'pawn',
+                });
+            });
+        });
+
+        describe('Bishop Edge Cases and Validation', () => {
+            test('should throw error for invalid position', () => {
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+
+                expect(() => {
+                    moveGenerator.generateBishopMoves(whiteBishop, -1);
+                }).toThrow('Invalid position: -1 must be between 0 and 63');
+
+                expect(() => {
+                    moveGenerator.generateBishopMoves(whiteBishop, 64);
+                }).toThrow('Invalid position: 64 must be between 0 and 63');
+            });
+
+            test('should not wrap around board edges', () => {
+                // Place white bishop on h1 (index 63) - corner edge case
+                const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+                board.squares[63] = whiteBishop;
+
+                const moves = moveGenerator.generateBishopMoves(whiteBishop, 63);
+
+                // Check that no moves wrap around board
+                moves.forEach((move) => {
+                    expect(move.to).toBeGreaterThanOrEqual(0);
+                    expect(move.to).toBeLessThan(64);
+                    // Verify diagonal movement is valid
+                    expect(moveGenerator.isValidDiagonalMove(63, move.to)).toBe(true);
+                });
+            });
+
+            test('should generate correct moves for black bishop', () => {
+                // Place black bishop on d5 (index 35)
+                const blackBishop = new Piece('bishop', 'black', 3, '♝');
+                board.squares[35] = blackBishop;
+
+                const moves = moveGenerator.generateBishopMoves(blackBishop, 35);
+
+                expect(moves.length).toBeGreaterThan(0);
+                moves.forEach((move) => {
+                    expect(move.from).toBe(35);
+                    expect(move.piece).toBe('bishop');
+                    expect(move.color).toBe('black');
+                    expect(move.type).toBe('normal');
+                });
+            });
+        });
+
+        describe('Helper Methods', () => {
+            test('isValidDiagonalMove should prevent board wrapping', () => {
+                // Valid diagonal moves
+                expect(moveGenerator.isValidDiagonalMove(28, 35)).toBe(true); // e4 to d5
+                expect(moveGenerator.isValidDiagonalMove(28, 37)).toBe(true); // e4 to f5
+                expect(moveGenerator.isValidDiagonalMove(28, 21)).toBe(true); // e4 to f3
+                expect(moveGenerator.isValidDiagonalMove(28, 19)).toBe(true); // e4 to d3
+
+                // Invalid diagonal moves (wrapping)
+                expect(moveGenerator.isValidDiagonalMove(7, 8)).toBe(false); // h1 to a2 (wraps)
+                expect(moveGenerator.isValidDiagonalMove(0, 15)).toBe(false); // a1 to h2 (wraps)
+
+                // Non-diagonal moves
+                expect(moveGenerator.isValidDiagonalMove(28, 29)).toBe(false); // e4 to f4 (horizontal)
+                expect(moveGenerator.isValidDiagonalMove(28, 36)).toBe(false); // e4 to e5 (vertical)
+            });
+        });
+    });
+
     describe('Other Piece Move Generation (TODO)', () => {
         test('should return empty array for knight moves (not implemented)', () => {
             const knight = new Piece('knight', 'white', 3, '♘');
             const moves = moveGenerator.generateKnightMoves(knight, 1);
-            expect(moves).toEqual([]);
-        });
-
-        test('should return empty array for bishop moves (not implemented)', () => {
-            const bishop = new Piece('bishop', 'white', 3, '♗');
-            const moves = moveGenerator.generateBishopMoves(bishop, 2);
             expect(moves).toEqual([]);
         });
 
@@ -622,6 +779,16 @@ describe('MoveGenerator', () => {
 
             expect(moves.length).toBeGreaterThan(0);
             expect(moves[0].piece).toBe('rook');
+        });
+
+        test('should route to correct piece-specific method for bishop', () => {
+            const whiteBishop = new Piece('bishop', 'white', 3, '♗');
+            board.squares[28] = whiteBishop;
+
+            const moves = moveGenerator.generateMoves(whiteBishop, 28);
+
+            expect(moves.length).toBeGreaterThan(0);
+            expect(moves[0].piece).toBe('bishop');
         });
 
         test('should return empty array for unknown piece type', () => {
