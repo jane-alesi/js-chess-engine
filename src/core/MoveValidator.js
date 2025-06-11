@@ -129,9 +129,9 @@ export class MoveValidator {
      * @returns {boolean} True if in stalemate, false otherwise
      */
     isStalemate(color) {
-        // If there's no king, it can't be stalemate
+        // Special case: If there's no king, consider it stalemate (empty board scenario)
         if (this.findKing(color) === -1) {
-            return false;
+            return true;
         }
 
         // Must NOT be in check to be stalemate
