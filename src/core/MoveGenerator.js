@@ -259,6 +259,61 @@ export class MoveGenerator {
     }
 
     /**
+     * Generate pseudo-legal moves for knights.
+     * Handles the "L-shaped" movement pattern.
+     *
+     * @param {Piece} piece - The knight piece
+     * @param {number} position - Current position index (0-63)
+     * @returns {Array} Array of move objects
+     */
+    generateKnightMoves(piece, position) {
+        const moves = [];
+        const color = piece.getColor();
+
+        // Validate position
+        if (position < 0 || position >= 64) {
+            throw new Error(`Invalid position: ${position} must be between 0 and 63`);
+        }
+
+        // Knight movement offsets (L-shapes)
+        const directions = [-17, -15, -10, -6, 6, 10, 15, 17];
+
+        for (const direction of directions) {
+            const currentSquare = position + direction;
+
+            // Check if the target square is on the board and the move is valid
+            if (this.isValidSquare(currentSquare) && this.isValidKnightMove(position, currentSquare)) {
+                const targetPiece = this.board.squares[currentSquare];
+
+                if (!targetPiece) {
+                    // Empty square - add normal move
+                    moves.push({
+                        from: position,
+                        to: currentSquare,
+                        type: 'normal',
+                        piece: piece.getType(),
+                        color: color,
+                    });
+                } else {
+                    // Square occupied - can capture if it's an enemy piece
+                    if (targetPiece.getColor() !== color) {
+                        moves.push({
+                            from: position,
+                            to: currentSquare,
+                            type: 'capture',
+                            piece: piece.getType(),
+                            color: color,
+                            captured: targetPiece.getType(),
+                        });
+                    }
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    /**
      * Check if a square index is valid (0-63)
      * @param {number} square - Square index to validate
      * @returns {boolean} True if valid, false otherwise
@@ -315,9 +370,21 @@ export class MoveGenerator {
         return fileDiff === rankDiff;
     }
 
-    generateKnightMoves(_piece, _position) {
-        // TODO: Implement knight move generation
-        return [];
+    /**
+     * Check if a knight move is valid (doesn't wrap around board edges).
+     * @param {number} fromSquare - Starting square index.
+     * @param {number} toSquare - Target square index.
+     * @returns {boolean} True if the move is a valid L-shape, false otherwise.
+     */
+    isValidKnightMove(fromSquare, toSquare) {
+        const fromFile = fromSquare % 8;
+        const toFile = toSquare % 8;
+        const fileDiff = Math.abs(fromFile - toFile);
+
+        // A knight's move should not wrap around the board.
+        // The file difference for a valid knight move will always be 1 or 2.
+        // A larger difference indicates a wrap-around.
+        return fileDiff === 1 || fileDiff === 2;
     }
 
     generateQueenMoves(_piece, _position) {
