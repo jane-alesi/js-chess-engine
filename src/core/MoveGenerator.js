@@ -376,6 +376,22 @@ export class MoveGenerator {
     }
 
     /**
+     * Generate pseudo-legal moves for the queen.
+     * Combines the move sets of a rook and a bishop.
+     *
+     * @param {Piece} piece - The queen piece
+     * @param {number} position - Current position index (0-63)
+     * @returns {Array} Array of move objects
+     */
+    generateQueenMoves(piece, position) {
+        // A queen's power is the sum of a rook's and a bishop's
+        const rookMoves = this.generateRookMoves(piece, position);
+        const bishopMoves = this.generateBishopMoves(piece, position);
+
+        return [...rookMoves, ...bishopMoves];
+    }
+
+    /**
      * Check if a square index is valid (0-63)
      * @param {number} square - Square index to validate
      * @returns {boolean} True if valid, false otherwise
@@ -463,10 +479,5 @@ export class MoveGenerator {
         // A king's move should not wrap around the board.
         // The file difference for a valid king move will always be 0 or 1.
         return fileDiff <= 1;
-    }
-
-    generateQueenMoves(_piece, _position) {
-        // TODO: Implement queen move generation
-        return [];
     }
 }
