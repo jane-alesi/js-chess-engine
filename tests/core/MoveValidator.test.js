@@ -22,9 +22,9 @@ describe('MoveValidator', () => {
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[12] = whitePawn; // e2
-            board.squares[4] = whiteKing;  // e1
+            board.squares[4] = whiteKing; // e1
             board.squares[60] = blackKing; // e8
 
             const isValid = moveValidator.isValidMove(12, 20); // e2 to e3
@@ -59,9 +59,9 @@ describe('MoveValidator', () => {
             const whiteRook = new Piece('rook', 'white', 5, '♖');
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[28] = whiteRook; // e4
-            board.squares[4] = whiteKing;  // e1
+            board.squares[4] = whiteKing; // e1
             board.squares[60] = blackKing; // e8
 
             const isValid = moveValidator.isValidMove(28, 36); // e4 to e5
@@ -279,7 +279,7 @@ describe('MoveValidator', () => {
             // King has legal moves available
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚'); // Add black king to prevent errors
-            
+
             board.squares[28] = whiteKing; // e4
             board.squares[60] = blackKing; // e8
 
@@ -427,7 +427,7 @@ describe('MoveValidator', () => {
         test('should handle piece at board boundaries correctly', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚'); // Add black king to prevent errors
-            
+
             board.squares[0] = whiteKing; // a1 (corner)
             board.squares[63] = blackKing; // h8 (opposite corner)
 
