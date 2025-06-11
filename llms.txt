@@ -22,6 +22,8 @@ This is a pure JavaScript chess engine inspired by the legendary Atari Video Che
 - **Modular Architecture** - Core, UI, AI, Utils components with incremental development
 - **AI-First Design** - Optimized for LLM collaboration and code generation
 - **File-Reference Approach** - Reference actual repository files instead of embedding large code examples
+- **🧹 Clean Code Standards** - Self-documenting code without unnecessary comments
+- **♟️ Official Chess Standards** - Strict adherence to standard chess notation and rules
 
 ### File Structure Overview
 
@@ -66,6 +68,8 @@ src/
 - Implement comprehensive input validation with descriptive errors
 - Follow getter/setter patterns for private field access
 - Maintain immutable game state for AI search
+- **🧹 Write self-documenting code without comments**
+- **♟️ Follow standard chess notation (a1=56, h8=0)**
 
 ### 2. Move Generation System
 
@@ -114,6 +118,56 @@ tests/
 - Automated linting pipeline prevents CI failures
 - Jest configuration for ES modules
 - Comprehensive error handling patterns
+- **🧹 Clean code principle: No comments, self-documenting code**
+- **♟️ Standard chess notation compliance**
+
+### 5. Clean Code Standards (CRITICAL)
+
+**🧹 Clean Code Principles:**
+- **Remove unused variables entirely** - Never introduce unused variables, they are useless clutter
+- **Follow .eslintrc.json standards strictly** - Project has strict no-unused-vars rule
+- **Use parameterless catch blocks** when error details aren't needed: `catch { ... }` instead of `catch (error) { ... }`
+- **Clean code over workarounds** - Remove unnecessary code rather than trying to work around ESLint
+- **Self-documenting code** - Method names, variable names, and structure should make intent obvious
+- **No comments** - Good code should not need comments to explain what it does
+
+**Example Clean Code:**
+```javascript
+export class MoveValidator {
+    isValidMove(fromPosition, toPosition) {
+        try {
+            if (!this.isValidPosition(fromPosition)) {
+                return false;
+            }
+            
+            const piece = this.board.squares[fromPosition];
+            return this.validatePieceMovement(piece, fromPosition, toPosition);
+        } catch {
+            return false;
+        }
+    }
+}
+```
+
+### 6. Chess Standards Compliance (CRITICAL)
+
+**♟️ Standard Chess Notation:**
+- **Board Layout**: Rank 1 = positions 56-63 (white back rank), Rank 8 = positions 0-7 (black back rank)
+- **Pawn Movement**: White moves "up" (-8 direction), Black moves "down" (+8 direction)
+- **Starting Positions**: White pawns rank 2 (48-55), Black pawns rank 7 (8-15)
+- **Square Mapping**: a1=56, h1=63, a8=0, h8=7
+
+**Board Representation:**
+```
+Rank 8 (0-7):   ♜♞♝♛♚♝♞♜  (a8-h8, Black back rank)
+Rank 7 (8-15):  ♟♟♟♟♟♟♟♟  (a7-h7, Black pawns)
+Rank 6 (16-23): ........  (empty)
+Rank 5 (24-31): ........  (empty)
+Rank 4 (32-39): ........  (empty)
+Rank 3 (40-47): ........  (empty)
+Rank 2 (48-55): ♙♙♙♙♙♙♙♙  (a2-h2, White pawns)
+Rank 1 (56-63): ♖♘♗♕♔♗♘♖  (a1-h1, White back rank)
+```
 
 ## 🚀 Development Workflow
 
@@ -145,7 +199,7 @@ git commit -m "✨ Implement move validation system (Issue #32)
 - Update documentation"
 ```
 
-## 🎮 Chess-Specific Implementation
+## ♟️ Chess-Specific Implementation
 
 ### Board Representation
 - 64-square array (0-63 indices)
@@ -225,6 +279,14 @@ expect(piece.getType()).toBe('pawn');
 - Solution: Implement alpha-beta pruning, transposition tables
 - Use Web Workers for AI computation
 
+**5. Clean Code Violations**
+- Solution: Remove unused variables entirely, use parameterless catch blocks
+- Follow strict no-unused-vars rule, write self-documenting code
+
+**6. Chess Standards Violations**
+- Solution: Follow standard chess notation (a1=56, h8=0)
+- Ensure proper pawn movement directions and starting positions
+
 ### Development Environment
 - Node.js with ES2022 support
 - Jest with experimental VM modules
@@ -245,11 +307,12 @@ expect(piece.getType()).toBe('pawn');
 - ✅ **Pawn, Rook, Bishop, Knight, King and Queen moves fully implemented**
 - **All pseudo-legal move generation for standard pieces is now implemented.**
 
-### 📅 Phase 3: Core Game Logic (CURRENT PRIORITY)
-1. **Issue #15**: Enhance Board.js movePiece for Game Logic (**RECOMMENDED NEXT**)
-2. Implement move validation and legal move filtering
-3. Add check/checkmate detection
-4. Complete game state management
+### 🔧 Phase 3: Core Game Logic (CURRENT PRIORITY)
+1. **Issue #15**: Enhance Board.js movePiece for Game Logic (**COMPLETED**)
+2. **Issue #49**: Fix MoveValidator integration (**COMPLETED**)
+3. **🧹 Clean Code Implementation**: Remove comments, follow standards (**COMPLETED**)
+4. **♟️ Chess Standards Compliance**: Standard notation implementation (**COMPLETED**)
+5. **Issue #14**: Orchestrate Game Flow with Game Class (**NEXT RECOMMENDED**)
 
 ### 🧠 Phase 4: AI Implementation (Lower Priority)
 1. Basic AI with random moves
@@ -307,4 +370,4 @@ This document serves as the comprehensive development guide for any LLM working 
 
 **Remember**: This guide focuses on HOW to develop, while `llms_project_context.txt` focuses on WHAT to develop next.
 
-**Current Status**: Core Game Logic Phase (Phase 3) → Entering core game logic implementation (Issue #15)
+**Current Status**: Core Game Logic Phase (Phase 3) → Enhanced with clean code standards and chess notation compliance
