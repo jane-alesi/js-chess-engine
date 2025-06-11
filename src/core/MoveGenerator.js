@@ -48,10 +48,11 @@ export class MoveGenerator {
             throw new Error(`Invalid position: ${position} must be between 0 and 63`);
         }
 
-        // 🔧 CRITICAL FIX: Corrected direction and starting ranks to match Board.js layout
-        // Board layout: 0-7 (black back rank), 8-15 (white pawns), 48-55 (black pawns), 56-63 (white back rank)
-        const direction = color === 'white' ? 8 : -8; // WHITE moves UP (+8), BLACK moves DOWN (-8)
-        const startingRank = color === 'white' ? 1 : 6; // WHITE rank 1 (8-15), BLACK rank 6 (48-55)
+        // 🔧 CRITICAL FIX: Corrected board layout to match standard chess notation
+        // Standard chess board: rank 0 = 8th rank (black back), rank 7 = 1st rank (white back)
+        // Position mapping: 0-7=a8-h8, 8-15=a7-h7, ..., 48-55=a2-h2, 56-63=a1-h1
+        const direction = color === 'white' ? -8 : 8; // WHITE moves UP (-8), BLACK moves DOWN (+8)
+        const startingRank = color === 'white' ? 6 : 1; // WHITE rank 6 (48-55), BLACK rank 1 (8-15)
         const currentRank = Math.floor(position / 8);
 
         // Single square forward move
@@ -85,7 +86,7 @@ export class MoveGenerator {
 
         // Diagonal capture moves
         // 🔧 CRITICAL FIX: Corrected capture offsets for proper direction
-        const captureOffsets = color === 'white' ? [7, 9] : [-9, -7];
+        const captureOffsets = color === 'white' ? [-9, -7] : [7, 9];
 
         for (const offset of captureOffsets) {
             const captureSquare = position + offset;
