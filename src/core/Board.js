@@ -104,7 +104,15 @@ export class Board {
         }
     }
 
-    // Method to move a piece (simplified for now)
+    /**
+     * Enhanced method to move a piece and track game logic details.
+     * Updates piece properties and returns comprehensive move information.
+     * 
+     * @param {number} fromIndex - Source square index (0-63)
+     * @param {number} toIndex - Destination square index (0-63)
+     * @returns {Object} Move details including from, to, pieceMoved, pieceCaptured, and success status
+     * @throws {Error} If move is invalid (out of bounds or no piece at source)
+     */
     movePiece(fromIndex, toIndex) {
         // Validate indices
         if (fromIndex < 0 || fromIndex >= 64 || toIndex < 0 || toIndex >= 64) {
@@ -118,9 +126,26 @@ export class Board {
             throw new Error(`Invalid move: no piece found at square ${fromIndex}`);
         }
 
-        // Move the piece
-        this.squares[toIndex] = this.squares[fromIndex];
+        // Capture move details before making the move
+        const movingPiece = this.squares[fromIndex];
+        const capturedPiece = this.squares[toIndex];
+
+        // Mark piece as moved (important for castling rights, pawn double moves, etc.)
+        if (!movingPiece.getHasMoved()) {
+            movingPiece.markAsMoved();
+        }
+
+        // Perform the move
+        this.squares[toIndex] = movingPiece;
         this.squares[fromIndex] = null;
-        return true;
+
+        // Return comprehensive move information for game logic
+        return {
+            from: fromIndex,
+            to: toIndex,
+            pieceMoved: movingPiece.getType(),
+            pieceCaptured: capturedPiece ? capturedPiece.getType() : null,
+            success: true
+        };
     }
 }
