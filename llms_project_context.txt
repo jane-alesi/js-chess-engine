@@ -17,6 +17,8 @@
 
 **Repository:** https://github.com/jane-alesi/js-chess-engine
 
+**For comprehensive development guidelines, see `llms.txt` in the repository root.**
+
 ---
 
 ## 🏆 **CURRENT PROJECT STATUS (June 2025)**
@@ -40,8 +42,8 @@
 - **Jest Configuration**: Removed deprecated `--harmony-private-fields` flag
 - **Test Cases**: Fixed board wrapping validation logic
 - **Security**: Updated all vulnerable dependencies with npm overrides
-- **ESLint & Prettier**: Synchronized tooling with a `.prettierrc.json` and `eslint-config-prettier` to resolve all style conflicts.
-- **CI/CD Pipeline**: Implemented a robust, multi-stage CI workflow that correctly handles auto-fix commits, race conditions, and dependency installation order.
+- **ESLint & Prettier**: Synchronized tooling with `.prettierrc.json` and `eslint-config-prettier` to resolve all style conflicts
+- **CI/CD Pipeline**: Implemented robust, multi-stage CI workflow that correctly handles auto-fix commits, race conditions, and dependency installation order
 
 ---
 
@@ -85,7 +87,7 @@ const currentSHA = fileData.sha;
 await create_or_update_file(owner, repo, path, content, message, branch, currentSHA);
 
 // ❌ INCORRECT: Missing SHA causes error
-// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\n\\\\n\\\\\\\"sha\\\\\\\" wasn't supplied. []"}
+// Error: MCP plugin run error: Failed to call tool: {"error":"Failed to call tool","details":"MCP error -32603: failed to create/update file: PUT https://api.github.com/repos/jane-alesi/js-chess-engine/contents/FILE_TO_UPDATE: 422 Invalid request.\\\\n\\\\n\\\\\"sha\\\\\" wasn't supplied. []"}
 ```
 
 **Update Workflow:**
