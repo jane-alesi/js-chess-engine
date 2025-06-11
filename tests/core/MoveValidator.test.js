@@ -72,7 +72,7 @@ describe('MoveValidator', () => {
             // Place white king on e1 and black rook on e8
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackRook; // e8
 
@@ -84,7 +84,7 @@ describe('MoveValidator', () => {
             // Place white king on e1 and black bishop on a5
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackBishop = new Piece('bishop', 'black', 3, '♝');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[32] = blackBishop; // a5
 
@@ -96,7 +96,7 @@ describe('MoveValidator', () => {
             // Place white king on e4 and black knight on d6
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKnight = new Piece('knight', 'black', 3, '♞');
-            
+
             board.squares[28] = whiteKing; // e4
             board.squares[43] = blackKnight; // d6
 
@@ -108,7 +108,7 @@ describe('MoveValidator', () => {
             // Place white king on e4 and black pawn on d5
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackPawn = new Piece('pawn', 'black', 1, '♟');
-            
+
             board.squares[28] = whiteKing; // e4
             board.squares[35] = blackPawn; // d5
 
@@ -120,7 +120,7 @@ describe('MoveValidator', () => {
             // Place white king on e1 and black rook on a8 (not attacking)
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[56] = blackRook; // a8
 
@@ -142,7 +142,7 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const whiteRook = new Piece('rook', 'white', 5, '♖');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[12] = whiteRook; // e2
             board.squares[60] = blackRook; // e8
@@ -156,7 +156,7 @@ describe('MoveValidator', () => {
             // White king on e1, white rook on a1 (not pinned)
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const whiteRook = new Piece('rook', 'white', 5, '♖');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[56] = whiteRook; // a1
 
@@ -169,7 +169,7 @@ describe('MoveValidator', () => {
             // White king on e1, black rook on e8
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackRook; // e8
 
@@ -187,7 +187,7 @@ describe('MoveValidator', () => {
             const whitePawn1 = new Piece('pawn', 'white', 1, '♙');
             const whitePawn2 = new Piece('pawn', 'white', 1, '♙');
             const whitePawn3 = new Piece('pawn', 'white', 1, '♙');
-            
+
             board.squares[6] = whiteKing; // g1
             board.squares[62] = blackRook; // g8
             board.squares[13] = whitePawn1; // f2
@@ -202,7 +202,7 @@ describe('MoveValidator', () => {
             // King in check but can escape
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackRook; // e8
 
@@ -225,7 +225,7 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
             const whiteRook = new Piece('rook', 'white', 5, '♖');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackRook; // e8
             board.squares[56] = whiteRook; // a1
@@ -242,7 +242,7 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
             const blackQueen = new Piece('queen', 'black', 9, '♛');
-            
+
             board.squares[0] = whiteKing; // a1
             board.squares[18] = blackKing; // c3
             board.squares[9] = blackQueen; // b2
@@ -256,7 +256,7 @@ describe('MoveValidator', () => {
             // King in check cannot be stalemate
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackRook; // e8
 
@@ -287,7 +287,7 @@ describe('MoveValidator', () => {
         test('findKing should locate king correctly', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackKing; // e8
 
@@ -300,7 +300,7 @@ describe('MoveValidator', () => {
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
             const whiteRook = new Piece('rook', 'white', 5, '♖');
             const blackPawn = new Piece('pawn', 'black', 1, '♟');
-            
+
             board.squares[12] = whitePawn; // e2
             board.squares[0] = whiteRook; // a1
             board.squares[52] = blackPawn; // e7
@@ -320,19 +320,19 @@ describe('MoveValidator', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const whiteRook = new Piece('rook', 'white', 5, '♖');
             const blackRook = new Piece('rook', 'black', 5, '♜');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[12] = whiteRook; // e2 (pinned)
             board.squares[60] = blackRook; // e8
 
             const legalMoves = moveValidator.getAllLegalMoves('white');
-            
+
             // Should have king moves and legal rook moves (only vertical)
             expect(legalMoves.length).toBeGreaterThan(0);
-            
+
             // Pinned rook should not have horizontal moves
             const horizontalRookMoves = legalMoves.filter(
-                move => move.from === 12 && Math.floor(move.to / 8) === Math.floor(12 / 8)
+                (move) => move.from === 12 && Math.floor(move.to / 8) === Math.floor(12 / 8)
             );
             expect(horizontalRookMoves).toHaveLength(0);
         });
@@ -343,7 +343,7 @@ describe('MoveValidator', () => {
             board.squares[12] = whitePawn;
 
             const boardCopy = moveValidator.createBoardCopy();
-            
+
             expect(boardCopy.squares[12]).not.toBe(whitePawn); // Different object
             expect(boardCopy.squares[12].getType()).toBe('pawn');
             expect(boardCopy.squares[12].getColor()).toBe('white');
@@ -355,13 +355,13 @@ describe('MoveValidator', () => {
         test('should handle complex position with multiple pieces', () => {
             // Set up a complex middle game position
             board.setupInitialBoard();
-            
+
             // Make some moves to create a realistic position
             board.movePiece(12, 28); // e2-e4
             board.movePiece(52, 36); // e7-e5
-            
+
             gameState.switchPlayer(); // Now black's turn
-            
+
             // Validate that black can make legal moves
             const isValid = moveValidator.isValidMove(57, 42); // b8-c6 (knight)
             expect(isValid).toBe(true);
@@ -370,16 +370,16 @@ describe('MoveValidator', () => {
         test('should correctly validate game state transitions', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const whitePawn = new Piece('pawn', 'white', 1, '♙');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[12] = whitePawn; // e2
 
             // White's turn - should be able to move pawn
             expect(moveValidator.isValidMove(12, 20)).toBe(true);
-            
+
             // Switch to black's turn
             gameState.switchPlayer();
-            
+
             // Now white pieces should not be movable
             expect(moveValidator.isValidMove(12, 20)).toBe(false);
         });
@@ -387,7 +387,9 @@ describe('MoveValidator', () => {
 
     describe('Edge Cases', () => {
         test('should handle empty board gracefully', () => {
-            expect(() => moveValidator.isInCheck('white')).toThrow('No white king found on the board');
+            expect(() => moveValidator.isInCheck('white')).toThrow(
+                'No white king found on the board'
+            );
             expect(moveValidator.getAllLegalMoves('white')).toEqual([]);
             expect(moveValidator.isCheckmate('white')).toBe(false);
             expect(moveValidator.isStalemate('white')).toBe(false);
@@ -396,7 +398,7 @@ describe('MoveValidator', () => {
         test('should handle board with only kings', () => {
             const whiteKing = new Piece('king', 'white', 1000, '♔');
             const blackKing = new Piece('king', 'black', 1000, '♚');
-            
+
             board.squares[4] = whiteKing; // e1
             board.squares[60] = blackKing; // e8
 
@@ -411,9 +413,9 @@ describe('MoveValidator', () => {
 
             const legalMoves = moveValidator.getAllLegalMoves('white');
             expect(legalMoves.length).toBe(3); // Only 3 moves from corner
-            
+
             // All moves should be valid positions
-            legalMoves.forEach(move => {
+            legalMoves.forEach((move) => {
                 expect(move.to).toBeGreaterThanOrEqual(0);
                 expect(move.to).toBeLessThan(64);
             });

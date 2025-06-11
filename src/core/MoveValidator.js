@@ -19,7 +19,7 @@ export class MoveValidator {
     /**
      * Validates if a move is legal according to chess rules
      * Includes piece-specific validation, turn validation, and self-check prevention
-     * 
+     *
      * @param {number} fromPosition - Source square index (0-63)
      * @param {number} toPosition - Destination square index (0-63)
      * @returns {boolean} True if move is legal, false otherwise
@@ -56,7 +56,7 @@ export class MoveValidator {
     /**
      * Checks if a move is pseudo-legal (follows piece movement rules)
      * Does not consider check/checkmate, only basic piece movement
-     * 
+     *
      * @param {number} fromPosition - Source square index
      * @param {number} toPosition - Destination square index
      * @returns {boolean} True if move is pseudo-legal
@@ -68,12 +68,12 @@ export class MoveValidator {
         }
 
         const possibleMoves = this.moveGenerator.generateMoves(piece, fromPosition);
-        return possibleMoves.some(move => move.to === toPosition);
+        return possibleMoves.some((move) => move.to === toPosition);
     }
 
     /**
      * Checks if a king of the specified color is currently in check
-     * 
+     *
      * @param {string} color - Color of the king to check ('white' or 'black')
      * @returns {boolean} True if king is in check, false otherwise
      */
@@ -89,7 +89,7 @@ export class MoveValidator {
         // Check if any opponent piece can attack the king
         for (const { piece, position } of opponentPieces) {
             const possibleMoves = this.moveGenerator.generateMoves(piece, position);
-            if (possibleMoves.some(move => move.to === kingPosition)) {
+            if (possibleMoves.some((move) => move.to === kingPosition)) {
                 return true;
             }
         }
@@ -100,7 +100,7 @@ export class MoveValidator {
     /**
      * Checks if the specified color is in checkmate
      * King must be in check and have no legal moves to escape
-     * 
+     *
      * @param {string} color - Color to check for checkmate
      * @returns {boolean} True if in checkmate, false otherwise
      */
@@ -118,7 +118,7 @@ export class MoveValidator {
     /**
      * Checks if the specified color is in stalemate
      * King must NOT be in check but have no legal moves
-     * 
+     *
      * @param {string} color - Color to check for stalemate
      * @returns {boolean} True if in stalemate, false otherwise
      */
@@ -136,7 +136,7 @@ export class MoveValidator {
     /**
      * Checks if castling is legal for the specified color and side
      * TODO: Implement castling validation in future enhancement
-     * 
+     *
      * @param {string} _color - Color attempting to castle
      * @param {string} _side - Side to castle ('kingside' or 'queenside')
      * @returns {boolean} Currently returns false (not implemented)
@@ -152,7 +152,7 @@ export class MoveValidator {
 
     /**
      * Helper method to validate square indices
-     * 
+     *
      * @param {number} position - Square index to validate
      * @returns {boolean} True if position is valid (0-63)
      */
@@ -162,7 +162,7 @@ export class MoveValidator {
 
     /**
      * Finds the position of the king for the specified color
-     * 
+     *
      * @param {string} color - Color of king to find
      * @returns {number} King position index, or -1 if not found
      */
@@ -178,7 +178,7 @@ export class MoveValidator {
 
     /**
      * Gets all pieces of the specified color with their positions
-     * 
+     *
      * @param {string} color - Color of pieces to find
      * @returns {Array} Array of {piece, position} objects
      */
@@ -196,7 +196,7 @@ export class MoveValidator {
     /**
      * Gets all legal moves for the specified color
      * Filters out moves that would result in self-check
-     * 
+     *
      * @param {string} color - Color to get legal moves for
      * @returns {Array} Array of legal move objects
      */
@@ -206,7 +206,7 @@ export class MoveValidator {
 
         for (const { piece, position } of pieces) {
             const pseudoLegalMoves = this.moveGenerator.generateMoves(piece, position);
-            
+
             for (const move of pseudoLegalMoves) {
                 if (!this.wouldMoveResultInCheck(move.from, move.to, color)) {
                     legalMoves.push(move);
@@ -220,7 +220,7 @@ export class MoveValidator {
     /**
      * Simulates a move and checks if it would result in the king being in check
      * Creates a temporary board state to test the move
-     * 
+     *
      * @param {number} fromPosition - Source square index
      * @param {number} toPosition - Destination square index
      * @param {string} color - Color of the moving piece
@@ -229,7 +229,7 @@ export class MoveValidator {
     wouldMoveResultInCheck(fromPosition, toPosition, color) {
         // Create a copy of the board to simulate the move
         const boardCopy = this.createBoardCopy();
-        
+
         // Execute the move on the copy
         const piece = boardCopy.squares[fromPosition];
         if (!piece) {
@@ -241,7 +241,7 @@ export class MoveValidator {
 
         // Create temporary validator with the copied board
         const tempValidator = new MoveValidator(boardCopy, this.gameState);
-        
+
         // Check if king would be in check after the move
         return tempValidator.isInCheck(color);
     }
@@ -249,12 +249,12 @@ export class MoveValidator {
     /**
      * Creates a deep copy of the current board state
      * Preserves all piece properties including hasMoved state
-     * 
+     *
      * @returns {Board} Deep copy of the current board
      */
     createBoardCopy() {
         const boardCopy = new Board();
-        
+
         for (let i = 0; i < 64; i++) {
             const piece = this.board.squares[i];
             if (piece) {
@@ -262,19 +262,19 @@ export class MoveValidator {
                 const pieceCopy = new Piece(
                     piece.getType(),
                     piece.getColor(),
-                    piece.getPoints(),  // ✅ FIXED: Changed from getValue() to getPoints()
+                    piece.getPoints(), // ✅ FIXED: Changed from getValue() to getPoints()
                     piece.getSymbol()
                 );
-                
+
                 // Preserve hasMoved state
                 if (piece.getHasMoved()) {
                     pieceCopy.markAsMoved();
                 }
-                
+
                 boardCopy.squares[i] = pieceCopy;
             }
         }
-        
+
         return boardCopy;
     }
 }
