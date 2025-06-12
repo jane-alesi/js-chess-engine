@@ -325,9 +325,30 @@ describe('MoveValidator', () => {
     });
 
     describe('Integration Tests', () => {
-        test.skip('should handle complex position with multiple pieces', () => {
-            // SKIPPED: Requires knight move generation to be implemented
-            // This test will be enabled once we implement knight movements
+        test('should handle complex position with multiple pieces', () => {
+            // Set up a complex position with multiple pieces
+            const whiteKing = new Piece('king', 'white', 1000, '♔');
+            const blackKing = new Piece('king', 'black', 1000, '♚');
+            const whiteKnight = new Piece('knight', 'white', 3, '♘');
+            const whitePawn = new Piece('pawn', 'white', 1, '♙');
+
+            // Place kings on the board (required for valid game state)
+            board.squares[60] = whiteKing;  // e1
+            board.squares[4] = blackKing;   // e8
+
+            // Place a white knight at g1 (position 62)
+            board.squares[62] = whiteKnight;
+
+            // Place a white pawn to make the position more complex
+            board.squares[52] = whitePawn;  // e2
+
+            // Ensure it's white's turn to move
+            expect(gameState.getCurrentPlayer()).toBe('white');
+
+            // Test knight move from g1 to f3 (62 to 45)
+            // This is a valid knight move: -1 file, +2 ranks
+            const isValid = moveValidator.isValidMove(62, 45);
+            expect(isValid).toBe(true);
         });
 
         test('should correctly validate game state transitions', () => {
