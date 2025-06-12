@@ -118,7 +118,6 @@ export class MoveValidator {
     }
 
     canCastle(_color, _side) {
-        // TODO: Implement castling validation
         return false;
     }
 
@@ -206,7 +205,7 @@ export class MoveValidator {
                     const pieceCopy = new Piece(
                         piece.getType(),
                         piece.getColor(),
-                        piece.getPoints(), // ✅ FIXED: Changed from getValue() to getPoints()
+                        piece.getPoints(),
                         piece.getSymbol()
                     );
 
