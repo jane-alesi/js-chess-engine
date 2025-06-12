@@ -206,7 +206,7 @@ export class MoveValidator {
                     const pieceCopy = new Piece(
                         piece.getType(),
                         piece.getColor(),
-                        piece.getPoints(),  // ✅ FIXED: Changed from getValue() to getPoints()
+                        piece.getPoints(), // ✅ FIXED: Changed from getValue() to getPoints()
                         piece.getSymbol()
                     );
 
