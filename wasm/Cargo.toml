@@ -1,0 +1,42 @@
+[package]
+name = "js-chess-engine-wasm"
+version = "2.0.0"
+edition = "2021"
+authors = ["Jane Alesi <ja@satware.ai>"]
+description = "High-performance WebAssembly chess engine with NNUE evaluation"
+license = "MIT"
+repository = "https://github.com/jane-alesi/js-chess-engine"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+wee_alloc = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+console_error_panic_hook = "0.1"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "console",
+  "Performance",
+  "Window",
+]
+
+[profile.release]
+# Optimize for size and speed
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+# Enable SIMD optimizations
+[target.'cfg(target_arch = "wasm32")']
+rustflags = ["-C", "target-feature=+simd128"]
+
+[package.metadata.wasm-pack.profile.release]
+# wasm-opt optimizations
+wasm-opt = ["-O4", "--enable-simd"]
